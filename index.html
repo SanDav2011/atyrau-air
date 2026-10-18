@@ -16,6 +16,7 @@
   header { background: var(--accent); color: #fff; padding: 12px 16px; }
   header h1 { margin: 0; font-size: 19px; }
   header p { margin: 2px 0 0; opacity: .85; font-size: 13px; }
+  .hdr-link { display: inline-block; color: #fff; padding: 10px 0 2px; font-size: 14px; font-weight: 600; }
   main { max-width: 1200px; margin: 0 auto; padding: 12px 16px 24px; display: grid; gap: 12px; grid-template-columns: 1fr 340px; }
   @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
   .card { background: var(--card); border-radius: 10px; padding: 12px; }
@@ -73,6 +74,7 @@
 <header>
   <h1>🌬️ Атырау ауасы: иіс қайдан келеді?</h1>
   <p>Күкіртсутек (H2S) бекеттері + жел бағыты, сағат бойынша</p>
+  <a class="hdr-link" href="gazdar.html">📘 Газдар туралы: әсері, симптомдары, қалай өлшенеді →</a>
 </header>
 <main>
   <div>
@@ -366,7 +368,7 @@ function render() {
   renderAttribution();
 
   $('#legend').innerHTML = lim
-    ? `<b>${pollutant}, шекті мән ${lim} мкг/м³ <span class="info" tabindex="0" aria-label="Дереккөз">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="${LIMIT_DOC.url}" target="_blank" rel="noopener">adilet.zan.kz ашу</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>бұл сағатта дерек жоқ</span>`
+    ? `<b>${pollutant}, шекті мән ${lim} мкг/м³ <span class="info" tabindex="0" aria-label="Дереккөз">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="${LIMIT_DOC.url}" target="_blank" rel="noopener">adilet.zan.kz ашу</a><br><a href="gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">${pollutant} туралы толығырақ →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>бұл сағатта дерек жоқ</span>`
     : `<b>${pollutant}</b><span class="muted">Шекті мән енгізілмеген — көк түспен</span>`;
 }
 

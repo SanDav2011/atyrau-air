@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Газдар туралы — Атырау ауасы</title>
+<script src="mol.js"></script>
+<style>
+  :root { --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #6b7280; --line: #e3e6ea; --accent: #0f766e; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { background: var(--accent); color: #fff; padding: 12px 16px; }
+  header a { color: #fff; display: inline-block; padding: 10px 0; }
+  header h1 { margin: 0; font-size: 21px; }
+  header p { margin: 2px 0 0; opacity: .85; font-size: 14px; }
+  main { max-width: 860px; margin: 0 auto; padding: 12px 16px 32px; display: grid; gap: 12px; }
+  .card { background: var(--card); border-radius: 10px; padding: 14px 16px; scroll-margin-top: 12px; }
+  h2 { font-size: 19px; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+  .nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nav a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; justify-content: center; padding: 0 12px; border-radius: 8px;
+           background: var(--bg); color: var(--text); text-decoration: none; font-weight: 600; }
+  .gas-head { display: grid; grid-template-columns: 1fr 170px; gap: 12px; align-items: center; }
+  @media (max-width: 560px) { .gas-head { grid-template-columns: 1fr; } .gas-head .pic { justify-self: center; } }
+  dl { margin: 8px 0 0; }
+  dt { font-weight: 700; margin-top: 10px; }
+  dd { margin: 2px 0 0; }
+  .ppm { color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+  td { padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td:first-child { white-space: nowrap; font-weight: 600; padding-right: 10px; }
+  tr.ours td { background: #ecfdf5; }
+  .src { font-size: 13px; color: var(--muted); }
+  .src a, main a { color: var(--accent); }
+  .note { background: #fef3c7; border-radius: 10px; padding: 12px 16px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<header>
+  <a href="./">← Картаға оралу</a>
+  <h1>📘 Газдар туралы</h1>
+  <p>Бекеттер не өлшейді, қалай өлшейді және денсаулыққа қалай әсер етеді</p>
+</header>
+<main>
+  <div class="card">
+    <p style="margin-top:0">Бекеттер ауадағы газдар мен шаңды автоматты құрылғылармен үздіксіз өлшеп, сағат сайын мән береді. Төменде әр зат туралы: қалай өлшенеді, денсаулыққа қалай әсер етеді, қай деңгейде не сезіледі.</p>
+    <p><b>Өлшем бірліктері.</b> Сайтта — <b>мкг/м³</b>: бір текше метр ауадағы заттың салмағы, микрограммен (1000 мкг/м³ = 1 мг/м³). Шетелдік мәтіндерде, әсіресе жұмыс орнындағы шектерде, жиі <b>ppm</b> қолданылады: ауаның миллион бөлігіне келетін газ бөлігі.
+      Бір-біріне ауыстыру газға байланысты: мысалы, H2S үшін 1 ppm ≈ 1400 мкг/м³, сондықтан 0,003 ppm ≈ 4 мкг/м³. Шатаспау үшін төменде шекті мәндер екі бірлікпен де берілген (25 °C).</p>
+    <p style="margin-bottom:0"><b>Шекті мәндер</b> — ҚР ДСМ-70 бұйрығы бойынша (ең жоғары бір реттік шек 20–30 минутқа). Бекет сағаттық орташа береді, сондықтан салыстыру шамамен.</p>
+  </div>
+
+  <nav class="card nav" aria-label="Заттар">
+    <a href="#H2S">H2S</a><a href="#SO2">SO2</a><a href="#NO2">NO2</a><a href="#NO">NO</a><a href="#CO">CO</a><a href="#O3">O3</a><a href="#NH3">NH3</a><a href="#PM">PM</a>
+  </nav>
+
+  <section class="card" id="H2S">
+    <div class="gas-head">
+      <div><h2>H2S — күкіртсутегі</h2><p class="sub">«Шіріген жұмыртқа» иісі</p></div>
+      <div class="pic" data-mol="H2S"></div>
+    </div>
+    <dl>
+      <dt>Не</dt>
+      <dd>Түссіз газ. Көздері: мұнай өңдеу, мұнай-газ кәсіпшілігі, тазарту құрылыстары, булану тоғандары, батпақ.</dd>
+      <dt>Қалай өлшенеді</dt>
+      <dd>Әдетте ультракүлгін флуоресценция әдісімен: ауадағы SO2 алдымен сүзіліп алынады, H2S қыздырылып SO2-ге айналдырылады да, ультракүлгін сәуле астында жарқырауы өлшенеді. Кейбір бекеттерде арзанырақ электрохимиялық сенсор тұруы мүмкін — оның дәлдігі төмендеу. Атырау бекеттеріндегі нақты құрылғы әзірге нақтыланбаған.</dd>
+      <dt>Шекті мән</dt>
+      <dd>8 мкг/м³ <span class="ppm">(≈0,006 ppm)</span>, бір реттік (ҚР ДСМ-70).</dd>
+      <dt>Деңгей бойынша не болады</dt>
+      <dd>
+        <table>
+          <tr><td>0,2–2 мкг/м³</td><td>Сезімтал адамдар иісті байқай бастайды; 0,6–6 мкг/м³ — иісін тани бастайды (ДДҰ).</td></tr>
+          <tr class="ours"><td>1–10 мкг/м³</td><td><b>Біздің бекеттерде</b>: әдетте 1, ең жоғарысы 10 (14–19 қазан 2026).</td></tr>
+          <tr><td>7 мкг/м³</td><td>30 минут бойы осыдан жоғары болса, иіске шағымдар көбейеді (ДДҰ).</td></tr>
+          <tr><td>150 мкг/м³</td><td>Тәулік бойы — көз тітіркенуіне негізделген шек (ДДҰ).</td></tr>
+          <tr><td>≈14 000 мкг/м³<br><span class="ppm">10 ppm</span></td><td>Ұзақ уақыт әсер етсе — көз тітіркенуі, бас ауруы, шаршау (ATSDR).</td></tr>
+          <tr><td>≈140 000 мкг/м³<br><span class="ppm">100 ppm</span></td><td>Иіс сезу жоғалады — иіс бұдан әрі ескерту бола алмайды. Өмірге бірден қауіпті (NIOSH).</td></tr>
+        </table>
+        Біздің бекеттердегі деңгей — иіс сезілетін деңгей; ATSDR көрсеткен зиянды деңгейлерден мыңдаған есе төмен.
+      </dd>
+      <dt>Салыстыру үшін — жұмыс орнындағы шектер</dt>
+      <dd>Сау ересек жұмысшыларға, 8 сағаттық ауысымға арналған, тұрғындарға емес:
+        <ul>
+          <li>Канада провинциялары: 10 ppm (≈14 000 мкг/м³) 8 сағатқа; ACGIH (Онтарио): 1 ppm (≈1400 мкг/м³).</li>
+          <li>NIOSH (АҚШ): 10 ppm 10 минутқа; 100 ppm — өмірге бірден қауіпті деңгей.</li>
+        </ul>
+        Тұрғындарға арналған ҚР шегі (8 мкг/м³) жұмысшыларға арналған ең қатаң шектен шамамен 175 есе төмен: тұрғындардың ішінде балалар, қарттар мен науқастар бар, олар ауамен тәулік бойы тыныс алады.</dd>
+      <dt>Кімге сезімталдау</dt>
+      <dd>Астмасы барлар — кейбіреуінде тыныс алу қиындайды, бас ауруы, жүрек айнуы болуы мүмкін (ATSDR). Балалар туралы зерттеу аз.</dd>
+      <dt>Не істеуге болады</dt>
+      <dd>Иіс күшті болса — терезені жабу, ұзақ серуенді кейінге қалдыру.</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="SO2">
+    <div class="gas-head">
+      <div><h2>SO2 — күкірт диоксиді</h2><p class="sub">Өткір иісті газ</p></div>
+      <div class="pic" data-mol="SO2"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Түссіз, өткір иісті газ. Көздері: құрамында күкірті бар отын жағу, мұнай өңдеу, ЖЭО.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Ультракүлгін флуоресценция (АҚШ-та эталон әдіс).</dd>
+      <dt>Шекті мән</dt><dd>500 мкг/м³ <span class="ppm">(≈0,19 ppm)</span> бір реттік, 50 мкг/м³ <span class="ppm">(≈0,019 ppm)</span> тәуліктік (ҚР ДСМ-70). ДДҰ ұсынысы: тәулігіне 40 мкг/м³.</dd>
+      <dt>Әсері</dt><dd>Тыныс жолдарын тітіркендіреді, қысқа уақыт әсер етсе де тыныс алуды қиындатады (EPA).</dd>
+      <dt>Кімге сезімталдау</dt><dd>Астмасы барлар, әсіресе балалар (EPA).</dd>
+      <dt>Біздің бекеттерде</dt><dd>Әдетте 2 мкг/м³, кейде 70–150-ге дейін көтеріледі (14–19 қазан 2026).</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="NO2">
+    <div class="gas-head">
+      <div><h2>NO2 — азот диоксиді</h2><p class="sub">Жану кезінде пайда болады</p></div>
+      <div class="pic" data-mol="NO2"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Қоңыр түсті газ. Көздері: көлік, ЖЭО, өнеркәсіптегі жану.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Хемилюминесценция: NO озонмен әрекеттескенде шығатын жарық өлшенеді; NO2 алдымен NO-ға айналдырылады.</dd>
+      <dt>Шекті мән</dt><dd>200 мкг/м³ <span class="ppm">(≈0,11 ppm)</span> бір реттік, 40 мкг/м³ <span class="ppm">(≈0,021 ppm)</span> тәуліктік (ҚР ДСМ-70). ДДҰ (2021): тәулігіне 25, жылына 10.</dd>
+      <dt>Әсері</dt><dd>Тыныс жолдарын тітіркендіреді. Қысқа уақытта — жөтел, ысқырып тыныс алу, тыныс тарылуы, әсіресе астмада. Ұзақ уақытта — астманың пайда болуына әсер етуі мүмкін, тыныс жолдары инфекцияларына бейімдік артады (EPA).</dd>
+      <dt>Кімге сезімталдау</dt><dd>Астмасы барлар, балалар, қарттар (EPA).</dd>
+      <dt>Біздің бекеттерде</dt><dd>Әдетте 5 мкг/м³, кейде 70–150-ге дейін (14–19 қазан 2026).</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="NO">
+    <div class="gas-head">
+      <div><h2>NO — азот оксиді</h2><p class="sub">Ауада тез NO2-ге айналады</p></div>
+      <div class="pic" data-mol="NO"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Түссіз газ, жану кезінде пайда болады; ауада тез NO2-ге айналады.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Хемилюминесценция (NO2-мен бірге бір құрылғыда).</dd>
+      <dt>Шекті мән</dt><dd>400 мкг/м³ <span class="ppm">(≈0,33 ppm)</span> бір реттік, 60 мкг/м³ <span class="ppm">(≈0,049 ppm)</span> тәуліктік (ҚР ДСМ-70).</dd>
+      <dt>Әсері</dt><dd>NO тез NO2-ге айналатындықтан, денсаулыққа әсері негізінен NO2 арқылы бағаланады — <a href="#NO2">NO2 бөлімін</a> қараңыз.</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="CO">
+    <div class="gas-head">
+      <div><h2>CO — көміртек оксиді</h2><p class="sub">Тұрмыста «иіс газы» деп аталады, бірақ <b>иісі жоқ</b></p></div>
+      <div class="pic" data-mol="CO"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Түссіз, иіссіз газ — сондықтан адам оны сезбейді. Көздері: көлік, жану, ақаулы пеш пен газ жылытқыш.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Инфрақызыл сәуленің жұтылуы (NDIR).</dd>
+      <dt>Шекті мән</dt><dd>5000 мкг/м³ <span class="ppm">(≈4,4 ppm)</span> бір реттік, 3000 мкг/м³ <span class="ppm">(≈2,6 ppm)</span> тәуліктік (ҚР ДСМ-70). ДДҰ: тәулігіне 4000.</dd>
+      <dt>Әсері</dt><dd>Қандағы оттегі мүшелерге (жүрек, ми) аз жетеді. Көшедегі жоғары деңгейде жүрек ауруы барларда кеуде ауруы (стенокардия), әсіресе жүктеме кезінде. Өте жоғары деңгейде — бас айналу, сананың шатасуы, есінен тану; ондай деңгей негізінен жабық бөлмелерде болады, көшеде емес (EPA).</dd>
+      <dt>Кімге сезімталдау</dt><dd>Жүрек ауруы барлар (EPA).</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="O3">
+    <div class="gas-head">
+      <div><h2>O3 — озон (жерге жақын)</h2><p class="sub">Күн сәулесінде түзіледі</p></div>
+      <div class="pic" data-mol="O3"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Тікелей шығарылмайды — күн сәулесінде NO2 мен басқа заттардан түзіледі. Күндізгі ыстықта көбейеді.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Ультракүлгін фотометрия — озон ультракүлгін сәулені жұтады.</dd>
+      <dt>Шекті мән</dt><dd>160 мкг/м³ <span class="ppm">(≈0,082 ppm)</span> бір реттік, 30 мкг/м³ <span class="ppm">(≈0,015 ppm)</span> тәуліктік (ҚР ДСМ-70). ДДҰ: 8 сағатқа 100.</dd>
+      <dt>Әсері</dt><dd>Жөтел, тамақтың ауыруы, терең тыныс алу қиындайды, демді ішке тартқанда ауырсыну; тыныс жолдарының қабынуы (EPA).</dd>
+      <dt>Кімге сезімталдау</dt><dd>Астмасы барлар, балалар, қарттар, далада көп жүретіндер (EPA).</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="NH3">
+    <div class="gas-head">
+      <div><h2>NH3 — аммиак</h2><p class="sub">Өткір иісті газ</p></div>
+      <div class="pic" data-mol="NH3"></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>Түссіз, өткір иісті газ. Көздері: тыңайтқыштар, мал фермалары, кейбір өндірістер.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Атырау бекеттеріндегі әдіс әзірге нақтыланбаған.</dd>
+      <dt>Шекті мән</dt><dd>200 мкг/м³ <span class="ppm">(≈0,29 ppm)</span> бір реттік, 40 мкг/м³ <span class="ppm">(≈0,057 ppm)</span> тәуліктік (ҚР ДСМ-70).</dd>
+      <dt>Әсері</dt><dd>Әдеттегі қоршаған орта деңгейінде зиян табылмаған. Жоғары деңгейде көз, тамақ, өкпе тітіркенеді, жөтел (ATSDR).</dd>
+      <dt>Кімге сезімталдау</dt><dd>Астмасы барлардың кейбірі (ATSDR).</dd>
+    </dl>
+  </section>
+
+  <section class="card" id="PM">
+    <span id="PM10"></span><span id="PM2.5"></span>
+    <div class="gas-head">
+      <div><h2>PM10 және PM2,5 — шаң бөлшектері</h2><p class="sub">Газ емес — ауадағы ұсақ бөлшектер</p></div>
+      <div class="pic" data-pm></div>
+    </div>
+    <dl>
+      <dt>Не</dt><dd>PM10 — диаметрі 10 мкм-ден кіші, PM2,5 — 2,5 мкм-ден кіші бөлшектер (шаштан шамамен 30 есе жіңішке). Көздері: жану, көлік, құрылыс, жел көтерген шаң.</dd>
+      <dt>Қалай өлшенеді</dt><dd>Әдетте бета-сәулелену әдісі (сүзгіге жиналған шаң сәулені қанша әлсірететіні) немесе оптикалық (жарықтың шашырауы; арзан, бірақ ылғал жоғары болғанда дәлдігі төмендейді). Эталон әдіс — сүзгіні таразыға тарту. Атырау бекеттеріндегі нақты құрылғы әзірге нақтыланбаған.</dd>
+      <dt>Шекті мән</dt><dd>PM10 — 300 мкг/м³ бір реттік, 60 тәуліктік; PM2,5 — 160 бір реттік, 35 тәуліктік (ҚР ДСМ-70). ДДҰ: PM2,5 тәулігіне 15, жылына 5; PM10 тәулігіне 45, жылына 15. Бөлшектер үшін ppm қолданылмайды.</dd>
+      <dt>Әсері</dt><dd>Бөлшектер өкпенің терең бөлігіне, кейде қанға дейін жетеді. Тыныс жолдарының тітіркенуі, жөтел, тыныс алудың қиындауы, астманың өршуі, жүрек ырғағының бұзылуы; жүрек пен өкпе ауруы барларда мерзімінен бұрын қайтыс болу қаупі артады (EPA). ДДҰ: жүрек-қан тамырлары мен тыныс алу аурулары, қатерлі ісік.</dd>
+      <dt>Кімге сезімталдау</dt><dd>Жүрек немесе өкпе ауруы барлар, балалар, қарттар (EPA).</dd>
+    </dl>
+  </section>
+
+  <div class="note"><b>Бұл медициналық кеңес емес.</b> Деңгейлер мен симптомдар ресми дереккөздерден алынған. Жағдайыңыз нашарласа — 103-ке хабарласыңыз немесе дәрігерге барыңыз.</div>
+
+  <div class="card src">
+    <b>Дереккөздер</b>
+    <ul>
+      <li>ҚР Денсаулық сақтау министрінің 2022 жылғы 2 тамыздағы № ҚР ДСМ-70 бұйрығы, 1-қосымша (НҚА тізілімі № 29011): <a href="https://adilet.zan.kz/rus/docs/V2200029011">adilet.zan.kz</a></li>
+      <li>ДДҰ (WHO), Global Air Quality Guidelines, 2021: <a href="https://www.who.int/publications/i/item/9789240034228">who.int</a></li>
+      <li>ДДҰ, Air Quality Guidelines for Europe, 2-басылым, H2S тарауы 6.6: <a href="https://www.who.int/publications/i/item/9789289013581">who.int</a></li>
+      <li>ATSDR (АҚШ): <a href="https://wwwn.cdc.gov/TSP/ToxFAQs/ToxFAQsDetails.aspx?faqid=388&amp;toxid=67">H2S</a>, <a href="https://wwwn.cdc.gov/TSP/ToxFAQs/ToxFAQsDetails.aspx?faqid=10&amp;toxid=2">аммиак</a></li>
+      <li>NIOSH Pocket Guide, H2S: <a href="https://www.cdc.gov/niosh/npg/npgd0337.html">cdc.gov</a></li>
+      <li>US EPA: <a href="https://www.epa.gov/no2-pollution/basic-information-about-no2">NO2</a>, <a href="https://www.epa.gov/so2-pollution/sulfur-dioxide-basics">SO2</a>, <a href="https://www.epa.gov/co-pollution/basic-information-about-carbon-monoxide-co-outdoor-air-pollution">CO</a>, <a href="https://www.epa.gov/ground-level-ozone-pollution/health-effects-ozone-pollution">O3</a>, <a href="https://www.epa.gov/pm-pollution/health-and-environmental-effects-particulate-matter-pm">PM</a></li>
+      <li>Жұмыс орнындағы шектер (Канада): <a href="https://www.safetyevolution.com/blog/h2s-exposure-limits-canada">Safety Evolution</a>, 2026</li>
+      <li>Өлшеу әдістері: АҚШ эталон әдістері, <a href="https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-50">40 CFR Part 50</a></li>
+      <li>Молекула суреттері: Wikimedia Commons, public domain (автор Ben Mills). Атом түстері: S сары, O қызыл, N көк, C қара/сұр, H ақ.</li>
+    </ul>
+  </div>
+</main>
+<script>
+// Молекула суреттерін орнына қою (mol.js)
+document.querySelectorAll('[data-mol]').forEach(el => { el.innerHTML = molImg(el.dataset.mol); });
+document.querySelectorAll('[data-pm]').forEach(el => { el.innerHTML = pmSVG(); });
+</script>
+</body>
+</html>
