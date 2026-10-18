@@ -78,8 +78,8 @@
   <div>
     <div id="map"></div>
     <div class="card time">
-      <button id="play" title="Ойнату">▶</button>
-      <input type="range" id="slider" min="0" max="0" value="0">
+      <button id="play" title="Ойнату" aria-label="Сағаттарды ойнату">▶</button>
+      <input type="range" id="slider" min="0" max="0" value="0" aria-label="Сағатты таңдау">
       <b id="hourLabel">—</b>
     </div>
     <div class="card" style="margin-top:12px">
@@ -104,7 +104,7 @@
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <h2 style="margin:0">🔎 Көзді анықтау <span class="info" tabindex="0" aria-label="Әдіс">i<span class="tip">Есептеу — Гаусс шлейфі моделі (атмосфералық шашырау): әр көз үшін сол сағаттағы жел, атмосфера тұрақтылығы және шығарылым биіктігі бойынша бекеттерге қанша мөлшерде және қанша уақытта жететіні есептеледі, содан кейін нақты өлшеммен салыстырылады.<br><a href="#method">Толық әдістеме ↓</a></span></span></h2>
-        <select id="attrWindow">
+        <select id="attrWindow" aria-label="Талдау кезеңі">
           <option value="1">таңдалған сағат</option>
           <option value="3" selected>соңғы 3 сағат</option>
           <option value="6">соңғы 6 сағат</option>
