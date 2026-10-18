@@ -56,6 +56,17 @@
   .bar { display: grid; grid-template-columns: 1fr 44px; gap: 6px; align-items: center; font-size: 13px; margin: 4px 0; }
   .bar .track { background: var(--bg); border-radius: 4px; height: 8px; margin-top: 3px; }
   .bar .fill { background: #b45309; height: 8px; border-radius: 4px; }
+  /* Саусақпен басуға ыңғайлы өлшем — кемінде 44×44 px */
+  button, select { min-height: 44px; }
+  button { min-width: 44px; }
+  select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); }
+  input[type=range] { height: 44px; margin: 0; }
+  input[type=checkbox] { width: 22px; height: 22px; margin: 0; accent-color: var(--accent); }
+  label:has(> input[type=checkbox]) { min-height: 44px; }
+  summary { padding: 12px 0; }
+  ol li { padding: 6px 0; }
+  #info a { display: inline-block; padding: 12px 0; }
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 22px; }
 </style>
 </head>
 <body>
