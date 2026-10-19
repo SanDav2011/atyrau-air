@@ -826,6 +826,13 @@ document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('
 init().catch(e => { $('#info').textContent = 'Деректер жүктелмеді: ' + e; });
 loadSources().catch(e => { $('#srcList').textContent = 'Көздер тізімі жүктелмеді: ' + e; });
 </script>
+<footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
+<script>
+// Сайттың астындағы санауыш: GoatCounter жалпы қаралым саны (баптауда «Allow adding visitor counts» қосулы болуы керек; әйтпесе жасырын қалады)
+fetch('https://atyrau-air.goatcounter.com/counter/TOTAL.json').then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт ' + d.count + ' рет қаралды'; el.hidden = false; })
+  .catch(() => {});
+</script>
 <!-- Келушілер статистикасы: GoatCounter (cookie жоқ, жеке дерек жиналмайды) -->
 <script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
