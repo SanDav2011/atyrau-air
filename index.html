@@ -420,6 +420,9 @@ const weatherOf = h => {
     temp, stationTemps: Object.values(kgmTemps[h] || {}) };
 };
 
+// Таңдалған затқа қатысты көздер: `pollutants` жоқ көз — барлық зат үшін, бар болса — тек сол заттар үшін (мыс. АНПЗ мұржалары — SO2/NO2/NO/CO)
+const forPollutant = () => sources.filter(s => !s.pollutants || s.pollutants.includes(pollutant));
+
 function renderAttribution() {
   plumeLayer.clearLayers();
   if (!hours.length) return;
@@ -452,7 +455,7 @@ function renderAttribution() {
     $('#attr').innerHTML = `<div class="muted">Бұл кезеңде бекеттерде ${pollutant} фоннан айтарлықтай жоғары емес (артықшылық ${maxEx.toFixed(1)} мкг/м³ < ${MIN_EXCESS}). Көзді анықтауға негіз жоқ.</div>` + clsLine;
     return;
   }
-  const { ranking, rows } = AirModel.rankSources(sources, obs, weather);
+  const { ranking, rows } = AirModel.rankSources(forPollutant(), obs, weather);
   const best = ranking[0];
   if (!best || best.explained < MIN_EXPLAINED) {
     $('#attr').innerHTML = `<div class="muted">Бекеттерде ${pollutant} фоннан сәл жоғары (ең көбі +${maxEx.toFixed(1)} мкг/м³), бірақ тізімдегі бірде-бір көз
@@ -591,7 +594,7 @@ function renderChronic(win) {
     let n = 0, over = 0, sum = 0;
     for (const h of hs) { const v = val(s, pollutant, h); if (v == null) continue; n++; const d = v - cityMed[h]; sum += d; if (d >= diffMin) over++; }
     if (n >= 2 && over / n >= 0.8) {
-      const near = sources.filter(x => x.lat != null)
+      const near = forPollutant().filter(x => x.lat != null)
         .map(x => ({ x, d: Math.min(...sourcePoints(x).map(([a, o]) => Math.hypot((a - s.lat) * 110.54, (o - s.lng) * 111.32 * Math.cos(s.lat * Math.PI / 180)))) }))
         .sort((a, b) => a.d - b.d)[0];
       res.push({ s, over, n, avg: sum / n, near });
@@ -632,7 +635,7 @@ function renderComplaints(win, weather) {
     for (const h of hoursW) {
       const end = upwindPoint(c, weather[h].dir, LINE_KM);
       L.polyline([[c.lat, c.lng], end], { color: '#7c3aed', weight: 3, opacity: 0.7, dashArray: '6 4', interactive: false }).addTo(roseLayer);
-      for (const s of sources) {
+      for (const s of forPollutant()) {
         if (s.lat == null) continue;
         const d = Math.min(...sourcePoints(s).map(pt => distToSegmentKm(pt, [c.lat, c.lng], end)));
         const r = hits[s.id] ??= { s, n: 0, min: Infinity };
@@ -761,7 +764,7 @@ function renderSources() {
       </div>
       ${s.note ? `<div class="meta">${esc(s.note)}</div>` : ''}
     </div>` : `
-    <div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b> · ${s.height_m} м
+    <div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b> · ${s.height_m} м${s.pollutants ? ` <span class="muted">(тек ${s.pollutants.join(', ')})</span>` : ''}
       ${s.lat == null ? '<div class="meta">орны белгісіз — «Түзету» арқылы картаға қойыңыз</div>' : ''}</div>`).join('');
 }
 
