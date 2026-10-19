@@ -26,11 +26,18 @@ jobs:
       - run: pip install -r collector/requirements.txt
       # посты ecodata.kz с серверов GitHub не открываются — их собирает ноутбук (--only stations --push)
       - run: python collector/collect.py --only weather,kgm --log cloud.log
+      # счётчик посещений GoatCounter → data/visits.json на нашем домене (блокировщики рекламы и кэш браузера не мешают)
+      - name: Счётчик посещений
+        continue-on-error: true
+        run: |
+          curl -sf https://atyrau-air.goatcounter.com/counter/TOTAL.json -o /tmp/v.json
+          python -c "import json; d=json.load(open('/tmp/v.json')); assert 'count' in d; json.dump({'count': d['count']}, open('data/visits.json','w'))"
       - name: Сохранить данные в репозиторий
         if: always()
         run: |
           git config user.name "collector-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/wind.csv data/kgm.csv data/cloud.log
+          [ -f data/visits.json ] && git add data/visits.json
           git diff --cached --quiet || git commit -m "Погода $(TZ=Asia/Almaty date '+%Y-%m-%d %H:%M')"
           git pull --rebase && git push
