@@ -422,7 +422,7 @@ const weatherOf = h => {
 
 function renderAttribution() {
   plumeLayer.clearLayers();
-  if (!hours.length || !sources.length) return;
+  if (!hours.length) return;
   const n = +$('#attrWindow').value;
   const win = hours.slice(Math.max(0, idx - n + 1), idx + 1);
   const weather = {}, obs = [];
@@ -444,6 +444,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
+  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">🔒 Көзді анықтау үшін көздер тізімі керек — төмендегі «Ықтимал көздер» бөлімінде құпиясөзді енгізіңіз.</span>'; return; }
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
@@ -658,7 +659,7 @@ map.on('click', e => {
   saveComplaints(); renderAttribution();
 });
 
-/* ===== Ықтимал көздер: sources.json + осы құрылғыдағы түзетулер ===== */
+/* ===== Ықтимал көздер: sources.enc.json (шифрланған) + осы құрылғыдағы түзетулер ===== */
 const SRC_KEY = 'atyrau-air-sources-v1';
 const KINDS = { high: 'Биік (құбыр, факел)', low: 'Аласа (резервуар, ғимарат)', ground: 'Жер деңгейі (тоған, тазарту)' };
 const KIND_ICON = { high: '🏭', low: '🛢️', ground: '💧' };
@@ -667,17 +668,66 @@ const srcLayer = L.layerGroup().addTo(map);
 
 function saveSources() { try { localStorage.setItem(SRC_KEY, JSON.stringify(sources)); } catch {} }
 
-async function loadSources() {
-  defaultSources = await fetch('sources.json?t=' + Date.now()).then(r => r.json());
+/* Көздер шифрланған (sources.enc.json): AES-GCM, кілт құпиясөзден PBKDF2 арқылы. Құпиясөзсіз көздер мен мұржалар көрінбейді. */
+const PW_KEY = 'atyrau-air-pw';
+let encData = null, stacks = [], locked = true;
+const stackLayer = L.layerGroup().addTo(map);
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function decryptSources(password) {
+  const e = encData;
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(e.salt), iterations: e.iter },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(e.iv) }, key, unb64(e.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+async function unlock(password, remember) {
+  const data = await decryptSources(password); // қате құпиясөз — мұнда қате лақтырады
+  defaultSources = data.sources; stacks = data.stacks || []; locked = false;
+  try { if (remember) sessionStorage.setItem(PW_KEY, password); } catch {}
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SRC_KEY)); } catch {}
   sources = Array.isArray(saved) ? saved : structuredClone(defaultSources);
   renderSources();
 }
 
+async function loadSources() {
+  encData = await fetch('sources.enc.json?t=' + Date.now()).then(r => r.json());
+  let pw = null;
+  try { pw = sessionStorage.getItem(PW_KEY); } catch {}
+  if (pw) { try { await unlock(pw, false); return; } catch {} }
+  renderSources();
+}
+
+function renderStacks() {
+  stackLayer.clearLayers();
+  for (const s of stacks)
+    L.circleMarker([s.lat, s.lng], { radius: s.flare ? 7 : 5, color: s.flare ? '#b91c1c' : '#ea580c', weight: 2, fillColor: '#fb923c', fillOpacity: 0.85 })
+      .bindTooltip(`${s.flare ? '🔥 ' : ''}${esc(s.name)} · ${s.h} м · SO2 ${s.so2} г/с` + (s.h2s ? ` · H2S ${s.h2s} г/с` : '') + ' (АНПЗ түгендеуі, 2026)')
+      .addTo(stackLayer);
+}
+
 function renderSources() {
   srcLayer.clearLayers();
+  renderStacks();
   renderAttribution();
+  $('#editBtn').hidden = locked;
+  if (locked) {
+    $('#srcTools').hidden = true;
+    $('#srcList').innerHTML = `<div class="muted">🔒 Көздер мен мұржалардың орны жабық. Құпиясөзді білетіндер ғана көреді.</div>
+      <form id="unlockForm" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <input type="password" id="pwInput" placeholder="Құпиясөз" autocomplete="current-password" aria-label="Құпиясөз" style="flex:1;min-width:150px;min-height:44px;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px">
+        <button type="submit">🔓 Ашу</button>
+      </form><div class="muted" id="pwMsg"></div>`;
+    $('#unlockForm').onsubmit = async ev => {
+      ev.preventDefault();
+      $('#pwMsg').textContent = 'Тексерілуде…';
+      try { await unlock($('#pwInput').value, true); } catch { $('#pwMsg').textContent = 'Құпиясөз дұрыс емес.'; }
+    };
+    return;
+  }
   for (const s of sources) {
     if (s.lat == null) continue;
     if (Array.isArray(s.area)) for (const ring of s.area)

@@ -5,3 +5,4 @@ app/
 .env
 tmp-test/
 nace-test/
+private/
