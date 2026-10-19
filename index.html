@@ -673,7 +673,7 @@ function saveSources() { try { localStorage.setItem(SRC_KEY, JSON.stringify(sour
 
 /* Көздер шифрланған (sources.enc.json): AES-GCM, кілт құпиясөзден PBKDF2 арқылы. Құпиясөзсіз көздер мен мұржалар көрінбейді. */
 const PW_KEY = 'atyrau-air-pw';
-let encData = null, stacks = [], locked = true;
+let encData = null, stacks = [], locked = true, publicSources = [];
 const stackLayer = L.layerGroup().addTo(map);
 const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 
@@ -697,7 +697,10 @@ async function unlock(password, remember) {
 }
 
 async function loadSources() {
-  encData = await fetch('sources.enc.json?t=' + Date.now()).then(r => r.json());
+  [encData, publicSources] = await Promise.all([
+    fetch('sources.enc.json?t=' + Date.now()).then(r => r.json()),
+    fetch('sources.public.json?t=' + Date.now()).then(r => r.json()).catch(() => []),
+  ]);
   let pw = null;
   try { pw = sessionStorage.getItem(PW_KEY); } catch {}
   if (pw) { try { await unlock(pw, false); return; } catch {} }
@@ -719,7 +722,14 @@ function renderSources() {
   $('#editBtn').hidden = locked;
   if (locked) {
     $('#srcTools').hidden = true;
-    $('#srcList').innerHTML = `<div class="muted">🔒 Көздер мен мұржалардың орны жабық. Құпиясөзді білетіндер ғана көреді.</div>
+    // ашық режим: тек белгі мен атау, орны ≈500 м дәлдікпен (sources.public.json)
+    for (const s of publicSources)
+      L.marker([s.lat, s.lng], { interactive: true, opacity: 0.85,
+          icon: L.divIcon({ className: 'src-icon', html: KIND_ICON[s.kind] || '📍', iconSize: [26, 26] }) })
+        .bindTooltip(`${esc(s.name)} · орны шамамен (±500 м)`).addTo(srcLayer);
+    $('#srcList').innerHTML = (publicSources.length ? publicSources.map(s => `<div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b></div>`).join('') +
+        '<div class="muted" style="margin-top:6px">Картада орындары шамамен (±500 м) көрсетілген.</div>' : '') +
+      `<div class="muted" style="margin-top:8px">🔒 Нақты орны, биіктігі, АНПЗ мұржалары және «Көзді анықтау» — құпиясөзбен.</div>
       <form id="unlockForm" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
         <input type="password" id="pwInput" placeholder="Құпиясөз" autocomplete="current-password" aria-label="Құпиясөз" style="flex:1;min-width:150px;min-height:44px;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px">
         <button type="submit">🔓 Ашу</button>
