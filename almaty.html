@@ -51,6 +51,7 @@
   .info .tip a { color: #7dd3fc; }
   .info:hover .tip, .info:focus .tip, .info:focus-within .tip { display: block; }
   @media (max-width: 860px) { .info .tip { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; width: auto; } }
+  .wind-arrow svg { display: block; overflow: visible; }
   .src-icon { font-size: 22px; line-height: 1; text-align: center; filter: drop-shadow(0 0 2px #fff); }
   .src-item { border-top: 1px solid var(--line); padding: 8px 0; font-size: 14px; }
   .src-item .meta { color: var(--muted); font-size: 13px; }
@@ -556,6 +557,22 @@ function upwindPoint(st, fromDeg, km) {
   return [st.lat + km * 1000 * Math.cos(a) / 110540, st.lng + km * 1000 * Math.sin(a) / (111320 * Math.cos(st.lat * Math.PI / 180))];
 }
 
+// жел жебесі: сызық + ортасындағы ұшы бекетке қарап тұр (газ көзден бекетке қарай келді), үстінен өткенде — түсіндірме
+const hourText = h => h.slice(8, 10) + '.' + h.slice(5, 7) + ' ' + h.slice(11, 13) + ':00';
+function windArrow(at, fromDeg, km, style, tip) {
+  const end = upwindPoint(at, fromDeg, km), line = [[at.lat, at.lng], end];
+  const opt = { ...style, bubblingMouseEvents: false };
+  L.polyline(line, { ...opt, interactive: false }).addTo(roseLayer);
+  // жіңішке сызықты тышқанмен табу оңай болсын — үстінен көрінбейтін жуан сызық
+  L.polyline(line, { color: '#000', opacity: 0, weight: 14, bubblingMouseEvents: false }).bindTooltip(tip, { sticky: true }).addTo(roseLayer);
+  const s = Math.round(14 + 2 * style.weight); // ұшы өлшемі сызық қалыңдығына сай
+  const html = `<svg width="${s}" height="${s}" viewBox="-10 -10 20 20" style="transform:rotate(${fromDeg + 180}deg)">` +
+    `<path d="M0,-9 L7,7 L0,3 L-7,7 Z" fill="${style.color}" fill-opacity="${Math.max(0.85, style.opacity)}" stroke="#fff" stroke-width="1.2"/></svg>`;
+  // ұшы сызықтың ортасында: бекеттің белгісі оны жаппасын
+  L.marker(upwindPoint(at, fromDeg, km * 0.45), { icon: L.divIcon({ className: 'wind-arrow', html, iconSize: [s, s], iconAnchor: [s / 2, s / 2] }), bubblingMouseEvents: false, keyboard: false })
+    .bindTooltip(tip).addTo(roseLayer);
+}
+
 function renderRose(win, obs, weather, maxEx) {
   roseLayer.clearLayers();
   const on = $('#roseChk').checked;
@@ -583,7 +600,7 @@ function renderRose(win, obs, weather, maxEx) {
   const topK = pol.indexOf(Math.max(...pol));
   $('#roseNote').innerHTML = `Кезең: ${nHours} сағат. Сұр — жел қай жақтан қаншалықты жиі соқты; қоңыр — ${pollutant} артықшылығын қай жақтан соққан жел әкелді.` +
     (Math.max(...pol) > 0 ? ` Көбі — <b>${['солтүстік', 'солтүстік-солтүстік-шығыс', 'солтүстік-шығыс', 'шығыс-солтүстік-шығыс', 'шығыс', 'шығыс-оңтүстік-шығыс', 'оңтүстік-шығыс', 'оңтүстік-оңтүстік-шығыс', 'оңтүстік', 'оңтүстік-оңтүстік-батыс', 'оңтүстік-батыс', 'батыс-оңтүстік-батыс', 'батыс', 'батыс-солтүстік-батыс', 'солтүстік-батыс', 'солтүстік-солтүстік-батыс'][topK]}</b> жақтан.` : ' Бұл кезеңде артықшылық жоқ.') +
-    `<br>Картада: артықшылық болған бекеттен жел келген жаққа ${LINE_KM} км сызық (сағатына біреу), қалыңдығы — артықшылыққа сай. Сызықтар тоғысқан жер — ықтимал көз.`;
+    `<br>Картада: артықшылық болған бекеттен жел келген жаққа ${LINE_KM} км жебе (сағатына біреу): жебе ұшы бекетке қарайды — жел газды сол жақтан әкелді, қалыңдығы — артықшылыққа сай. Тышқанды апарсаңыз — сағаты мен желі. Сызықтар тоғысқан жер — ықтимал көз.`;
   renderComplaints(win, weather);
   // 2) картадағы талдау сызықтары
   if (maxEx <= 0) return;
@@ -591,8 +608,8 @@ function renderRose(win, obs, weather, maxEx) {
     const w = weather[o.hour];
     if (!w || o.excess < 0.5) continue;
     const t = o.excess / maxEx;
-    L.polyline([[o.station.lat, o.station.lng], upwindPoint(o.station, w.dir, LINE_KM)],
-      { color: '#b45309', weight: 1 + 5 * t, opacity: 0.25 + 0.6 * t, interactive: false }).addTo(roseLayer);
+    windArrow(o.station, w.dir, LINE_KM, { color: '#b45309', weight: 1 + 5 * t, opacity: 0.25 + 0.6 * t },
+      `<b>${esc(o.station.name)}</b> · ${hourText(o.hour)}<br>Жел ${DIRS[Math.round(w.dir / 45) % 8]}, ${w.speed.toFixed(1)} м/с<br>${esc(pollutant)} артығы: ${o.excess.toFixed(1)} мкг/м³`);
   }
 }
 
@@ -656,7 +673,8 @@ function renderComplaints(win, weather) {
     const hits = {};
     for (const h of hoursW) {
       const end = upwindPoint(c, weather[h].dir, LINE_KM);
-      L.polyline([[c.lat, c.lng], end], { color: '#7c3aed', weight: 3, opacity: 0.7, dashArray: '6 4', interactive: false }).addTo(roseLayer);
+      windArrow(c, weather[h].dir, LINE_KM, { color: '#7c3aed', weight: 3, opacity: 0.7, dashArray: '6 4' },
+        `<b>Шағым нүктесі ${i + 1}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с`);
       for (const s of forPollutant()) {
         if (s.lat == null) continue;
         const d = Math.min(...sourcePoints(s).map(pt => distToSegmentKm(pt, [c.lat, c.lng], end)));
