@@ -32,10 +32,10 @@
   @media (max-width: 560px) { nav .brand { display: none; } nav { justify-content: center; gap: 0; } nav a { font-size: 14px; padding: 12px 8px; } }
 
   /* «Таза ауа» — су мен ауаның шекарасында; жоғарғы жартысы ақ, судағы жартысы көгілдір */
-  #title { position: fixed; z-index: 2; left: 50%; transform: translate(-50%, -50%); margin: 0; border: 0; padding: 0 .1em; cursor: pointer;
+  #title { position: fixed; z-index: 2; left: 50%; transform: translate(-50%, calc(-50% + .15em)); margin: 0; border: 0; padding: 0 .1em .3em; cursor: pointer;
            font: 800 clamp(56px, 13vw, 168px)/1 Onest, system-ui, sans-serif; letter-spacing: -.02em; white-space: nowrap;
            background: transparent; color: transparent;
-           background-image: linear-gradient(to bottom, #ffffff 0 50%, #e4fbff 50% 100%); -webkit-background-clip: text; background-clip: text;
+           background-image: linear-gradient(to bottom, #ffffff 0 .5em, #e4fbff .5em 100%); -webkit-background-clip: text; background-clip: text;
            filter: drop-shadow(0 2px 14px rgba(0,60,110,.28)); transition: opacity .3s; }
   #title:focus-visible { outline: 2px solid #fff; outline-offset: 8px; border-radius: 12px; }
   /* Рябь — «Таза ауа» суға тиген жерден таралатын жалпақ шеңберлер (бұрынғы «басыңыз» капсуласының контуры) */
@@ -118,7 +118,7 @@ function dissolve() {
   const oc = document.createElement('canvas'); oc.width = Math.ceil(r.width); oc.height = Math.ceil(r.height);
   const o = oc.getContext('2d');
   o.font = `800 ${fs}px Onest, system-ui, sans-serif`; o.textAlign = 'center'; o.textBaseline = 'middle'; o.fillStyle = '#fff';
-  o.fillText(title.textContent, oc.width / 2, oc.height / 2 + fs * 0.04);
+  o.fillText(title.textContent, oc.width / 2, fs * 0.5 + fs * 0.04); // жазу қорапта жоғарыдан fs/2 тұр, төменде «у» құйрығына орын бар
   const data = o.getImageData(0, 0, oc.width, oc.height).data, gap = Math.max(3, Math.round(fs / 34));
   for (let y = 0; y < oc.height; y += gap) for (let x = 0; x < oc.width; x += gap) {
     if (data[(y * oc.width + x) * 4 + 3] > 128) parts.push({
