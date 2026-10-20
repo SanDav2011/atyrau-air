@@ -334,7 +334,7 @@ async function init() {
     const dam = a.match(/населенный пункт\s+([^,]+)/i); // «Атырау, населенный пункт Дамба, …»
     if (dam) return dam[1].trim();
     const first = a.split(',')[0].replace(/^(с|п|г)\.\s*/i, '').trim();
-    return ['Ақтөбе', 'Актобе'].includes(first) ? '' : first;
+    return ['Актобе', 'Ақтөбе'].includes(first) ? '' : first;
   };
   for (const st of Object.values(stations)) {
     const v = villageOf(st.address);
