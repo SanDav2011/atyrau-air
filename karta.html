@@ -87,7 +87,7 @@
 </div>
 <div id="tip"></div>
 <div id="legend">
-  <span>Атырау (H2S): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
+  <span>Ауа күйі (Атырау — H2S, Алматы — PM2,5): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
   <span><i style="background:#fff"></i>датчигі бар</span>
   <span><i style="background:var(--soon)"></i>датчик жоқ</span>
   <span>➝ жел</span>
@@ -102,8 +102,11 @@
    жалау — Атыраудағы нақты желмен желбірейді. */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
-const H2S_LIMIT = 8; // мкг/м³, ҚР ДСМ-70
-const ACTIVE = { 'Атырау': 'atyrau.html' }; // толық картасы бар қалалар
+// Толық картасы бар қалалар: беті, деректер файлы, басты зат және оның шегі (мкг/м³, ҚР ДСМ-70, бір реттік)
+const ACTIVE = {
+  'Атырау': { href: 'atyrau.html', file: 'data/stations.csv', pol: 'H2S', limit: 8 },
+  'Алматы': { href: 'almaty.html', file: 'data/almaty/stations.csv', pol: 'PM2.5', limit: 160 },
+};
 let regions = null, box = null, places = null, wind = {}, cityStatus = {}, postsByRegion = {};
 let view = { k: 1, tx: 0, ty: 0 }, selected = null, MW = 0, MH = 0, anim = null;
 const DETAIL_K = 2.2; // осы масштабтан бастап — датчигі бар елді мекендер де көрінеді
@@ -143,7 +146,7 @@ function layout(sc) {
 const NS = 'http://www.w3.org/2000/svg';
 const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 const ringPath = ring => ring.map(([lng, lat], i) => (i ? 'L' : 'M') + proj(lng, lat).map(v => v.toFixed(1)).join(',')).join('') + 'Z';
-const statusColor = st => st == null ? 'var(--soon)' : st < H2S_LIMIT / 2 ? 'var(--ok)' : st <= H2S_LIMIT ? 'var(--warn)' : 'var(--bad)';
+const statusColor = (st, lim) => st == null ? 'var(--soon)' : st < lim / 2 ? 'var(--ok)' : st <= lim ? 'var(--warn)' : 'var(--bad)';
 let world = null, pts = null, regionEls = {};
 
 function buildWorld() {
@@ -193,10 +196,10 @@ function renderPoints() {
     vis.push({ c, x, y }); placed.push({ x: x - 5, y: y - 5, w: 10, h: 10, dot: true, cap: !!c.cap });
   }
   for (const { c, x, y } of vis) {
-    const active = !!ACTIVE[c.name];
-    const col = active ? statusColor(cityStatus.atyrau) : c.posts ? '#ffffff' : 'var(--soon)';
+    const A = ACTIVE[c.name], active = !!A, st = active ? cityStatus[c.name] : null;
+    const col = active ? statusColor(st && st.max, A.limit) : c.posts ? '#ffffff' : 'var(--soon)';
     const g = el('g', { class: 'city' + (c.cap ? ' cap' : ' set') }, pts);
-    const host = active ? el('a', { href: ACTIVE[c.name], 'aria-label': `${c.name} — картаны ашу` }, g) : g;
+    const host = active ? el('a', { href: A.href, 'aria-label': `${c.name} — картаны ашу` }, g) : g;
     if (active) el('circle', { cx: x, cy: y, r: 9, fill: col, class: 'halo' }, host);
     el('circle', { cx: x, cy: y, r: c.cap ? (active ? 7 : 5.5) : 3.6, fill: col, stroke: c.cap ? 'rgba(255,255,255,.9)' : 'rgba(0,50,100,.5)', 'stroke-width': c.cap ? 2 : 1, class: 'dot' }, host);
     if (!active) { // басқа қалалар: тұсында — бекет саны
@@ -205,7 +208,7 @@ function renderPoints() {
     }
     // жазу: алдымен оң жақ, сыймаса — сол жақ, сыймаса — астына, бәрі бос емес болса — жазусыз (нүкте қалады)
     const fs = (c.cap ? 15 : 12) * zf, w = c.name.length * fs * 0.6 + 6, h = fs + 4;
-    const sub = active ? (cityStatus.atyrau != null ? `H2S ${cityStatus.atyrau} мкг/м³` : 'H2S —') : '';
+    const sub = active ? `${A.pol} ${st && st.max != null ? st.max + ' мкг/м³' : '—'}` : '';
     const hh = h + (sub ? fs : 0);
     const cand = [{ x: x + 9, y: y - h / 2, a: 'start' }, { x: x - 9 - w, y: y - h / 2, a: 'end' }, { x: x - w / 2, y: y + 7, a: 'middle' }];
     const spot = cand.find(r => r.x > -4 && r.x + w < MW + 4 && r.y > -4 && r.y + hh < MH + 4 && fits({ x: r.x, y: r.y, w, h: hh }, c.cap));
@@ -319,22 +322,23 @@ async function loadWind() { // Open-Meteo: барлық орталықтар б�
     wind.atyrau = wind['Атырау'];
   } catch {}
 }
-async function loadAtyrauStatus() { // соңғы толық сағаттағы ең жоғары H2S (6 сағат өзгермеген мәндерді елемейміз)
+async function loadCityStatus(name) { // соңғы толық сағаттағы басты заттың ең жоғары мәні (6 сағат өзгермеген мәндерді елемейміз)
+  const A = ACTIVE[name];
   try {
-    const txt = await fetch('data/stations.csv?t=' + Date.now()).then(r => r.text());
+    const txt = await fetch(A.file + '?t=' + Date.now()).then(r => r.text());
     const rows = txt.trim().split('\n').slice(1).map(l => l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/))
-      .filter(r => r[6] === 'H2S').map(r => ({ st: r[1], h: r[5].slice(0, 13), v: +r[7] }));
+      .filter(r => r[6] === A.pol).map(r => ({ st: r[1], h: r[5].slice(0, 13), v: +r[7] }));
     const hours = [...new Set(rows.map(r => r.h))].sort();
     const last = hours[hours.length - 1], prev6 = hours.slice(-7, -1);
     const byStation = {};
     for (const r of rows) (byStation[r.st] ??= {})[r.h] = r.v;
     let max = null;
-    for (const [st, s] of Object.entries(byStation)) {
-      const v = s[last]; if (v == null) continue;
+    for (const s of Object.values(byStation)) {
+      const v = s[last]; if (v == null || isNaN(v)) continue;
       const stuck = prev6.length >= 6 && prev6.every(h => s[h] === v) && v >= 3;
       if (!stuck) max = Math.max(max ?? 0, v);
     }
-    cityStatus.atyrau = max; cityStatus.atyrauHour = last;
+    cityStatus[name] = { max, hour: last };
   } catch {}
 }
 
@@ -383,13 +387,13 @@ function drawFlag(t) {
 /* ---- іске қосу ---- */
 const sc = createScene(document.getElementById('scene'), { horizon: 0.5, timeOfDay: true, dim: 0.06, onResize: S => layout(S) });
 (async () => {
-  await Promise.all([loadRegions(), loadPlaces(), loadAtyrauStatus()]);
+  await Promise.all([loadRegions(), loadPlaces(), ...Object.keys(ACTIVE).map(loadCityStatus)]);
   layout(sc);
   await loadWind(); applyView();
 })();
 function tickClock() {
   const h = sc.localHour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
-  $('#clock').textContent = `Атырау уақыты ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` + (cityStatus.atyrauHour ? ` · соңғы өлшем ${cityStatus.atyrauHour.slice(11)}:00` : '');
+  $('#clock').textContent = `Атырау уақыты ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` + (cityStatus['Атырау']?.hour ? ` · соңғы өлшем ${cityStatus['Атырау'].hour.slice(11)}:00` : '');
 }
 tickClock(); setInterval(tickClock, 30000);
 const t0 = performance.now();
