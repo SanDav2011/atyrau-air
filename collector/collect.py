@@ -29,6 +29,9 @@ CITIES = {
     # Алматы с пригородами (Боралдай, Талгар)
     "almaty": {"bbox": {"lat_min": 43.05, "lat_max": 43.55, "lng_min": 76.55, "lng_max": 77.45},
                "wind": (43.24, 76.92), "tz": "Asia%2FAlmaty", "dir": DATA / "almaty"},
+    # Астана с пригородами
+    "astana": {"bbox": {"lat_min": 50.9, "lat_max": 51.4, "lng_min": 71.2, "lng_max": 71.7},
+               "wind": (51.13, 71.43), "tz": "Asia%2FAlmaty", "dir": DATA / "astana"},
 }
 
 
