@@ -522,7 +522,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
-  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">🔒 Көзді анықтау үшін көздер тізімі керек — төмендегі «Ықтимал көздер» бөлімінде құпиясөзді енгізіңіз.</span>'; return; }
+  if (!sources.length) { $('#attr').innerHTML = ''; return; } // көздер ашылмаған — ештеңе жазбаймыз
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
