@@ -1,4 +1,4 @@
-"""Сборщик: посты качества воздуха Атырауской области (карта Казгидромета ecodata.kz) + погода (Open-Meteo).
+"""Сборщик: посты качества воздуха (карта Казгидромета ecodata.kz) + погода (Open-Meteo) — по городам из CITIES.
 
 Запуск раз в час. ecodata.kz открывается только из Казахстана, поэтому:
   ноутбук:  collect.py --only stations --log local.log --push   (посты → сразу в GitHub)
@@ -18,16 +18,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-STATIONS_CSV = DATA / "stations.csv"
-WIND_CSV = DATA / "wind.csv"
-KGM_CSV = DATA / "kgm.csv"
 LOG = DATA / "collect.log"  # меняется аргументом --log
 
 ECODATA_URL = "http://ecodata.kz:3838/app_dem_visual/"
-# Атырауская область с запасом (город, Кульсары, Тенгиз, Жанбай, Макат, Ганюшкино)
-BBOX = {"lat_min": 45.5, "lat_max": 48.5, "lng_min": 48.5, "lng_max": 55.0}  # 48.5 — Ганюшкино (Құрманғазы ауданы)
-# Ветер берём над центром Атырау
-WIND_POINT = (47.11, 51.92)
+# Города: рамка постов, точка ветра (Open-Meteo), папка с данными. Атырау — в корне data/ (как было).
+CITIES = {
+    # Атырауская область с запасом (город, Кульсары, Тенгиз, Жанбай, Макат, Ганюшкино — 48.5)
+    "atyrau": {"bbox": {"lat_min": 45.5, "lat_max": 48.5, "lng_min": 48.5, "lng_max": 55.0},
+               "wind": (47.11, 51.92), "tz": "Asia%2FAtyrau", "dir": DATA},
+    # Алматы с пригородами (Боралдай, Талгар)
+    "almaty": {"bbox": {"lat_min": 43.05, "lat_max": 43.55, "lng_min": 76.55, "lng_max": 77.45},
+               "wind": (43.24, 76.92), "tz": "Asia%2FAlmaty", "dir": DATA / "almaty"},
+}
+
+
+def city_files(c):
+    d = CITIES[c]["dir"]
+    return d / "stations.csv", d / "wind.csv", d / "kgm.csv"
 ATYRAU_TZ = timezone(timedelta(hours=5))  # Казахстан UTC+5; сервер GitHub работает в UTC
 # На Windows — установленный Edge, на сервере GitHub — Chromium из Playwright (BROWSER_CHANNEL пустой)
 BROWSER_CHANNEL = os.environ.get("BROWSER_CHANNEL", "msedge" if os.name == "nt" else "") or None
@@ -105,7 +112,8 @@ def append_rows(path, fields, rows):
         w.writerows(rows)
 
 
-def fetch_stations():
+def fetch_stations(cities):
+    """Одна загрузка карты — точки для каждого города (по его рамке)."""
     from playwright.sync_api import sync_playwright  # нужен только для постов
 
     with sync_playwright() as p:
@@ -121,31 +129,36 @@ def fetch_stations():
                        return n > 50; }""",
             timeout=120_000,
         )
-        points = page.evaluate(EXTRACT_JS, BBOX)
+        points = {c: page.evaluate(EXTRACT_JS, CITIES[c]["bbox"]) for c in cities}
         browser.close()
     return points
 
 
-def collect_stations():
+def collect_stations(cities):
     try:
-        points = fetch_stations()
+        by_city = fetch_stations(cities)
     except Exception as e:  # разовые сбои запуска браузера/сайта — одна повторная попытка
         log(f"посты: повтор после ошибки {e!r}")
-        points = fetch_stations()
+        by_city = fetch_stations(cities)
     key = lambda r: (r["station"], r["lat"][:7], r["lng"][:7], r["measured_at"], r["pollutant"])
-    seen = read_keys(STATIONS_CSV, key)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    rows = []
-    for pt in points:
-        for v in pt["values"]:
-            r = {"fetched_at_utc": now, "station": pt["station"], "address": pt["address"],
-                 "lat": f"{pt['lat']:.5f}", "lng": f"{pt['lng']:.5f}",
-                 "measured_at": pt["measured_at"], "pollutant": v["pollutant"], "value": v["value"]}
-            if key(r) not in seen:
-                seen.add(key(r))
-                rows.append(r)
-    append_rows(STATIONS_CSV, STATION_FIELDS, rows)
-    return len(points), len(rows)
+    res = {}
+    for c, points in by_city.items():
+        path = city_files(c)[0]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        seen = read_keys(path, key)
+        rows = []
+        for pt in points:
+            for v in pt["values"]:
+                r = {"fetched_at_utc": now, "station": pt["station"], "address": pt["address"],
+                     "lat": f"{pt['lat']:.5f}", "lng": f"{pt['lng']:.5f}",
+                     "measured_at": pt["measured_at"], "pollutant": v["pollutant"], "value": v["value"]}
+                if key(r) not in seen:
+                    seen.add(key(r))
+                    rows.append(r)
+        append_rows(path, STATION_FIELDS, rows)
+        res[c] = (len(points), len(rows))
+    return res
 
 
 def get_json(url, attempts=3):
@@ -159,22 +172,29 @@ def get_json(url, attempts=3):
             time.sleep(10 * (i + 1))
 
 
-def collect_kgm():
-    """Посты Казгидромета с tabigat.gov.kz: дописывает новые (пост, час, параметр) в data/kgm.csv."""
+def collect_kgm(cities):
+    """Посты Казгидромета с tabigat.gov.kz: дописывает новые (пост, час, параметр) в kgm.csv каждого города."""
     attrs = get_json(TABIGAT_ATTRS)
     code = {a["attrname"]: KGM_PARAMS[a["nameRu"]] for a in attrs if a.get("nameRu") in KGM_PARAMS}
     name = {a["nameRu"]: a["attrname"] for a in attrs}
     date_attr, id_attr = name["Дата"], name["ID Станции"]
     feats = get_json(TABIGAT_WFS)["features"]
     key = lambda r: (r["station_id"], r["measured_at"], r["param"])
-    seen = read_keys(KGM_CSV, key)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return {c: _kgm_city(c, feats, code, date_attr, id_attr, key, now) for c in cities}
+
+
+def _kgm_city(c, feats, code, date_attr, id_attr, key, now):
+    B = CITIES[c]["bbox"]
+    path = city_files(c)[2]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    seen = read_keys(path, key)
     rows, n_pts = [], 0
     for f in feats:
         x, y = f["geometry"]["coordinates"]
         lng = x / 6378137 * 180 / math.pi
         lat = math.degrees(2 * math.atan(math.exp(y / 6378137)) - math.pi / 2)
-        if not (BBOX["lat_min"] <= lat <= BBOX["lat_max"] and BBOX["lng_min"] <= lng <= BBOX["lng_max"]):
+        if not (B["lat_min"] <= lat <= B["lat_max"] and B["lng_min"] <= lng <= B["lng_max"]):
             continue
         p = f["properties"]
         if not p.get(date_attr):
@@ -190,17 +210,19 @@ def collect_kgm():
             if key({k: str(v2) for k, v2 in r.items()}) not in seen:
                 seen.add(key({k: str(v2) for k, v2 in r.items()}))
                 rows.append(r)
-    append_rows(KGM_CSV, KGM_FIELDS, rows)
+    append_rows(path, KGM_FIELDS, rows)
     return n_pts, len(rows)
 
 
-def collect_wind():
+def collect_wind(c):
     """Погода по часам с WEATHER_START до текущего часа; файл пересобирается целиком (Open-Meteo уточняет прошлые часы)."""
-    lat, lng = WIND_POINT
+    lat, lng = CITIES[c]["wind"]
+    wind_csv = city_files(c)[1]
+    wind_csv.parent.mkdir(parents=True, exist_ok=True)
     now_local = datetime.now(ATYRAU_TZ).replace(tzinfo=None)
     url = (f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}"
            "&hourly=wind_direction_10m,wind_speed_10m,wind_gusts_10m,shortwave_radiation,cloud_cover,temperature_2m"
-           f"&wind_speed_unit=ms&timezone=Asia%2FAtyrau&start_date={WEATHER_START}&end_date={now_local:%Y-%m-%d}")
+           f"&wind_speed_unit=ms&timezone={CITIES[c]['tz']}&start_date={WEATHER_START}&end_date={now_local:%Y-%m-%d}")
     h = get_json(url)["hourly"]
     rows = []
     for t, d, s, g, rad, cl, tc in zip(h["time"], h["wind_direction_10m"], h["wind_speed_10m"], h["wind_gusts_10m"],
@@ -209,12 +231,12 @@ def collect_wind():
             continue  # только прошедшие часы, без прогноза
         rows.append({"time_local": t, "wind_dir_deg": d, "wind_speed_ms": s, "wind_gust_ms": g,
                      "radiation_wm2": rad, "cloud_pct": cl, "temp_c": tc})
-    tmp = WIND_CSV.with_suffix(".tmp")
+    tmp = wind_csv.with_suffix(".tmp")
     with tmp.open("w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=WIND_FIELDS)
         w.writeheader()
         w.writerows(rows)
-    tmp.replace(WIND_CSV)
+    tmp.replace(wind_csv)
     return len(rows)
 
 
@@ -244,33 +266,37 @@ def main():
     ap.add_argument("--only", default="all", help="через запятую: stations, weather, kgm (или all)")
     ap.add_argument("--log", default="collect.log")
     ap.add_argument("--push", action="store_true", help="после сбора отправить данные в GitHub")
+    ap.add_argument("--city", default="all", help="через запятую: " + ", ".join(CITIES) + " (или all)")
     a = ap.parse_args()
     LOG = DATA / a.log
     parts = {"stations", "weather", "kgm"} if a.only == "all" else set(a.only.split(","))
+    cities = list(CITIES) if a.city == "all" else a.city.split(",")
+    tag = lambda c: "" if c == "atyrau" else f"[{c}] "  # строки Атырау в логе — как раньше
     ok = True
     if "stations" in parts:
         try:
-            n_points, n_rows = collect_stations()
-            log(f"посты: {n_points} точек, новых строк {n_rows}")
+            for c, (n_points, n_rows) in collect_stations(cities).items():
+                log(f"{tag(c)}посты: {n_points} точек, новых строк {n_rows}")
         except Exception as e:
             ok = False
             log(f"ОШИБКА посты: {e!r}")
     if "kgm" in parts:
         try:
-            n_pts, n_rows = collect_kgm()
-            log(f"казгидромет (tabigat): {n_pts} постов, новых строк {n_rows}")
+            for c, (n_pts, n_rows) in collect_kgm(cities).items():
+                log(f"{tag(c)}казгидромет (tabigat): {n_pts} постов, новых строк {n_rows}")
         except Exception as e:
             ok = False
             log(f"ОШИБКА казгидромет: {e!r}")
     if "weather" in parts:
-        try:
-            log(f"погода: часов в файле {collect_wind()}")
-        except Exception as e:
-            ok = False
-            log(f"ОШИБКА погода: {e!r}")
+        for c in cities:
+            try:
+                log(f"{tag(c)}погода: часов в файле {collect_wind(c)}")
+            except Exception as e:
+                ok = False
+                log(f"{tag(c)}ОШИБКА погода: {e!r}")
     if a.push:
         try:
-            r = push([STATIONS_CSV, LOG])
+            r = push([city_files(c)[0] for c in cities if city_files(c)[0].exists()] + [LOG])
             log(f"github: {r}")
             ok = ok and not r.startswith("ОШИБКА")
         except Exception as e:
