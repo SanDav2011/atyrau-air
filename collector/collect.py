@@ -39,6 +39,9 @@ CITIES = {
               "wind": (43.65, 51.16), "tz": "Asia%2FAqtau", "dir": DATA / "aktau"},
     "oral": {"bbox": {"lat_min": 51.0, "lat_max": 51.4, "lng_min": 51.2, "lng_max": 51.6},
              "wind": (51.23, 51.37), "tz": "Asia%2FOral", "dir": DATA / "oral"},
+    # ЗКО, восток: Аксай (51.16, 53.00) и Берли (51.43, 52.71) — посты у Карачаганака, вне рамки Уральска
+    "zko-east": {"bbox": {"lat_min": 51.05, "lat_max": 51.55, "lng_min": 52.55, "lng_max": 53.15},
+                 "wind": (51.3, 52.85), "tz": "Asia%2FOral", "dir": DATA / "zko-east"},
 }
 
 
