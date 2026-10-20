@@ -82,150 +82,17 @@
   </ul>
 </section>
 
+<script src="scene.js"></script>
 <script>
-/* Көрініс: аспан + жылжитын бұлттар мен ауа ағыны, толқынды су беті, су астындағы жарық сәулелері, құм және балдырлар.
-   «Таза ауа» басылғанда — әріптер бөлшектерге бөлініп, суға батады да, оттегі көпіршіктеріне айналып, жоғары көтеріліп ериді. */
-const cv = document.getElementById('scene'), ctx = cv.getContext('2d');
+/* Басты бет: ортақ көрініс (scene.js) + «Таза ауа» басылғанда — әріптер бөлшектерге бөлініп, суға батады да,
+   оттегі көпіршіктеріне айналып, жоғары көтеріліп ериді; сосын қалалар тізімі шығады. */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W = 0, H = 0, DPR = 1, horizon = 0, clouds = [], streaks = [], rays = [], raySprite = null, weeds = [];
-
-function makeWeeds() { // балдыр бұталары: шеттерге көбірек, ортасында аз
-  const list = [], n = Math.max(8, Math.round(W / 70));
-  for (let i = 0; i < n; i++) {
-    let x = Math.random() * W;
-    if (Math.abs(x - W / 2) < W * 0.2) x += (x < W / 2 ? -1 : 1) * W * 0.2;
-    const blades = 2 + Math.floor(Math.random() * 3);
-    for (let b = 0; b < blades; b++) list.push({
-      x: x + (Math.random() - 0.5) * 26, h: H * (0.12 + Math.random() * 0.2), w: 5 + Math.random() * 6,
-      ph: Math.random() * 6, sp: 0.6 + Math.random() * 0.6, hue: 140 + Math.random() * 30, light: 28 + Math.random() * 14 });
-  }
-  return list.sort((a, b) => a.h - b.h);
-}
-function drawWeed(w, t) {
-  // жапырақ: түбінен ұшына дейін жіңішкеретін, синус бойынша иілетін таспа
-  const base = H + 4, seg = 14, left = [], right = [];
-  for (let i = 0; i <= seg; i++) {
-    const s = i / seg, y = base - w.h * s;
-    const sway = Math.sin(t * w.sp + w.ph + s * 2.2) * 18 * s * s + Math.sin(t * 1.7 + w.ph + s * 5) * 3 * s;
-    const half = w.w * (1 - s * 0.85) * (0.8 + 0.25 * Math.sin(s * 9 + w.ph));
-    left.push([w.x + sway - half, y]); right.push([w.x + sway + half, y]);
-  }
-  ctx.beginPath(); ctx.moveTo(left[0][0], left[0][1]);
-  for (const [x, y] of left) ctx.lineTo(x, y);
-  for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i][0], right[i][1]);
-  ctx.closePath();
-  const g = ctx.createLinearGradient(0, base, 0, base - w.h);
-  g.addColorStop(0, `hsla(${w.hue},55%,${w.light - 10}%,0.95)`); g.addColorStop(1, `hsla(${w.hue - 15},60%,${w.light + 14}%,0.75)`);
-  ctx.fillStyle = g; ctx.fill();
-  ctx.strokeStyle = `hsla(${w.hue},60%,${w.light + 25}%,0.35)`; ctx.lineWidth = 1; ctx.stroke();
-}
-
-function makeRay() { // жұмсақ шетті жарық сәулесі (бір рет салынады)
-  const c = document.createElement('canvas'); c.width = 200; c.height = 400;
-  const g = c.getContext('2d'); g.filter = 'blur(14px)';
-  const lg = g.createLinearGradient(0, 0, 0, 400); lg.addColorStop(0, 'rgba(255,255,255,1)'); lg.addColorStop(1, 'rgba(255,255,255,0)');
-  g.fillStyle = lg; g.beginPath(); g.moveTo(85, 0); g.lineTo(115, 0); g.lineTo(170, 400); g.lineTo(30, 400); g.fill();
-  return c;
-}
-
-function makeCloud(w) {
-  // бұлт суреті бір рет алдын ала салынады (бұлдыр шеңберлер), кейін тек жылжиды
-  // кенептің шетінде бос орын қалдырамыз — әйтпесе бұлдыр шеті тікбұрыш болып кесіледі
-  const pad = Math.round(w * 0.22), h = w * 0.42, c = document.createElement('canvas');
-  c.width = w + pad * 2; c.height = h + pad * 2;
-  const g = c.getContext('2d');
-  g.filter = `blur(${Math.round(w * 0.05)}px)`;
-  g.fillStyle = 'rgba(255,255,255,0.9)';
-  for (let i = 0; i < 7; i++) {
-    const x = pad + w * (0.2 + Math.random() * 0.6), y = pad + h * (0.45 + Math.random() * 0.2), r = w * (0.07 + Math.random() * 0.08);
-    g.beginPath(); g.ellipse(x, y, r * 1.6, r, 0, 0, Math.PI * 2); g.fill();
-  }
-  return c;
-}
-
-function resize() {
-  DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-  W = innerWidth; H = innerHeight;
-  cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  horizon = Math.round(H * 0.46);
-  clouds = Array.from({ length: 6 }, (_, i) => {
-    const w = Math.max(180, W * (0.22 + Math.random() * 0.22));
-    return { img: makeCloud(w), x: Math.random() * (W + w) - w, y: H * (0.04 + Math.random() * 0.26), v: 6 + Math.random() * 10, a: 0.35 + Math.random() * 0.4 };
-  });
-  streaks = Array.from({ length: 26 }, () => ({ x: Math.random() * W, y: Math.random() * horizon * 0.85, len: 60 + Math.random() * 140, v: 30 + Math.random() * 50 }));
-  rays = Array.from({ length: 9 }, (_, i) => ({ x: (i + 0.5) / 9 + (Math.random() - 0.5) * 0.06, w: 0.03 + Math.random() * 0.05, ph: Math.random() * 6 }));
-  raySprite = makeRay();
-  weeds = makeWeeds();
-  placeUi();
-}
-
-function surfaceY(x, t) { // су бетінің биіктігі — үш синус қосындысы
-  return horizon + 6 * Math.sin(x * 0.011 + t * 1.1) + 3 * Math.sin(x * 0.029 - t * 1.6) + 1.4 * Math.sin(x * 0.071 + t * 2.4);
-}
-
-function draw(t) {
-  // 1) аспан
-  let g = ctx.createLinearGradient(0, 0, 0, horizon);
-  g.addColorStop(0, '#0b46b5'); g.addColorStop(0.45, '#3d86d8'); g.addColorStop(0.82, '#cfe6f7'); g.addColorStop(1, '#f4fbff');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, horizon + 20);
-  // 2) бұлттар мен ауа ағыны (солдан оңға)
-  for (const c of clouds) {
-    const x = ((c.x + c.v * t) % (W + c.img.width)) - c.img.width;
-    ctx.globalAlpha = c.a; ctx.drawImage(c.img, x, c.y);
-  }
-  ctx.globalAlpha = 1; ctx.lineCap = 'round'; ctx.lineWidth = 1.2;
-  for (const s of streaks) {
-    const x = ((s.x + s.v * t) % (W + s.len * 2)) - s.len, y = s.y + 4 * Math.sin(t * 0.8 + s.x);
-    const lg = ctx.createLinearGradient(x, 0, x + s.len, 0);
-    lg.addColorStop(0, 'rgba(255,255,255,0)'); lg.addColorStop(0.5, 'rgba(255,255,255,0.28)'); lg.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.strokeStyle = lg; ctx.beginPath(); ctx.moveTo(x, y);
-    ctx.quadraticCurveTo(x + s.len / 2, y - 5 * Math.sin(t + s.y), x + s.len, y); ctx.stroke();
-  }
-  // 3) су (беті толқынды)
-  const step = 8;
-  ctx.beginPath(); ctx.moveTo(0, H);
-  for (let x = 0; x <= W + step; x += step) ctx.lineTo(x, surfaceY(x, t));
-  ctx.lineTo(W, H); ctx.closePath();
-  g = ctx.createLinearGradient(0, horizon, 0, H);
-  g.addColorStop(0, '#10a9d6'); g.addColorStop(0.08, '#22c4e4'); g.addColorStop(0.45, '#56dcef'); g.addColorStop(0.72, '#9cecf0'); g.addColorStop(1, '#d9f4e6');
-  ctx.fillStyle = g; ctx.fill();
-  ctx.save(); ctx.clip();
-  // 4) су астындағы жарық сәулелері
-  for (const r of rays) {
-    const cx = (r.x + 0.015 * Math.sin(t * 0.5 + r.ph)) * W, w = r.w * W * 3.2;
-    ctx.globalAlpha = 0.16 + 0.1 * Math.sin(t * 0.7 + r.ph);
-    ctx.drawImage(raySprite, cx - w / 2, horizon, w, (H - horizon) * 0.95);
-    ctx.globalAlpha = 1;
-  }
-  // 5) құм түбі және балдырлар
-  const sandTop = H * 0.8;
-  g = ctx.createLinearGradient(0, sandTop, 0, H);
-  g.addColorStop(0, 'rgba(236,220,178,0)'); g.addColorStop(0.35, 'rgba(236,220,178,0.75)'); g.addColorStop(1, 'rgba(244,229,192,1)');
-  ctx.fillStyle = g; ctx.fillRect(0, sandTop, W, H - sandTop);
-  // балдырлар — түбінен өсіп, ағыспен тербеледі (ортасы бос — мәтін анық оқылсын)
-  for (const w of weeds) drawWeed(w, t);
-  // судың үстіңгі қабатының астыңғы көлеңкесі
-  ctx.beginPath();
-  for (let x = 0; x <= W + step; x += step) ctx.lineTo(x, surfaceY(x, t) + 16);
-  for (let x = W + step; x >= 0; x -= step) ctx.lineTo(x, surfaceY(x, t));
-  ctx.fillStyle = 'rgba(8,120,170,0.28)'; ctx.fill();
-  ctx.restore();
-  // 6) су бетіндегі ақ жарқыл сызығы
-  ctx.beginPath();
-  for (let x = 0; x <= W + step; x += step) { const y = surfaceY(x, t); x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-  ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 2; ctx.stroke();
-  ctx.beginPath();
-  for (let x = 0; x <= W + step; x += step) { const y = surfaceY(x, t) - 3; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 5; ctx.stroke();
-  // 7) бөлшектер / оттегі көпіршіктері
-  drawParticles(t);
-}
-
 /* ---- «Таза ауа» → көпіршіктер ---- */
 const title = document.getElementById('title'), hint = document.getElementById('hint'), cities = document.getElementById('cities');
 let parts = [], lastT = 0, dissolved = false;
 
-function placeUi() {
+function placeUi(s) {
+  const { horizon, H } = (s && s.W) ? s : sc;
   title.style.top = horizon + 'px';
   const r = title.getBoundingClientRect();
   hint.style.top = (horizon + r.height / 2 + 18) + 'px';
@@ -247,7 +114,7 @@ function dissolve() {
       r: gap * 0.45, age: 0, delay: Math.random() * 0.5 + (x / oc.width) * 0.35, under: false, life: 2.6 + Math.random() * 1.6, wob: Math.random() * 6 });
   }
   title.style.opacity = '0'; title.style.pointerEvents = 'none'; hint.style.display = 'none';
-  setTimeout(() => { cities.style.visibility = 'visible'; placeUi();
+  setTimeout(() => { cities.style.visibility = 'visible'; placeUi(sc);
     cities.querySelectorAll('li').forEach((li, i) => li.style.transitionDelay = (0.12 * i) + 's');
     requestAnimationFrame(() => cities.classList.add('show')); }, 1100);
 }
@@ -259,7 +126,7 @@ function drawParticles(t) {
   for (const p of parts) {
     p.age += dt;
     if (p.age < p.delay) { draw1(p, 1, false); keep.push(p); continue; }
-    const sy = surfaceY(p.x, t);
+    const sy = sc.surfaceY(p.x, t);
     if (!p.under) { // суға батады
       p.vy += 160 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
       if (p.y > sy + 6) { p.under = true; p.vy = 120 + Math.random() * 220; p.vx *= 0.3; p.born = p.age; }
@@ -278,6 +145,7 @@ function drawParticles(t) {
   parts = keep;
 }
 function draw1(p, a, bubble) {
+  const ctx = sc.ctx;
   ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
   if (bubble) { ctx.strokeStyle = `rgba(255,255,255,${0.75 * a})`; ctx.lineWidth = 1; ctx.stroke();
     ctx.fillStyle = `rgba(255,255,255,${0.18 * a})`; ctx.fill(); }
@@ -285,11 +153,10 @@ function draw1(p, a, bubble) {
 }
 
 title.addEventListener('click', dissolve);
-addEventListener('resize', resize);
-resize();
-document.fonts && document.fonts.ready.then(placeUi);
+const sc = createScene(document.getElementById('scene'), { onResize: S => placeUi(S) });
+document.fonts && document.fonts.ready.then(() => placeUi());
 const t0 = performance.now();
-function loop(now) { draw((now - t0) / 1000); if (!reduce || parts.length) requestAnimationFrame(loop); }
+function loop(now) { const t = (now - t0) / 1000; sc.draw(t); drawParticles(t); if (!reduce || parts.length) requestAnimationFrame(loop); }
 requestAnimationFrame(loop);
 if (reduce) title.addEventListener('click', () => requestAnimationFrame(loop));
 </script>
