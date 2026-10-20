@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Газдар туралы — Атырау ауасы</title>
+<title>Газдар туралы — Қазақстан ауасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="mol.js"></script>
 <style>
   :root { --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #6b7280; --line: #e3e6ea; --accent: #0f766e; }
@@ -36,13 +39,46 @@
   .note { background: #fef3c7; border-radius: 10px; padding: 12px 16px; }
   ul { margin: 6px 0 0; padding-left: 20px; }
   li { margin: 4px 0; }
+
+  /* ===== Бірыңғай дизайн (басты бетпен сай): аспан → су фоны, Onest, шыны карточкалар ===== */
+  :root { --bg: rgba(11,111,196,.08); --card: rgba(255,255,255,.9); --text: #10233f; --muted: #5b6b82; --line: rgba(16,35,63,.12); --accent: #0b6fc4; }
+  html { background: #0b46b5; }
+  body { font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; min-height: 100vh; }
+  header { background: transparent; padding: 0 clamp(16px, 4vw, 48px) 8px; color: #fff; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav a { padding: 12px 10px; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; padding-left: 0; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 860px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { font-size: 15px; opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  .card { border-radius: 16px; padding: 16px 18px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .nav a { border-radius: 10px; transition: background .2s, color .2s; }
+  .nav a:hover { background: var(--accent); color: #fff; }
+  .note { border-radius: 16px; background: rgba(254,243,199,.92); box-shadow: 0 8px 30px rgba(0,40,90,.12); }
+  tr.ours td { background: rgba(52,211,153,.16); }
+  #visits { color: rgba(16,35,63,.6) !important; }
 </style>
 </head>
 <body>
 <header>
-  <a href="./">← Басты бет</a> · <a href="atyrau.html">Атырау картасы</a>
-  <h1>📘 Газдар туралы</h1>
-  <p>Бекеттер не өлшейді, қалай өлшейді және денсаулыққа қалай әсер етеді</p>
+  <nav aria-label="Негізгі мәзір">
+    <a class="brand" href="./">Қазақстан ауасы</a>
+    <a href="./">Басты</a>
+    <a href="karta.html">Карта</a>
+    <a href="gazdar.html" class="active" aria-current="page">Газдар туралы</a>
+    <a href="#" onclick="return false">Жоба туралы</a>
+  </nav>
+  <div class="hero">
+    <h1>Газдар туралы</h1>
+    <p>Бекеттер не өлшейді, қалай өлшейді және денсаулыққа қалай әсер етеді</p>
+  </div>
 </header>
 <main>
   <div class="card">
