@@ -87,7 +87,7 @@
 </div>
 <div id="tip"></div>
 <div id="legend">
-  <span>Ауа күйі (Атырау, Ақтөбе, Ақтау, Орал — H2S; Алматы, Астана — PM2,5): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
+  <span>Ауа күйі (басты зат қаланың бетінде көрсетілген: H2S, PM2,5, SO2 немесе NO2): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
   <span><i style="background:#fff"></i>датчигі бар</span>
   <span><i style="background:var(--soon)"></i>датчик жоқ</span>
   <span>➝ жел</span>
@@ -110,6 +110,19 @@ const ACTIVE = {
   'Ақтөбе': { href: 'aktobe.html', file: 'data/aktobe/stations.csv', pol: 'H2S', limit: 8 },
   'Ақтау': { href: 'aktau.html', file: 'data/aktau/stations.csv', pol: 'H2S', limit: 8 },
   'Орал': { href: 'oral.html', file: 'data/oral/stations.csv', pol: 'H2S', limit: 8 },
+  'Шымкент': { href: 'shymkent.html', file: 'data/shymkent/stations.csv', pol: 'H2S', limit: 8 },
+  'Қарағанды': { href: 'karaganda.html', file: 'data/karaganda/stations.csv', pol: 'H2S', limit: 8 },
+  'Павлодар': { href: 'pavlodar.html', file: 'data/pavlodar/stations.csv', pol: 'H2S', limit: 8 },
+  'Өскемен': { href: 'oskemen.html', file: 'data/oskemen/stations.csv', pol: 'H2S', limit: 8 },
+  'Семей': { href: 'semey.html', file: 'data/semey/stations.csv', pol: 'H2S', limit: 8 },
+  'Қостанай': { href: 'kostanay.html', file: 'data/kostanay/stations.csv', pol: 'NO2', limit: 200 },
+  'Тараз': { href: 'taraz.html', file: 'data/taraz/stations.csv', pol: 'NO2', limit: 200 },
+  'Талдықорған': { href: 'taldykorgan.html', file: 'data/taldykorgan/stations.csv', pol: 'H2S', limit: 8 },
+  'Қызылорда': { href: 'kyzylorda.html', file: 'data/kyzylorda/stations.csv', pol: 'SO2', limit: 500 },
+  'Көкшетау': { href: 'kokshetau.html', file: 'data/kokshetau/stations.csv', pol: 'SO2', limit: 500 },
+  'Түркістан': { href: 'turkistan.html', file: 'data/turkistan/stations.csv', pol: 'NO2', limit: 200 },
+  'Жезқазған': { href: 'zhezkazgan.html', file: 'data/zhezkazgan/stations.csv', pol: 'H2S', limit: 8 },
+  'Петропавл': { href: 'petropavl.html', file: 'data/petropavl/stations.csv', pol: 'H2S', limit: 8 },
 };
 let regions = null, box = null, places = null, wind = {}, cityStatus = {}, postsByRegion = {};
 let view = { k: 1, tx: 0, ty: 0 }, selected = null, MW = 0, MH = 0, anim = null;
@@ -215,13 +228,15 @@ function renderPoints() {
     const sub = active ? `${A.pol} ${st && st.max != null ? st.max + ' мкг/м³' : '—'}` : '';
     const hh = h + (sub ? fs : 0);
     const cand = [{ x: x + 9, y: y - h / 2, a: 'start' }, { x: x - 9 - w, y: y - h / 2, a: 'end' }, { x: x - w / 2, y: y + 7, a: 'middle' }];
-    const spot = cand.find(r => r.x > -4 && r.x + w < MW + 4 && r.y > -4 && r.y + hh < MH + 4 && fits({ x: r.x, y: r.y, w, h: hh }, c.cap));
+    const tryFit = hgt => cand.find(r => r.x > -4 && r.x + w < MW + 4 && r.y > -4 && r.y + hgt < MH + 4 && fits({ x: r.x, y: r.y, w, h: hgt }, c.cap));
+    let spot = tryFit(hh), withSub = !!sub;
+    if (!spot && sub) { spot = tryFit(h); withSub = false; } // мәнге орын жетпесе — тек қала аты
     if (spot) {
-      placed.push({ x: spot.x, y: spot.y, w, h: hh });
+      placed.push({ x: spot.x, y: spot.y, w, h: withSub ? hh : h });
       const tx = spot.a === 'start' ? spot.x : spot.a === 'end' ? spot.x + w : x;
       const t = el('text', { x: tx, y: spot.y + fs * 0.85, 'text-anchor': spot.a, style: `font-size:${fs.toFixed(1)}px`, class: c.cap ? '' : 'small' }, host);
       t.textContent = c.name;
-      if (sub) { const s2 = el('text', { x: tx, y: spot.y + fs * 1.85, 'text-anchor': spot.a, class: 'sub', style: `font-size:${(fs * 0.78).toFixed(1)}px` }, host); s2.textContent = sub; }
+      if (sub && withSub) { const s2 = el('text', { x: tx, y: spot.y + fs * 1.85, 'text-anchor': spot.a, class: 'sub', style: `font-size:${(fs * 0.78).toFixed(1)}px` }, host); s2.textContent = sub; }
     }
     const wd = wind[c.name];
     if (c.cap && wd && !detail) { // жел бағдаршасы (тек ел деңгейінде)
