@@ -87,7 +87,7 @@
 </div>
 <div id="tip"></div>
 <div id="legend">
-  <span>Ауа күйі (Атырау — H2S, Алматы — PM2,5): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
+  <span>Ауа күйі (Атырау, Ақтөбе, Ақтау, Орал — H2S; Алматы, Астана — PM2,5): <i style="background:var(--ok)"></i>таза <i style="background:var(--warn);margin-left:8px"></i>шекке жақын <i style="background:var(--bad);margin-left:8px"></i>шектен жоғары</span>
   <span><i style="background:#fff"></i>датчигі бар</span>
   <span><i style="background:var(--soon)"></i>датчик жоқ</span>
   <span>➝ жел</span>
@@ -106,6 +106,10 @@ const $ = s => document.querySelector(s);
 const ACTIVE = {
   'Атырау': { href: 'atyrau.html', file: 'data/stations.csv', pol: 'H2S', limit: 8 },
   'Алматы': { href: 'almaty.html', file: 'data/almaty/stations.csv', pol: 'PM2.5', limit: 160 },
+  'Астана': { href: 'astana.html', file: 'data/astana/stations.csv', pol: 'PM2.5', limit: 160 },
+  'Ақтөбе': { href: 'aktobe.html', file: 'data/aktobe/stations.csv', pol: 'H2S', limit: 8 },
+  'Ақтау': { href: 'aktau.html', file: 'data/aktau/stations.csv', pol: 'H2S', limit: 8 },
+  'Орал': { href: 'oral.html', file: 'data/oral/stations.csv', pol: 'H2S', limit: 8 },
 };
 let regions = null, box = null, places = null, wind = {}, cityStatus = {}, postsByRegion = {};
 let view = { k: 1, tx: 0, ty: 0 }, selected = null, MW = 0, MH = 0, anim = null;
