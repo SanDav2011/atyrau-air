@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Жоба туралы — Қазақстан ауасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --card: rgba(255,255,255,.92); --text: #10233f; --muted: #5b6b82; --accent: #0b6fc4; }
+  * { box-sizing: border-box; }
+  html { background: #0b46b5; }
+  body { margin: 0; font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text); min-height: 100vh;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; font-size: 15px; line-height: 1.6; }
+  header { color: #fff; padding: 0 clamp(16px, 4vw, 48px) 8px; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px;
+                             display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                                    transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 860px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { max-width: 860px; margin: 0 auto; padding: 8px 16px 32px; display: grid; gap: 14px; }
+  .card { background: var(--card); border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 8px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; padding-right: 12px; }
+  .contact a:hover { text-decoration: underline; }
+  #visits { text-align: center; color: rgba(16,35,63,.6); font-size: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Негізгі мәзір">
+    <a class="brand" href="./">Қазақстан ауасы</a>
+    <a href="./">Басты</a>
+    <a href="karta.html">Карта</a>
+    <a href="gazdar.html">Газдар туралы</a>
+    <a href="about.html" class="active" aria-current="page">Жоба туралы</a>
+  </nav>
+  <div class="hero">
+    <h1>Жоба туралы</h1>
+    <p>«Қазақстан ауасы» — ашық ақпараттық жоба</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <h2>Жоба не үшін</h2>
+    <p>Бұл коммерциялық емес жоба. Ол тұрғындарға ауа сапасын түсінуге көмектеседі: мысалы, Атырауда күкіртсутек иісі қайдан келетінін, желдің бағыты мен күші қалай әсер ететінін көрсетеді.</p>
+    <p>Қала картасында әр бекеттің өлшемдері, жел және шекті мәндермен салыстыру бар. Газдар туралы бетте әр заттың не екенін, қалай өлшенетінін және денсаулыққа әсерін түсіндіреміз.</p>
+  </section>
+
+  <section class="card">
+    <h2>Авторлар</h2>
+    <ul>
+      <li>Санжар Давлетбаев — жобаның авторы, НЗМ мектебінің 10-сынып оқушысы</li>
+      <li>Роман Давлетбаев — байланыс тұлғасы</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Деректер қайдан алынады</h2>
+    <ul>
+      <li><b>Қазгидромет</b> — бекеттердің өлшемдері (ecodata.kz, tabigat.gov.kz)</li>
+      <li><b>Open-Meteo</b> — жел, температура, бұлттылық</li>
+      <li><b>OpenStreetMap</b> — облыстар мен қалалардың шекаралары, өнеркәсіп нысандарының орны</li>
+      <li><b>ҚР ДСМ-70 бұйрығы</b> — шекті мәндер</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Маңызды ескерту</h2>
+    <p>Бұл ресми ескерту емес. Көрсетілген көздер мен түстер — модель бағасы, нақты ластануды өлшейтін бекеттердің өзі ресми деректер береді. Медициналық кеңес те емес: жағдайыңыз нашарласа, 103-ке хабарласыңыз немесе дәрігерге барыңыз.</p>
+  </section>
+
+  <section class="card contact">
+    <h2>Байланыс</h2>
+    <p class="muted">Сұрақ, ұсыныс немесе қате туралы жазыңыз:</p>
+    <a href="mailto:sanainwest@gmail.com">✉️ sanainwest@gmail.com</a><br>
+    <a href="https://instagram.com/roman.d.m" target="_blank" rel="noopener">📷 Instagram: @roman.d.m</a>
+  </section>
+
+  <div id="visits" hidden></div>
+</main>
+<script>
+// Келушілер саны: алдымен өз доменіміздегі data/visits.json, болмаса — GoatCounter
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+getJson('data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт ' + d.count + ' рет қаралды'; el.hidden = false; })
+  .catch(() => {});
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
