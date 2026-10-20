@@ -223,17 +223,28 @@ function startWheel() {
 }
 wheelUl.addEventListener('wheel', e => { e.preventDefault(); wTarget = null; wVel = 0; wPos += Math.max(-1, Math.min(1, e.deltaY / 120)) * 0.35; renderWheel();
   clearTimeout(wIdle); wIdle = setTimeout(() => { wTarget = Math.round(wPos); wKick(); }, 140); }, { passive: false });
-wheelUl.addEventListener('pointerdown', e => { wDrag = { y: e.clientY, pos: wPos, t: performance.now(), lastY: e.clientY, lastT: performance.now(), id: e.pointerId }; wMoved = false; wTarget = null; wVel = 0; });
-addEventListener('pointermove', e => {
-  if (!wDrag || e.pointerId !== wDrag.id) return;
-  const dy = e.clientY - wDrag.y;
-  if (!wMoved && Math.abs(dy) > 6) { wMoved = true; wheelUl.classList.add('drag'); try { wheelUl.setPointerCapture(e.pointerId); } catch {} }
+// сүйреу: тышқан/қалам — pointer events; телефон — touch events (кейбір мобильді браузерлерде pointermove келмейді) + жылжытуды тоқтату
+const dStart = (y, id) => { wDrag = { y, pos: wPos, lastY: y, lastT: performance.now(), id }; wMoved = false; wTarget = null; wVel = 0; };
+const dMove = y => {
+  if (!wDrag) return;
+  const dy = y - wDrag.y;
+  if (!wMoved && Math.abs(dy) > 6) { wMoved = true; wheelUl.classList.add('drag'); }
   if (!wMoved) return;
-  const now = performance.now(); wVel = -((e.clientY - wDrag.lastY) / wRow) * (16 / Math.max(8, now - wDrag.lastT)); wDrag.lastY = e.clientY; wDrag.lastT = now;
+  const now = performance.now(); wVel = -((y - wDrag.lastY) / wRow) * (16 / Math.max(8, now - wDrag.lastT)); wDrag.lastY = y; wDrag.lastT = now;
   wPos = wDrag.pos - dy / wRow; renderWheel();
+};
+const dEnd = () => { if (!wDrag) return; wDrag = null; wheelUl.classList.remove('drag'); if (wMoved) { wVel = Math.max(-0.5, Math.min(0.5, wVel)); wKick(); } };
+wheelUl.addEventListener('pointerdown', e => { if (e.pointerType !== 'touch') dStart(e.clientY, e.pointerId); });
+addEventListener('pointermove', e => {
+  if (!wDrag || e.pointerType === 'touch' || e.pointerId !== wDrag.id) return;
+  if (!wMoved && Math.abs(e.clientY - wDrag.y) > 6) { try { wheelUl.setPointerCapture(e.pointerId); } catch {} }
+  dMove(e.clientY);
 });
-const wEnd = e => { if (!wDrag || (e && e.pointerId !== wDrag.id)) return; wDrag = null; wheelUl.classList.remove('drag'); if (wMoved) { wVel = Math.max(-0.5, Math.min(0.5, wVel)); wKick(); } };
-addEventListener('pointerup', wEnd); addEventListener('pointercancel', wEnd);
+addEventListener('pointerup', e => { if (e.pointerType !== 'touch') dEnd(); });
+addEventListener('pointercancel', e => { if (e.pointerType !== 'touch') dEnd(); });
+wheelUl.addEventListener('touchstart', e => { if (e.touches.length === 1) dStart(e.touches[0].clientY, 't'); }, { passive: true });
+wheelUl.addEventListener('touchmove', e => { if (!wDrag) return; e.preventDefault(); dMove(e.touches[0].clientY); }, { passive: false });
+wheelUl.addEventListener('touchend', dEnd); wheelUl.addEventListener('touchcancel', dEnd);
 wheelUl.addEventListener('click', e => { if (wMoved) { e.preventDefault(); e.stopPropagation(); wMoved = false; } }, true);
 addEventListener('keydown', e => { if (!dissolved || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return; e.preventDefault();
   wTarget = Math.round(wPos) + (e.key === 'ArrowDown' ? 1 : -1); wKick(); });
