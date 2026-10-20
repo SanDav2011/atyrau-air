@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Қазақстан картасы — Қазақстан ауасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #fff; --ink-soft: rgba(255,255,255,.8); --ok: #34d399; --warn: #fbbf24; --bad: #f87171; --soon: rgba(255,255,255,.55); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0e5fb3; font-family: Onest, system-ui, sans-serif; color: var(--ink); }
+  canvas#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 14px clamp(16px, 4vw, 48px); }
+  nav .brand { font-weight: 800; letter-spacing: .02em; margin-right: auto; font-size: 18px; text-shadow: 0 1px 8px rgba(0,40,90,.35); color: #fff; text-decoration: none; }
+  nav a { color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px; display: inline-flex; align-items: center;
+          position: relative; text-shadow: 0 1px 8px rgba(0,40,90,.35); transition: color .2s; white-space: nowrap; }
+  nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                 transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+  nav a:hover, nav a.active { color: #fff; }
+  nav a:not(.brand):hover::after, nav a.active::after { transform: scaleX(1); }
+  @media (max-width: 800px) { nav .brand { font-size: 16px; } nav a { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { nav .brand { display: none; } nav { justify-content: center; gap: 0; } }
+
+  /* Жалау — тұғырда, нақты желмен желбірейді */
+  #flagWrap { position: fixed; z-index: 3; pointer-events: none; }
+  #flag { display: block; }
+  #flagCap { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.4); pointer-events: none; }
+
+  /* Карта — «шыны» пішін, өз фоны жоқ */
+  #mapBox { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); }
+  #kz { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 30px rgba(0,40,90,.35)); }
+  #kz .region { fill: rgba(255,255,255,.13); stroke: rgba(255,255,255,.55); stroke-width: .8; transition: fill .25s; vector-effect: non-scaling-stroke; }
+  #kz .region:hover { fill: rgba(255,255,255,.3); }
+  #kz .outline { fill: none; stroke: rgba(255,255,255,.95); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .city { cursor: default; }
+  .city a { cursor: pointer; }
+  .city .halo { animation: pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+  .city text { font: 700 17px Onest, system-ui, sans-serif; fill: #fff; paint-order: stroke; stroke: rgba(0,50,100,.55); stroke-width: 3px; }
+  .city text.sub { font-weight: 500; font-size: 13px; fill: rgba(255,255,255,.85); }
+  .city a:focus-visible circle.dot { stroke: #fff; stroke-width: 3; }
+  .wind { stroke: rgba(255,255,255,.85); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+
+  #tip { position: fixed; z-index: 6; pointer-events: none; font-size: 14px; font-weight: 600; color: #fff; text-shadow: 0 1px 8px rgba(0,40,90,.6); opacity: 0; transition: opacity .15s; }
+  #legend { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px;
+            font-size: 14px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); width: min(720px, 94vw); }
+  #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+  #clock { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); }
+  @media (prefers-reduced-motion: reduce) { .city .halo { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<nav aria-label="Негізгі мәзір">
+  <a class="brand" href="./">Қазақстан ауасы</a>
+  <a href="./">Басты</a>
+  <a href="karta.html" class="active" aria-current="page">Карта</a>
+  <a href="gazdar.html">Газдар туралы</a>
+  <a href="#" onclick="return false">Жоба туралы</a>
+</nav>
+
+<div id="flagWrap"><canvas id="flag" aria-label="Қазақстан Туы" role="img"></canvas></div>
+<div id="flagCap"></div>
+<div id="mapBox"><svg id="kz" role="img" aria-label="Қазақстан картасы: облыстар мен қалалар"></svg></div>
+<div id="tip"></div>
+<div id="legend">
+  <span><i style="background:var(--ok)"></i>таза (шектің жартысына дейін)</span>
+  <span><i style="background:var(--warn)"></i>шекке жақын</span>
+  <span><i style="background:var(--bad)"></i>шектен жоғары</span>
+  <span><i style="background:var(--soon)"></i>жақында</span>
+  <span>➝ жел</span>
+</div>
+<div id="clock"></div>
+
+<script src="scene.js"></script>
+<script>
+/* Қазақстан картасы: фон — ортақ көрініс (тәулік уақытымен), облыстар — OSM (data/kz-regions.json),
+   қалалар — ауа күйі (Атырау: соңғы сағаттағы ең жоғары H2S), жел — Open-Meteo (әр қала, қазіргі),
+   жалау — Атыраудағы нақты желмен желбірейді. */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const CITIES = [
+  { id: 'atyrau', name: 'Атырау', lat: 47.107, lng: 51.914, href: 'atyrau.html', active: true },
+  { id: 'astana', name: 'Астана', lat: 51.169, lng: 71.449, label: 'right' },
+  { id: 'karaganda', name: 'Қарағанды', lat: 49.806, lng: 73.085, label: 'below' },
+  { id: 'petropavl', name: 'Петропавл', lat: 54.865, lng: 69.135 },
+  { id: 'aktobe', name: 'Ақтөбе', lat: 50.283, lng: 57.167 },
+];
+const H2S_LIMIT = 8; // мкг/м³, ҚР ДСМ-70
+let regions = null, box = null, wind = {}, cityStatus = {};
+
+/* ---- проекция: тең бұрышты, cos(48°) түзетуімен; картаны контейнерге сыйғызу ---- */
+const K = Math.cos(48 * Math.PI / 180);
+let proj = (lng, lat) => [lng, lat];
+function fitProjection(w, h) {
+  const b = box || { minLng: 46.4, maxLng: 87.4, minLat: 40.5, maxLat: 55.5 };
+  const sx = w / ((b.maxLng - b.minLng) * K), sy = h / (b.maxLat - b.minLat), s = Math.min(sx, sy);
+  const ox = (w - (b.maxLng - b.minLng) * K * s) / 2, oy = (h - (b.maxLat - b.minLat) * s) / 2;
+  proj = (lng, lat) => [ox + (lng - b.minLng) * K * s, oy + (b.maxLat - lat) * s];
+}
+
+/* ---- орналасу ---- */
+function layout(sc) {
+  const W = sc.W, H = sc.H, mob = W < 640;
+  const flagSpace = mob ? 0 : 230; // жалауға сол жақтан орын
+  const mw = Math.min((W - flagSpace) * (mob ? 0.96 : 0.9), 1150), mh = Math.min(H * (mob ? 0.42 : 0.62), mw * 0.56);
+  const top = Math.max(mob ? 200 : 80, sc.horizon - mh * 0.55);
+  Object.assign($('#mapBox').style, { width: mw + 'px', height: mh + 'px', top: top + 'px', left: (flagSpace + (W - flagSpace) / 2) + 'px' });
+  $('#kz').setAttribute('viewBox', `0 0 ${mw} ${mh}`);
+  $('#legend').style.top = (top + mh + 14) + 'px';
+  fitProjection(mw, mh);
+  renderMap();
+  placeFlag(sc);
+  $('#clock').style.cssText += `;left:${mob ? 16 : 32}px;bottom:16px`;
+}
+
+/* ---- облыстар мен қалалар (SVG) ---- */
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const ringPath = ring => ring.map(([lng, lat], i) => (i ? 'L' : 'M') + proj(lng, lat).map(v => v.toFixed(1)).join(',')).join('') + 'Z';
+const statusColor = st => st == null ? 'var(--soon)' : st < H2S_LIMIT / 2 ? 'var(--ok)' : st <= H2S_LIMIT ? 'var(--warn)' : 'var(--bad)';
+
+function renderMap() {
+  const svg = $('#kz'); svg.innerHTML = '';
+  if (regions) {
+    const g = el('g', {}, svg);
+    for (const f of regions.features) {
+      const d = f.geometry.coordinates.map(poly => poly.map(ringPath).join('')).join('');
+      const p = el('path', { d, class: 'region' }, g);
+      p.addEventListener('mousemove', e => showTip(f.properties.name, e));
+      p.addEventListener('mouseleave', hideTip);
+    }
+    if (regions.outline) el('path', { d: regions.outline.coordinates.map(poly => poly.map(ringPath).join('')).join(''), class: 'outline' }, svg);
+  }
+  const cg = el('g', {}, svg);
+  for (const c of CITIES) {
+    const [x, y] = proj(c.lng, c.lat), st = cityStatus[c.id], col = c.active ? statusColor(st) : 'var(--soon)';
+    const g = el('g', { class: 'city' }, cg);
+    const host = c.active ? el('a', { href: c.href, 'aria-label': `${c.name} — картаны ашу` }, g) : g;
+    if (c.active) el('circle', { cx: x, cy: y, r: 9, fill: col, class: 'halo' }, host);
+    el('circle', { cx: x, cy: y, r: c.active ? 7 : 5, fill: col, stroke: 'rgba(255,255,255,.9)', 'stroke-width': 2, class: 'dot' }, host);
+    const below = c.label === 'below', right = c.label === 'right' || (!below && x < 110); // шетке жақын — жазу оң жаққа
+    const lx = below ? x : x + (right ? 12 : -12), anchor = below ? 'middle' : right ? 'start' : 'end';
+    const t = el('text', { x: lx, y: below ? y + 26 : y - 10, 'text-anchor': anchor }, host); t.textContent = c.name;
+    const w = wind[c.id];
+    const sub = el('text', { x: lx, y: below ? y + 42 : y + 8, class: 'sub', 'text-anchor': anchor }, host);
+    sub.textContent = (c.active ? (st != null ? `H2S ${st} мкг/м³` : 'H2S —') : 'жақында') + (w ? ` · ${w.speed.toFixed(0)} м/с` : '');
+    if (w) { // жел бағдаршасы: жел соққан жаққа қарай
+      const to = (w.dir + 180) * Math.PI / 180, L = 16 + Math.min(w.speed, 12) * 2.2;
+      const ax = x + Math.sin(to) * L, ay = y - Math.cos(to) * L;
+      el('path', { d: `M${x + Math.sin(to) * 10},${y - Math.cos(to) * 10}L${ax},${ay}M${ax},${ay}L${ax - Math.sin(to - .5) * 7},${ay + Math.cos(to - .5) * 7}M${ax},${ay}L${ax - Math.sin(to + .5) * 7},${ay + Math.cos(to + .5) * 7}`, class: 'wind' }, g);
+    }
+  }
+}
+function showTip(text, e) { const t = $('#tip'); t.textContent = text; t.style.left = (e.clientX + 14) + 'px'; t.style.top = (e.clientY + 10) + 'px'; t.style.opacity = 1; }
+function hideTip() { $('#tip').style.opacity = 0; }
+
+/* ---- деректер ---- */
+async function loadRegions() {
+  try {
+    regions = await fetch('data/kz-regions.json').then(r => r.json());
+    let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
+    for (const f of regions.features) for (const poly of f.geometry.coordinates) for (const [lng, lat] of poly[0]) {
+      minLng = Math.min(minLng, lng); maxLng = Math.max(maxLng, lng); minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+    }
+    box = { minLng, maxLng, minLat, maxLat };
+  } catch { regions = null; }
+}
+async function loadWind() { // Open-Meteo: бірнеше нүкте бір сұраумен
+  try {
+    const q = `latitude=${CITIES.map(c => c.lat).join(',')}&longitude=${CITIES.map(c => c.lng).join(',')}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms`;
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?' + q).then(r => r.json());
+    (Array.isArray(r) ? r : [r]).forEach((d, i) => { wind[CITIES[i].id] = { speed: d.current.wind_speed_10m, dir: d.current.wind_direction_10m }; });
+  } catch {}
+}
+async function loadAtyrauStatus() { // соңғы толық сағаттағы ең жоғары H2S (тұрып қалған мәндерді елемей — қарапайым: 6 сағат өзгермесе алып тастаймыз)
+  try {
+    const txt = await fetch('data/stations.csv?t=' + Date.now()).then(r => r.text());
+    const rows = txt.trim().split('\n').slice(1).map(l => l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/))
+      .filter(r => r[6] === 'H2S').map(r => ({ st: r[1], h: r[5].slice(0, 13), v: +r[7] }));
+    const hours = [...new Set(rows.map(r => r.h))].sort();
+    const last = hours[hours.length - 1], prev6 = hours.slice(-7, -1);
+    const byStation = {};
+    for (const r of rows) (byStation[r.st] ??= {})[r.h] = r.v;
+    let max = null;
+    for (const [st, s] of Object.entries(byStation)) {
+      const v = s[last]; if (v == null) continue;
+      const stuck = prev6.length >= 6 && prev6.every(h => s[h] === v) && v >= 3;
+      if (!stuck) max = Math.max(max ?? 0, v);
+    }
+    cityStatus.atyrau = max; cityStatus.atyrauHour = last;
+  } catch {}
+}
+
+/* ---- желбірейтін жалау: сурет тік жолақтарға бөлініп, әрқайсысы синус бойынша ығысады (тұғырдан алыстаған сайын көбірек) ---- */
+const flagImg = new Image(); flagImg.src = 'img/flag-kz.png';
+const fc = $('#flag'), fctx = fc.getContext('2d');
+let FW = 180, FH = 90, poleH = 0;
+function placeFlag(sc) {
+  const mob = sc.W < 640; FW = mob ? 84 : 170; FH = FW / 2; poleH = mob ? FH * 2.4 : Math.max(FH * 2.6, sc.horizon - 70);
+  const dpr = Math.min(devicePixelRatio || 1, 2), cw = FW + 40, ch = poleH + 10;
+  fc.width = cw * dpr; fc.height = ch * dpr; fc.style.width = cw + 'px'; fc.style.height = ch + 'px';
+  fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const left = mob ? 10 : 36;
+  const ftop = mob ? 64 : sc.horizon - poleH; // телефонда — мәзірдің астында, қысқа тұғырмен
+  Object.assign($('#flagWrap').style, { left: left + 'px', top: ftop + 'px' });
+  Object.assign($('#flagCap').style, mob ? { left: (left + FW + 50) + 'px', top: (ftop + 20) + 'px' } : { left: left + 'px', top: (sc.horizon + 14) + 'px' });
+}
+function drawFlag(t) {
+  const cw = FW + 40, w = wind.atyrau, sp = w ? w.speed : 4;
+  // жел шығысқа соқса — жалау оңға, батысқа соқса — солға (экранда тек көлденең бағыт)
+  const toEast = w ? Math.sin((w.dir + 180) * Math.PI / 180) >= 0 : true;
+  fctx.clearRect(0, 0, cw, poleH + 10);
+  fctx.save();
+  if (!toEast) { fctx.translate(cw, 0); fctx.scale(-1, 1); }
+  const px = 8; // тұғыр
+  const pg = fctx.createLinearGradient(px - 3, 0, px + 3, 0); pg.addColorStop(0, '#9aa5b1'); pg.addColorStop(.5, '#f1f5f9'); pg.addColorStop(1, '#7b8794');
+  fctx.fillStyle = pg; fctx.fillRect(px - 2.5, 6, 5, poleH);
+  fctx.fillStyle = '#e8c35a'; fctx.beginPath(); fctx.arc(px, 6, 5, 0, 7); fctx.fill();
+  if (flagImg.complete && flagImg.naturalWidth) {
+    const amp = Math.min(3 + sp * 1.1, 14) * (FW / 170), speed = 2 + Math.min(sp, 15) * 0.35, k = (2 * Math.PI) / (FW * 0.9);
+    const slice = 1, x0 = px + 2, y0 = 12;
+    for (let x = 0; x < FW; x += slice) {
+      const f = x / FW, phase = k * x - t * speed;
+      const dy = Math.sin(phase) * amp * f, slope = Math.cos(phase) * f; // көлбеу → жарық/көлеңке
+      fctx.drawImage(flagImg, (x / FW) * flagImg.naturalWidth, 0, (slice / FW) * flagImg.naturalWidth, flagImg.naturalHeight,
+        x0 + x, y0 + dy, slice + 0.8, FH);
+      const shade = slope * 0.16;
+      fctx.fillStyle = shade > 0 ? `rgba(255,255,255,${shade})` : `rgba(0,30,60,${-shade})`;
+      fctx.fillRect(x0 + x, y0 + dy, slice + 0.8, FH);
+    }
+  }
+  fctx.restore();
+  $('#flagCap').textContent = w ? `Атырау: жел ${w.speed.toFixed(1)} м/с` : '';
+}
+
+/* ---- іске қосу ---- */
+const sc = createScene(document.getElementById('scene'), { horizon: 0.5, timeOfDay: true, dim: 0.06, onResize: S => layout(S) });
+(async () => {
+  await Promise.all([loadRegions(), loadWind(), loadAtyrauStatus()]);
+  layout(sc);
+})();
+function tickClock() {
+  const h = sc.localHour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
+  $('#clock').textContent = `Атырау уақыты ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` + (cityStatus.atyrauHour ? ` · соңғы өлшем ${cityStatus.atyrauHour.slice(11)}:00` : '');
+}
+tickClock(); setInterval(tickClock, 30000);
+const t0 = performance.now();
+function loop(now) { const t = (now - t0) / 1000; sc.draw(t); drawFlag(reduce ? 0 : t); if (!reduce) requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
