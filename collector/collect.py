@@ -42,6 +42,33 @@ CITIES = {
     # ЗКО, восток: Аксай (51.16, 53.00) и Берли (51.43, 52.71) — посты у Карачаганака, вне рамки Уральска
     "zko-east": {"bbox": {"lat_min": 51.05, "lat_max": 51.55, "lng_min": 52.55, "lng_max": 53.15},
                  "wind": (51.3, 52.85), "tz": "Asia%2FOral", "dir": DATA / "zko-east"},
+    # Облыс орталықтары мен республикалық қалалар: рамка ±0,15° по широте и ±0,25° по долготе вокруг центра, ветер — в центре
+    "shymkent": {"bbox": {"lat_min": 42.1835, "lat_max": 42.4835, "lng_min": 69.3746, "lng_max": 69.8746},
+                "wind": (42.3335, 69.6246), "tz": "Asia%2FAlmaty", "dir": DATA / "shymkent"},  # Шымкент
+    "karaganda": {"bbox": {"lat_min": 49.6870, "lat_max": 49.9870, "lng_min": 72.8847, "lng_max": 73.3847},
+                 "wind": (49.837, 73.1347), "tz": "Asia%2FAlmaty", "dir": DATA / "karaganda"},  # Қарағанды
+    "pavlodar": {"bbox": {"lat_min": 52.1285, "lat_max": 52.4285, "lng_min": 76.7031, "lng_max": 77.2031},
+                "wind": (52.2785, 76.9531), "tz": "Asia%2FAlmaty", "dir": DATA / "pavlodar"},  # Павлодар
+    "oskemen": {"bbox": {"lat_min": 49.8118, "lat_max": 50.1118, "lng_min": 82.3831, "lng_max": 82.8831},
+               "wind": (49.9618, 82.6331), "tz": "Asia%2FAlmaty", "dir": DATA / "oskemen"},  # Өскемен
+    "semey": {"bbox": {"lat_min": 50.2718, "lat_max": 50.5718, "lng_min": 79.9913, "lng_max": 80.4913},
+             "wind": (50.4218, 80.2413), "tz": "Asia%2FAlmaty", "dir": DATA / "semey"},  # Семей
+    "kostanay": {"bbox": {"lat_min": 53.0634, "lat_max": 53.3634, "lng_min": 63.3850, "lng_max": 63.8850},
+                "wind": (53.2134, 63.635), "tz": "Asia%2FQostanay", "dir": DATA / "kostanay"},  # Қостанай
+    "taraz": {"bbox": {"lat_min": 42.7490, "lat_max": 43.0490, "lng_min": 71.1147, "lng_max": 71.6147},
+             "wind": (42.899, 71.3647), "tz": "Asia%2FAlmaty", "dir": DATA / "taraz"},  # Тараз
+    "taldykorgan": {"bbox": {"lat_min": 44.8557, "lat_max": 45.1557, "lng_min": 78.1027, "lng_max": 78.6027},
+                   "wind": (45.0057, 78.3527), "tz": "Asia%2FAlmaty", "dir": DATA / "taldykorgan"},  # Талдықорған
+    "kyzylorda": {"bbox": {"lat_min": 44.6770, "lat_max": 44.9770, "lng_min": 65.2641, "lng_max": 65.7641},
+                 "wind": (44.827, 65.5141), "tz": "Asia%2FQyzylorda", "dir": DATA / "kyzylorda"},  # Қызылорда
+    "kokshetau": {"bbox": {"lat_min": 53.1330, "lat_max": 53.4330, "lng_min": 69.1756, "lng_max": 69.6756},
+                 "wind": (53.283, 69.4256), "tz": "Asia%2FAlmaty", "dir": DATA / "kokshetau"},  # Көкшетау
+    "turkistan": {"bbox": {"lat_min": 43.1360, "lat_max": 43.4360, "lng_min": 68.0161, "lng_max": 68.5161},
+                 "wind": (43.286, 68.2661), "tz": "Asia%2FAlmaty", "dir": DATA / "turkistan"},  # Түркістан
+    "zhezkazgan": {"bbox": {"lat_min": 47.6492, "lat_max": 47.9492, "lng_min": 67.4658, "lng_max": 67.9658},
+                  "wind": (47.7992, 67.7158), "tz": "Asia%2FAlmaty", "dir": DATA / "zhezkazgan"},  # Жезқазған
+    "petropavl": {"bbox": {"lat_min": 54.7381, "lat_max": 55.0381, "lng_min": 68.8851, "lng_max": 69.3851},
+                 "wind": (54.8881, 69.1351), "tz": "Asia%2FAlmaty", "dir": DATA / "petropavl"},  # Петропавл
 }
 
 
