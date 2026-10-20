@@ -357,7 +357,9 @@ function placeFlag(sc) {
   Object.assign($('#flagCap').style, mob ? { left: (left + FW + 50) + 'px', top: (ftop + 20) + 'px' } : { left: left + 'px', top: (sc.horizon + 14) + 'px' });
 }
 function drawFlag(t) {
-  const cw = FW + 40, w = wind.atyrau, sp = w ? w.speed : 4;
+  // таңдалған облыстың орталығындағы жел; ештеңе таңдалмаса — Атырау
+  const capName = (selected && places?.capitals.find(c => c.region === selected)?.name) || 'Атырау';
+  const cw = FW + 40, w = wind[capName], sp = w ? w.speed : 4;
   // жел шығысқа соқса — жалау оңға, батысқа соқса — солға (экранда тек көлденең бағыт)
   const toEast = w ? Math.sin((w.dir + 180) * Math.PI / 180) >= 0 : true;
   fctx.clearRect(0, 0, cw, poleH + 10);
@@ -381,7 +383,7 @@ function drawFlag(t) {
     }
   }
   fctx.restore();
-  $('#flagCap').textContent = w ? `Атырау: жел ${w.speed.toFixed(1)} м/с` : '';
+  $('#flagCap').textContent = w ? `${capName}: жел ${w.speed.toFixed(1)} м/с` : '';
 }
 
 /* ---- іске қосу ---- */
