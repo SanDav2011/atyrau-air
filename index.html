@@ -38,9 +38,16 @@
            background-image: linear-gradient(to bottom, #ffffff 0 50%, #e4fbff 50% 100%); -webkit-background-clip: text; background-clip: text;
            filter: drop-shadow(0 2px 14px rgba(0,60,110,.28)); transition: opacity .3s; }
   #title:focus-visible { outline: 2px solid #fff; outline-offset: 8px; border-radius: 12px; }
-  #hint { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); color: var(--ink-soft); font-size: 15px; letter-spacing: .08em;
-          text-transform: uppercase; text-shadow: 0 1px 8px rgba(0,60,110,.35); animation: breathe 2.6s ease-in-out infinite; pointer-events: none; }
-  @keyframes breathe { 50% { opacity: .45; } }
+  /* «басыңыз» — көзге түсетін шыны капсула, айналасында толқын шеңбер */
+  #hint { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); min-height: 44px; padding: 10px 26px; cursor: pointer;
+          font: 700 15px/1 Onest, system-ui, sans-serif; color: #fff; letter-spacing: .12em; text-transform: uppercase;
+          background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.85); border-radius: 999px;
+          -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+          text-shadow: 0 1px 6px rgba(0,60,110,.4); box-shadow: 0 4px 18px rgba(0,60,110,.25); transition: background .2s, transform .2s; }
+  #hint::before { content: ''; position: absolute; inset: -1.5px; border-radius: inherit; border: 2px solid rgba(255,255,255,.7);
+          animation: ripple 2.2s ease-out infinite; pointer-events: none; }
+  #hint:hover { background: rgba(255,255,255,.3); transform: translateX(-50%) scale(1.04); }
+  @keyframes ripple { from { transform: scale(1); opacity: .9; } to { transform: scale(1.35, 1.7); opacity: 0; } }
 
   /* Қалалар — судың ішінде, өз фоны жоқ */
   #cities { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); text-align: center; visibility: hidden; }
@@ -57,7 +64,7 @@
   #cities a:focus-visible { outline: none; }
   #cities span.city { color: rgba(255,255,255,.78); cursor: default; text-shadow: 0 1px 2px rgba(0,60,100,.45), 0 2px 14px rgba(0,70,120,.45); }
   #cities small { font-weight: 500; font-size: 14px; letter-spacing: .04em; color: rgba(255,255,255,.9); }
-  @media (prefers-reduced-motion: reduce) { #hint { animation: none; } #cities li { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { #hint::before { animation: none; opacity: 0; } #cities li { transition: none; } }
 </style>
 </head>
 <body>
@@ -72,7 +79,7 @@
 </nav>
 
 <button id="title" type="button" aria-label="Таза ауа — қалалар тізімін ашу">Таза ауа</button>
-<div id="hint">басыңыз</div>
+<button id="hint" type="button" tabindex="-1" aria-hidden="true">басыңыз</button>
 
 <section id="cities" aria-label="Қалалар">
   <h2>Қаланы таңдаңыз</h2>
@@ -99,7 +106,7 @@ function placeUi(s) {
   const { horizon, H } = s || sc; // s — сахна өлшемі (resize кезінде), әйтпесе дайын сахна
   title.style.top = horizon + 'px';
   const r = title.getBoundingClientRect();
-  hint.style.top = (horizon + r.height / 2 + 18) + 'px';
+  hint.style.top = (horizon + r.height / 2 + 28) + 'px';
   cities.style.top = Math.min(horizon + 40, H - cities.offsetHeight - 16) + 'px';
 }
 
@@ -157,6 +164,7 @@ function draw1(p, a, bubble) {
 }
 
 title.addEventListener('click', dissolve);
+hint.addEventListener('click', dissolve); // капсула да «Таза ауа»-ны ашады
 const sc = createScene(document.getElementById('scene'), { onResize: S => placeUi(S) });
 document.fonts && document.fonts.ready.then(() => placeUi());
 const t0 = performance.now();
