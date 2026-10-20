@@ -25,6 +25,9 @@
   nav a:hover::after, nav a.active::after { transform: scaleX(1); }
   nav a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 6px; }
   nav .brand, nav a { white-space: nowrap; }
+  /* «Қазақстан ауасы» — сілтеме: басты бетті қайта ашады (тізім жабылып, «Таза ауа» қайта шығады) */
+  nav a.brand { color: #fff; padding-left: 0; }
+  nav a.brand::after { display: none; }
   @media (max-width: 800px) { nav .brand { font-size: 16px; } nav a { font-size: 14px; padding: 12px 7px; } }
   @media (max-width: 560px) { nav .brand { display: none; } nav { justify-content: center; gap: 0; } nav a { font-size: 14px; padding: 12px 8px; } }
 
@@ -61,8 +64,8 @@
 <canvas id="scene" aria-hidden="true"></canvas>
 
 <nav aria-label="Негізгі мәзір">
-  <span class="brand">Қазақстан ауасы</span>
-  <a href="#" class="active">Басты</a>
+  <a class="brand" href="./" aria-label="Басты бет — қайта бастау">Қазақстан ауасы</a>
+  <a href="./" class="active" aria-current="page">Басты</a>
   <a href="karta.html">Карта</a>
   <a href="gazdar.html">Газдар туралы</a>
   <a href="about.html">Жоба туралы</a>
