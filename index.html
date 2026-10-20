@@ -96,7 +96,7 @@ const title = document.getElementById('title'), hint = document.getElementById('
 let parts = [], lastT = 0, dissolved = false;
 
 function placeUi(s) {
-  const { horizon, H } = (s && s.W) ? s : sc;
+  const { horizon, H } = s || sc; // s — сахна өлшемі (resize кезінде), әйтпесе дайын сахна
   title.style.top = horizon + 'px';
   const r = title.getBoundingClientRect();
   hint.style.top = (horizon + r.height / 2 + 18) + 'px';
