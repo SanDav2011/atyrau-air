@@ -203,7 +203,7 @@
         <p class="muted" style="margin:0 0 6px">Әр бөлімді басып ашыңыз.</p>
         <details class="m"><summary>1. Деректер</summary>
           <p>Бекеттер — Қазгидромет картасы (ecodata.kz), сағат сайын. Жел, күн радиациясы, бұлттылық — Open-Meteo, қала орталығы (51.23, 51.37).
-          Орал бойынша жинау 2026 жылғы 20 қазанда басталды — тарих әзірге қысқа.</p>
+          Орал: 2026 жылғы 8–20 қазан аралығы — AirData.kz архивінен (CC BY-NC 4.0, Қазгидромет деректері), 20 қазаннан бастап — біздің сағаттық жинау. Тарих әзірге қысқа.</p>
         </details>
         <details class="m"><summary>2. Басты мәселе</summary>
           <p>Басты зат ретінде H2S алынған (жоба шешімі); қосымша заттар — жоғарыдағы зат таңдау тізімінде. Бекеттердің кейбірі SO2, NO2, CO да өлшейді. Бұл қалада ұсақ шаң (PM2,5, PM10) өлшенбейді.</p>
@@ -372,7 +372,7 @@ async function init() {
     byDay[d].reverse().map(i => `<option value="${i}">${hours[i].slice(8, 10)}.${hours[i].slice(5, 7)} ${hours[i].slice(11)}:00</option>`).join('') + '</optgroup>').join('');
   $('#info').innerHTML = `Бекеттер: ${Object.keys(stations).length}. Сағаттар: ${hours.length} (${hours[0] ?? '—'}:00 – ${hours.at(-1) ?? '—'}:00).<br>
     Дереккөз: <a href="http://ecodata.kz:3838/app_dem_visual/" target="_blank">Қазгидромет картасы</a>, жел — Open-Meteo.
-    Орал бойынша жинау 2026-10-20 басталды.`;
+    8–20 қазан аралығы — <a href="https://airdata.kz" target="_blank" rel="noopener">AirData.kz</a> (CC BY-NC 4.0), одан кейін — біздің жинау.`;
   const pts = Object.values(stations).filter(s => s.lat > 51.0 && s.lat < 51.4 && s.lng > 51.2 && s.lng < 51.6);
   if (pts.length) map.fitBounds(pts.map(s => [s.lat, s.lng]), { padding: [20, 20] });
   render();
