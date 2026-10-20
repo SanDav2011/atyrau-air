@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Атырау ауасы</title>
+<title>Атырау — Қазақстан ауасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -68,14 +71,47 @@
   ol li { padding: 6px 0; }
   #info a { display: inline-block; padding: 12px 0; }
   .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 22px; }
+
+  /* ===== Бірыңғай дизайн (басты бетпен сай): аспан → су фоны, Onest, шыны карточкалар ===== */
+  :root { --bg: rgba(11,70,181,.07); --card: rgba(255,255,255,.9); --text: #10233f; --muted: #5b6b82; --line: rgba(16,35,63,.12); --accent: #0b6fc4; }
+  html { background: #0b46b5; }
+  body { font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; min-height: 100vh; }
+  header { background: transparent; padding: 0 clamp(16px, 4vw, 48px) 8px; color: #fff; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px; display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 1200px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(34px, 6vw, 56px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { font-size: 15px; opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { padding-top: 8px; }
+  .card { border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  #map { border-radius: 16px; box-shadow: 0 10px 34px rgba(0,40,90,.22); }
+  h2 { font-weight: 700; }
+  button { background: rgba(11,111,196,.08); font-weight: 500; transition: background .2s; }
+  button:hover { background: rgba(11,111,196,.16); }
+  button.on { background: var(--accent); }
+  #visits { color: rgba(16,35,63,.6) !important; }
 </style>
 </head>
 <body>
 <header>
-  <h1>🌬️ Атырау ауасы: иіс қайдан келеді?</h1>
-  <p>Күкіртсутек (H2S) бекеттері + жел бағыты, сағат бойынша</p>
-  <a class="hdr-link" href="./">← Басты бет</a> &nbsp;·&nbsp;
-  <a class="hdr-link" href="gazdar.html">📘 Газдар туралы: әсері, симптомдары, қалай өлшенеді →</a>
+  <nav aria-label="Негізгі мәзір">
+    <a class="brand" href="./">Қазақстан ауасы</a>
+    <a href="./">Басты</a>
+    <a href="karta.html" class="active">Карта</a>
+    <a href="gazdar.html">Газдар туралы</a>
+    <a href="#" onclick="return false">Жоба туралы</a>
+  </nav>
+  <div class="hero">
+    <h1>Атырау</h1>
+    <p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>
+  </div>
 </header>
 <main>
   <div>
