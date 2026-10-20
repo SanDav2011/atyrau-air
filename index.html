@@ -47,22 +47,26 @@
   #ripples i:nth-child(3) { animation-delay: 4s; }
   @keyframes ripple { 0% { transform: translate(-50%, -50%) scale(.08); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; } }
 
-  /* Қалалар — судың ішінде, өз фоны жоқ */
-  #cities { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); text-align: center; visibility: hidden; }
-  #cities h2 { margin: 0 0 10px; font-weight: 500; font-size: clamp(16px, 2.4vw, 20px); color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase;
+  /* Қалалар — судың ішінде, өз фоны жоқ. Айналатын барабан: ортасы тегіс, шеттері (Атырау үстінде, Орал астында) иіліп артқа кетеді */
+  #cities { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); width: min(560px, 92vw); text-align: center; visibility: hidden;
+            opacity: 0; transition: opacity .5s ease; }
+  #cities.show { opacity: 1; }
+  #cities h2 { margin: 0; font-weight: 500; font-size: clamp(16px, 2.4vw, 20px); color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase;
                text-shadow: 0 1px 10px rgba(0,70,110,.35); }
-  #cities ul { list-style: none; margin: 0; padding: 0; }
-  #cities li { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
-  #cities.show li { opacity: 1; transform: none; }
-  #cities a, #cities span.city { display: inline-flex; align-items: baseline; gap: 10px; min-height: 48px; padding: 6px 12px; text-decoration: none;
-               font-weight: 700; font-size: clamp(26px, 4.6vw, 40px); color: #fff; text-shadow: 0 2px 14px rgba(0,70,120,.4); }
+  #cities ul { list-style: none; margin: 0; padding: 0; position: relative; perspective: 620px; perspective-origin: 50% 50%;
+               touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+  #cities ul.drag { cursor: grabbing; }
+  #cities li { position: absolute; left: 0; right: 0; top: 50%; margin-top: calc(var(--row) / -2); height: var(--row); display: flex; align-items: center; justify-content: center;
+               will-change: transform, opacity; backface-visibility: hidden; }
+  #cities a, #cities span.city { display: inline-flex; align-items: baseline; gap: 10px; padding: 0 12px; text-decoration: none; line-height: 1;
+               font-weight: 700; font-size: clamp(26px, 4.6vw, 40px); color: #fff; text-shadow: 0 2px 14px rgba(0,70,120,.4); -webkit-user-drag: none; }
   #cities a { position: relative; }
-  #cities a::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px; background: #fff; transform: scaleX(.25); transition: transform .3s; }
+  #cities a::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: -4px; height: 2px; background: #fff; transform: scaleX(.25); transition: transform .3s; }
   #cities a:hover::after, #cities a:focus-visible::after { transform: scaleX(1); }
   #cities a:focus-visible { outline: none; }
-  #cities span.city { color: rgba(255,255,255,.78); cursor: default; text-shadow: 0 1px 2px rgba(0,60,100,.45), 0 2px 14px rgba(0,70,120,.45); }
+  #cities span.city { color: rgba(255,255,255,.78); cursor: inherit; text-shadow: 0 1px 2px rgba(0,60,100,.45), 0 2px 14px rgba(0,70,120,.45); }
   #cities small { font-weight: 500; font-size: 14px; letter-spacing: .04em; color: rgba(255,255,255,.9); }
-  @media (prefers-reduced-motion: reduce) { #ripples i { animation: none; opacity: .5; transform: translate(-50%, -50%) scale(.9); } #ripples i:nth-child(n+2) { display: none; } #cities li { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { #ripples i { animation: none; opacity: .5; transform: translate(-50%, -50%) scale(.9); } #ripples i:nth-child(n+2) { display: none; } #cities { transition: none; } }
 </style>
 </head>
 <body>
@@ -88,7 +92,19 @@
     <li><a href="aktobe.html">Ақтөбе</a></li>
     <li><a href="aktau.html">Ақтау</a></li>
     <li><a href="oral.html">Орал</a></li>
+    <li><span class="city">Шымкент <small>жақында</small></span></li>
     <li><span class="city">Қарағанды <small>жақында</small></span></li>
+    <li><span class="city">Павлодар <small>жақында</small></span></li>
+    <li><span class="city">Өскемен <small>жақында</small></span></li>
+    <li><span class="city">Семей <small>жақында</small></span></li>
+    <li><span class="city">Қостанай <small>жақында</small></span></li>
+    <li><span class="city">Тараз <small>жақында</small></span></li>
+    <li><span class="city">Талдықорған <small>жақында</small></span></li>
+    <li><span class="city">Қызылорда <small>жақында</small></span></li>
+    <li><span class="city">Көкшетау <small>жақында</small></span></li>
+    <li><span class="city">Түркістан <small>жақында</small></span></li>
+    <li><span class="city">Жезқазған <small>жақында</small></span></li>
+    <li><span class="city">Қонаев <small>жақында</small></span></li>
     <li><span class="city">Петропавл <small>жақында</small></span></li>
   </ul>
 </section>
@@ -108,6 +124,7 @@ function placeUi(s) {
   const r = title.getBoundingClientRect();
   // рябь әріптің төменгі жиегінен (суға батқан бөліктің түбінен) басталады
   ripples.style.top = (horizon + parseFloat(getComputedStyle(title).fontSize) * 0.3) + 'px'; ripples.style.width = Math.round(r.width * 1.5) + 'px'; // су сызығында, жазудың ортасында
+  layoutWheel();
   cities.style.top = Math.min(horizon + 40, H - cities.offsetHeight - 16) + 'px';
 }
 
@@ -126,8 +143,7 @@ function dissolve() {
       r: gap * 0.45, age: 0, delay: Math.random() * 0.5 + (x / oc.width) * 0.35, under: false, life: 2.6 + Math.random() * 1.6, wob: Math.random() * 6 });
   }
   title.style.opacity = '0'; title.style.pointerEvents = 'none'; ripples.style.display = 'none';
-  setTimeout(() => { cities.style.visibility = 'visible'; placeUi(sc);
-    cities.querySelectorAll('li').forEach((li, i) => li.style.transitionDelay = (0.12 * i) + 's');
+  setTimeout(() => { cities.style.visibility = 'visible'; placeUi(sc); startWheel();
     requestAnimationFrame(() => cities.classList.add('show')); }, 1100);
 }
 
@@ -163,6 +179,64 @@ function draw1(p, a, bubble) {
     ctx.fillStyle = `rgba(255,255,255,${0.18 * a})`; ctx.fill(); }
   else { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill(); }
 }
+
+/* ---- Қалалар барабаны: 5 жол тегіс тұрады (Атырау … Ақтау, төменгі тегіс деңгей — Ақтау); одан тыс қалалар цилиндр бойымен иіліп артқа кетеді, барабан қайта айналады ---- */
+const wheelUl = cities.querySelector('ul'), wItems = [...wheelUl.children], WN = wItems.length, FLAT = 2;
+let wPos = 0, wRow = 56, wR = 36, wVel = 0, wRaf = 0, wTarget = null, wDrag = null, wMoved = false, wIdle = 0;
+function layoutWheel() {
+  const fs = parseFloat(getComputedStyle(wItems[0].firstElementChild).fontSize);
+  wRow = Math.max(48, Math.round(fs * 1.5)); wR = wRow * 1.5 / (Math.PI / 2);
+  cities.style.setProperty('--row', wRow + 'px');
+  wheelUl.style.height = (5 * wRow) + 'px';
+  wheelUl.style.margin = (wRow * 1.1) + 'px 0 ' + (wRow * 1.1) + 'px'; // иілген жолдарға орын
+  renderWheel();
+}
+function renderWheel() {
+  wItems.forEach((li, i) => {
+    let o = i - FLAT - wPos; o = ((o + WN / 2) % WN + WN) % WN - WN / 2; // [-N/2, N/2)
+    const s = Math.sign(o), d = Math.max(0, Math.abs(o) - FLAT);
+    const phi = Math.min(Math.PI / 2, d * wRow / wR);
+    const y = d === 0 ? o * wRow : s * (FLAT * wRow + wR * Math.sin(phi));
+    const z = -wR * (1 - Math.cos(phi));
+    li.style.transform = `translateY(${y.toFixed(1)}px) translateZ(${z.toFixed(1)}px) rotateX(${(-s * phi * 180 / Math.PI).toFixed(1)}deg)`;
+    li.style.opacity = (1 - Math.pow(phi / (Math.PI / 2), 1.6)).toFixed(3);
+    li.style.pointerEvents = Math.abs(o) > FLAT + 0.9 ? 'none' : '';
+    li.style.visibility = phi >= Math.PI / 2 - 0.01 ? 'hidden' : '';
+    li.style.zIndex = String(100 - Math.round(Math.abs(o) * 10));
+  });
+}
+function wStep() {
+  wRaf = 0;
+  if (wDrag) return;
+  if (wTarget !== null) { // жұмсақ тоқтау: ең жақын бүтін позицияға
+    const dlt = wTarget - wPos;
+    if (Math.abs(dlt) < 0.002) { wPos = wTarget; wTarget = null; wVel = 0; renderWheel(); return; }
+    wPos += dlt * (reduce ? 1 : 0.14); renderWheel(); wRaf = requestAnimationFrame(wStep); return;
+  }
+  if (Math.abs(wVel) > 0.0006) { wPos += wVel; wVel *= 0.93; renderWheel(); wRaf = requestAnimationFrame(wStep); return; }
+  wTarget = Math.round(wPos); wRaf = requestAnimationFrame(wStep);
+}
+const wKick = () => { if (!wRaf) wRaf = requestAnimationFrame(wStep); };
+function startWheel() {
+  if (reduce) { wPos = 0; renderWheel(); return; }
+  wPos = -2.2; wTarget = 0; renderWheel(); wKick(); // су астынан көтеріліп, айналып орнына келеді
+}
+wheelUl.addEventListener('wheel', e => { e.preventDefault(); wTarget = null; wVel = 0; wPos += Math.max(-1, Math.min(1, e.deltaY / 120)) * 0.35; renderWheel();
+  clearTimeout(wIdle); wIdle = setTimeout(() => { wTarget = Math.round(wPos); wKick(); }, 140); }, { passive: false });
+wheelUl.addEventListener('pointerdown', e => { wDrag = { y: e.clientY, pos: wPos, t: performance.now(), lastY: e.clientY, lastT: performance.now(), id: e.pointerId }; wMoved = false; wTarget = null; wVel = 0; });
+addEventListener('pointermove', e => {
+  if (!wDrag || e.pointerId !== wDrag.id) return;
+  const dy = e.clientY - wDrag.y;
+  if (!wMoved && Math.abs(dy) > 6) { wMoved = true; wheelUl.classList.add('drag'); try { wheelUl.setPointerCapture(e.pointerId); } catch {} }
+  if (!wMoved) return;
+  const now = performance.now(); wVel = -((e.clientY - wDrag.lastY) / wRow) * (16 / Math.max(8, now - wDrag.lastT)); wDrag.lastY = e.clientY; wDrag.lastT = now;
+  wPos = wDrag.pos - dy / wRow; renderWheel();
+});
+const wEnd = e => { if (!wDrag || (e && e.pointerId !== wDrag.id)) return; wDrag = null; wheelUl.classList.remove('drag'); if (wMoved) { wVel = Math.max(-0.5, Math.min(0.5, wVel)); wKick(); } };
+addEventListener('pointerup', wEnd); addEventListener('pointercancel', wEnd);
+wheelUl.addEventListener('click', e => { if (wMoved) { e.preventDefault(); e.stopPropagation(); wMoved = false; } }, true);
+addEventListener('keydown', e => { if (!dissolved || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return; e.preventDefault();
+  wTarget = Math.round(wPos) + (e.key === 'ArrowDown' ? 1 : -1); wKick(); });
 
 title.addEventListener('click', dissolve);
 const sc = createScene(document.getElementById('scene'), { onResize: S => placeUi(S) });
