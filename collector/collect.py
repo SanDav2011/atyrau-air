@@ -1,8 +1,8 @@
 """Сборщик: посты качества воздуха (карта Казгидромета ecodata.kz) + погода (Open-Meteo) — по городам из CITIES.
 
 Запуск раз в час. ecodata.kz открывается только из Казахстана, поэтому:
-  ноутбук:  collect.py --only stations --log local.log --push   (посты → сразу в GitHub)
-  GitHub:   collect.py --only weather,kgm --log cloud.log        (погода + посты Казгидромета с tabigat.gov.kz)
+  ноутбук:  collect.py --only stations,kgm,weather --log local.log --push   (всё → сразу в GitHub, каждый час)
+  GitHub:   collect.py --only weather,kgm --log cloud.log  (запасной: только если ноутбук не присылал данные > 1,5 ч)
 """
 import argparse
 import csv
@@ -252,7 +252,8 @@ def push(paths):
     if git("diff", "--cached", "--quiet").returncode == 0:
         return "нет изменений"
     git("commit", "-m", f"Посты {datetime.now(ATYRAU_TZ):%Y-%m-%d %H:%M}")
-    pull = git("pull", "--rebase", "-q")
+    # -X theirs: при конфликте в файлах данных побеждает свежий локальный сбор (ноутбук)
+    pull = git("pull", "--rebase", "-X", "theirs", "-q")
     if pull.returncode != 0:
         git("rebase", "--abort")
         return f"ОШИБКА pull: {pull.stderr.strip()[:300]}"
@@ -296,7 +297,7 @@ def main():
                 log(f"{tag(c)}ОШИБКА погода: {e!r}")
     if a.push:
         try:
-            r = push([city_files(c)[0] for c in cities if city_files(c)[0].exists()] + [LOG])
+            r = push([f for c in cities for f in city_files(c) if f.exists()] + [LOG])
             log(f"github: {r}")
             ok = ok and not r.startswith("ОШИБКА")
         except Exception as e:
