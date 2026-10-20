@@ -32,6 +32,13 @@ CITIES = {
     # Астана с пригородами
     "astana": {"bbox": {"lat_min": 50.9, "lat_max": 51.4, "lng_min": 71.2, "lng_max": 71.7},
                "wind": (51.13, 71.43), "tz": "Asia%2FAlmaty", "dir": DATA / "astana"},
+    # Актобе (город), Актау (город), Уральск (город) — только сам город, без остальной области
+    "aktobe": {"bbox": {"lat_min": 50.1, "lat_max": 50.5, "lng_min": 56.9, "lng_max": 57.5},
+               "wind": (50.28, 57.21), "tz": "Asia%2FAqtobe", "dir": DATA / "aktobe"},
+    "aktau": {"bbox": {"lat_min": 43.55, "lat_max": 43.8, "lng_min": 51.0, "lng_max": 51.4},
+              "wind": (43.65, 51.16), "tz": "Asia%2FAqtau", "dir": DATA / "aktau"},
+    "oral": {"bbox": {"lat_min": 51.0, "lat_max": 51.4, "lng_min": 51.2, "lng_max": 51.6},
+             "wind": (51.23, 51.37), "tz": "Asia%2FOral", "dir": DATA / "oral"},
 }
 
 
