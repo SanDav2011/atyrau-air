@@ -21,12 +21,13 @@
   header p { margin: 2px 0 0; opacity: .85; font-size: 13px; }
   .hdr-link { display: inline-block; color: #fff; padding: 10px 0 2px; font-size: 14px; font-weight: 600; }
   main { max-width: 1200px; margin: 0 auto; padding: 12px 16px 24px; display: grid; gap: 12px; grid-template-columns: 1fr 340px; }
-  @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); } } /* minmax: ішіндегі кең элемент бағанды экраннан шығармасын */
   .card { background: var(--card); border-radius: 10px; padding: 12px; }
   #map { height: 62vh; min-height: 360px; border-radius: 10px; }
   .time { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
   .time input { flex: 1; }
-  .time select { min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
+  .time input { min-width: 0; }
+  .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
   button { border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; background: var(--bg); color: var(--text); }
   button.on { background: var(--accent); color: #fff; }
   .wind { display: flex; gap: 12px; align-items: center; }
@@ -98,6 +99,8 @@
   main { padding-top: 8px; }
   .card { border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   #map { border-radius: 16px; box-shadow: 0 10px 34px rgba(0,40,90,.22); }
+  /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
+  @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
   h2 { font-weight: 700; }
   button { background: rgba(11,111,196,.08); font-weight: 500; transition: background .2s; }
   button:hover { background: rgba(11,111,196,.16); }
@@ -649,7 +652,7 @@ function renderRose(win, obs, weather, maxEx) {
   const topK = pol.indexOf(Math.max(...pol));
   $('#roseNote').innerHTML = `Кезең: ${nHours} сағат. Сұр — жел қай жақтан қаншалықты жиі соқты; қоңыр — ${pollutant} артықшылығын қай жақтан соққан жел әкелді.` +
     (Math.max(...pol) > 0 ? ` Көбі — <b>${['солтүстік', 'солтүстік-солтүстік-шығыс', 'солтүстік-шығыс', 'шығыс-солтүстік-шығыс', 'шығыс', 'шығыс-оңтүстік-шығыс', 'оңтүстік-шығыс', 'оңтүстік-оңтүстік-шығыс', 'оңтүстік', 'оңтүстік-оңтүстік-батыс', 'оңтүстік-батыс', 'батыс-оңтүстік-батыс', 'батыс', 'батыс-солтүстік-батыс', 'солтүстік-батыс', 'солтүстік-солтүстік-батыс'][topK]}</b> жақтан.` : ' Бұл кезеңде артықшылық жоқ.') +
-    `<br>Картада: артықшылық болған бекеттен жел келген жаққа ${LINE_KM} км жебе (сағатына біреу): жебе ұшы бекетке қарайды — жел газды сол жақтан әкелді, қалыңдығы — артықшылыққа сай. Тышқанды апарсаңыз — сағаты мен желі. Сызықтар тоғысқан жер — ықтимал көз.`;
+    `<br>Картада: артықшылық болған бекеттен жел келген жаққа ${LINE_KM} км жебе (сағатына біреу): жебе ұшы бекетке қарайды — жел газды сол жақтан әкелді, қалыңдығы — артықшылыққа сай. Жебені басыңыз (немесе тышқанды апарыңыз) — сағаты мен желі. Сызықтар тоғысқан жер — ықтимал көз.`;
   renderComplaints(win, weather);
   // 2) картадағы талдау сызықтары
   if (maxEx <= 0) return;
