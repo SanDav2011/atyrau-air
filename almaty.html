@@ -51,6 +51,11 @@
   .info .tip a { color: #7dd3fc; }
   .info:hover .tip, .info:focus .tip, .info:focus-within .tip { display: block; }
   @media (max-width: 860px) { .info .tip { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; width: auto; } }
+  /* әдістеме: әр бөлім жеке ашылады */
+  details.m { border-top: 1px solid rgba(0,0,0,.08); }
+  details.m summary { cursor: pointer; font-weight: 600; padding: 9px 0; min-height: 24px; list-style-position: inside; }
+  details.m summary:hover { color: #1d4ed8; }
+  details.m p { margin: 0 0 10px; }
   .wind-arrow svg { display: block; overflow: visible; }
   .src-icon { font-size: 22px; line-height: 1; text-align: center; filter: drop-shadow(0 0 2px #fff); }
   .src-item { border-top: 1px solid var(--line); padding: 8px 0; font-size: 14px; }
@@ -192,14 +197,25 @@
     <details class="card" id="method">
       <summary style="cursor:pointer;font-weight:600">📘 Әдістеме және ескертулер</summary>
       <div style="font-size:13.5px;line-height:1.55;margin-top:8px">
-        <p><b>1. Деректер.</b> Бекеттер — Қазгидромет картасы (ecodata.kz), сағат сайын. Жел, күн радиациясы, бұлттылық — Open-Meteo, қала орталығы (43.24, 76.92).
+        <p class="muted" style="margin:0 0 6px">Әр бөлімді басып ашыңыз.</p>
+        <details class="m"><summary>1. Деректер</summary>
+          <p>Бекеттер — Қазгидромет картасы (ecodata.kz), сағат сайын. Жел, күн радиациясы, бұлттылық — Open-Meteo, қала орталығы (43.24, 76.92).
           Алматы бойынша жинау 2026 жылғы 20 қазанда басталды — тарих әзірге қысқа.</p>
-        <p><b>2. Басты мәселе.</b> Алматыда ауаның басты ластануы — қыста ұсақ шаң (PM2,5) мен азот диоксиді: жылу беру маусымы, көмір жағатын ЖЭО мен жеке үйлер, көлік,
+        </details>
+        <details class="m"><summary>2. Басты мәселе</summary>
+          <p>Алматыда ауаның басты ластануы — қыста ұсақ шаң (PM2,5) мен азот диоксиді: жылу беру маусымы, көмір жағатын ЖЭО мен жеке үйлер, көлік,
           және тау етегіндегі тымық ауа (инверсия) түтінді қала үстінде ұстап қалады. Бекеттердің тек екеуі ғана H2S өлшейді.</p>
-        <p><b>3. Шекті мәндер.</b> ҚР ДСМ-70 бұйрығы (02.08.2022), 1-қосымша — ең жоғары бір реттік ПДК. Бекеттер сағаттық мән береді, сондықтан салыстыру шамамен.
+        </details>
+        <details class="m"><summary>3. Шекті мәндер</summary>
+          <p>ҚР ДСМ-70 бұйрығы (02.08.2022), 1-қосымша — ең жоғары бір реттік ПДК. Бекеттер сағаттық мән береді, сондықтан салыстыру шамамен.
           ДДҰ ұсынысы PM2,5 үшін әлдеқайда қатаң: тәулігіне 15 мкг/м³.</p>
-        <p><b>4. Деректер сапасы.</b> Бір сан 6 сағат қатарынан өзгермесе — «тұрып қалған» деп белгіленеді (⚠) және талдауға кірмейді.</p>
-        <p><b>5. Көздерді анықтау.</b> Алматы үшін әзірге жоқ: ластану көздерінің (ЖЭО, өнеркәсіп, көмір жағатын аудандар) тізімі жиналуда. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.</p>
+        </details>
+        <details class="m"><summary>4. Деректер сапасы</summary>
+          <p>Бір сан 6 сағат қатарынан өзгермесе — «тұрып қалған» деп белгіленеді (⚠) және талдауға кірмейді.</p>
+        </details>
+        <details class="m"><summary>5. Көздерді анықтау</summary>
+          <p>Алматы үшін әзірге жоқ: ластану көздерінің (ЖЭО, өнеркәсіп, көмір жағатын аудандар) тізімі жиналуда. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.</p>
+        </details>
       </div>
     </details>
   </div>
