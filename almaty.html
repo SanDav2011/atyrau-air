@@ -26,7 +26,7 @@
   #map { height: 62vh; min-height: 360px; border-radius: 10px; }
   .time { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
   .time input { flex: 1; }
-  .time b { min-width: 125px; font-variant-numeric: tabular-nums; }
+  .time select { min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
   button { border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; background: var(--bg); color: var(--text); }
   button.on { background: var(--accent); color: #fff; }
   .wind { display: flex; gap: 12px; align-items: center; }
@@ -120,7 +120,7 @@
     <div class="card time">
       <button id="play" title="Ойнату" aria-label="Сағаттарды ойнату">▶</button>
       <input type="range" id="slider" min="0" max="0" value="0" aria-label="Сағатты таңдау">
-      <b id="hourLabel">—</b>
+      <select id="hourSel" aria-label="Сағатты тізімнен таңдау"></select>
     </div>
     <div class="card" style="margin-top:12px">
       <h2>Зат</h2>
@@ -347,6 +347,11 @@ async function init() {
   $('#slider').max = Math.max(0, hours.length - 1);
   idx = hours.length - 1;
   $('#slider').value = idx;
+  // сағаттар тізімі: жаңасы жоғарыда, күн бойынша топталған
+  const byDay = {};
+  hours.forEach((h, i) => (byDay[h.slice(0, 10)] ??= []).push(i));
+  $('#hourSel').innerHTML = Object.keys(byDay).reverse().map(d => `<optgroup label="${d.slice(8, 10)}.${d.slice(5, 7)}.${d.slice(0, 4)}">` +
+    byDay[d].reverse().map(i => `<option value="${i}">${hours[i].slice(8, 10)}.${hours[i].slice(5, 7)} ${hours[i].slice(11)}:00</option>`).join('') + '</optgroup>').join('');
   $('#info').innerHTML = `Бекеттер: ${Object.keys(stations).length}. Сағаттар: ${hours.length} (${hours[0] ?? '—'}:00 – ${hours.at(-1) ?? '—'}:00).<br>
     Дереккөз: <a href="http://ecodata.kz:3838/app_dem_visual/" target="_blank">Қазгидромет картасы</a>, жел — Open-Meteo.
     Алматы бойынша жинау 2026-10-20 басталды.`;
@@ -357,7 +362,7 @@ async function init() {
 
 function render() {
   const h = hours[idx];
-  $('#hourLabel').textContent = h ? h.slice(8, 10) + '.' + h.slice(5, 7) + ' ' + h.slice(11) + ':00' : '—';
+  $('#hourSel').value = idx;
   layer.clearLayers();
   const lim = LIMITS[pollutant];
   const list = [];
@@ -414,6 +419,7 @@ function renderChart() {
 }
 
 $('#slider').oninput = e => { idx = +e.target.value; render(); };
+$('#hourSel').onchange = e => { if (timer) $('#play').click(); idx = +e.target.value; $('#slider').value = idx; render(); };
 $('#play').onclick = () => {
   if (timer) { clearInterval(timer); timer = null; $('#play').textContent = '▶'; return; }
   $('#play').textContent = '⏸';
