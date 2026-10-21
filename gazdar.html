@@ -60,6 +60,14 @@
   @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
   .card { border-radius: 16px; padding: 16px 18px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .nav a { border-radius: 10px; transition: background .2s, color .2s; }
+  /* газ карточкалары жиналады: тақырыпты басқанда толық мәтін ашылады */
+  section.gas .gas-head { cursor: pointer; position: relative; padding-right: 34px; border-radius: 10px; }
+  section.gas .gas-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  section.gas .gas-head::after { content: '▾'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 22px; color: var(--accent); transition: transform .25s; }
+  section.gas.open .gas-head::after { transform: translateY(-50%) rotate(180deg); }
+  section.gas .more { margin: 6px 0 0; font-size: 14px; color: var(--accent); font-weight: 600; }
+  section.gas.open .more { display: none; }
+  section.gas:not(.open) dl { display: none; }
   .nav a:hover { background: var(--accent); color: #fff; }
   .note { border-radius: 16px; background: rgba(254,243,199,.92); box-shadow: 0 8px 30px rgba(0,40,90,.12); }
   tr.ours td { background: rgba(52,211,153,.16); }
@@ -251,6 +259,32 @@
 // Молекула суреттерін орнына қою (mol.js)
 document.querySelectorAll('[data-mol]').forEach(el => { el.innerHTML = molImg(el.dataset.mol); });
 document.querySelectorAll('[data-pm]').forEach(el => { el.innerHTML = pmSVG(); });
+</script>
+<script>
+// Газ карточкалары: бастапқыда жиналған; тақырыпты басқанда ашылады/жабылады.
+// Сілтеме (#H2S, #PM2.5 т.б.) немесе жоғарыдағы мәзір басылса — сол карточка өзі ашылады.
+const gasCards = [...document.querySelectorAll('section.card')].filter(s => s.querySelector('.gas-head') && s.querySelector('dl'));
+function setOpen(s, on) {
+  s.classList.toggle('open', on);
+  s.querySelector('.gas-head').setAttribute('aria-expanded', on ? 'true' : 'false');
+}
+gasCards.forEach(s => {
+  s.classList.add('gas');
+  const head = s.querySelector('.gas-head');
+  head.setAttribute('role', 'button'); head.tabIndex = 0;
+  head.querySelector('div').insertAdjacentHTML('beforeend', '<p class="more">Толығырақ оқу</p>');
+  setOpen(s, false);
+  head.addEventListener('click', () => setOpen(s, !s.classList.contains('open')));
+  head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); head.click(); } });
+});
+function openFromHash() {
+  const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
+  const el = document.getElementById(id), s = el && el.closest('section.gas');
+  if (s) { setOpen(s, true); s.scrollIntoView({ block: 'start' }); }
+}
+window.addEventListener('hashchange', openFromHash);
+document.querySelectorAll('.nav a').forEach(x => x.addEventListener('click', () => setTimeout(openFromHash))); // сол сілтеме қайта басылса да ашылады
+openFromHash();
 </script>
 <footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
 <script>
