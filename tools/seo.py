@@ -9,7 +9,7 @@ import html, pathlib, re
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = 'https://sandav2011.github.io/atyrau-air/'
 AUTHOR = 'Санжар Давлетбаев'
-SCHOOL = 'Назарбаев Зияткерлік мектебі (НЗМ)'  # автор — НЗМ оқушысы (about.html)
+SCHOOL = 'Атырау қаласындағы Назарбаев Зияткерлік мектебі (НЗМ)'  # автор — Атырау НЗМ оқушысы
 
 # Қала аты → «-дағы/-дегі» тұлғасы (сипаттама үшін)
 LOC = {'Алматы': 'Алматыдағы', 'Астана': 'Астанадағы', 'Ақтөбе': 'Ақтөбедегі', 'Ақтау': 'Ақтаудағы', 'Орал': 'Оралдағы',
@@ -36,7 +36,7 @@ FIXED = {  # бет → (title, description, og:title, og:description)
                     'Газдар туралы — H₂S, SO₂, NO₂, PM2,5',
                     'Шекті мәндер, денсаулыққа әсері және өлшеу әдістері.'),
     'about.html': ('Жоба туралы — Қазақстан ауасы',
-                   '«Қазақстан ауасы» — ашық жоба. Автор: Санжар Давлетбаев (НЗМ). Дереккөздер: Қазгидромет, Open-Meteo.',
+                   '«Қазақстан ауасы» — ашық жоба. Автор: Санжар Давлетбаев, Атырау НЗМ оқушысы. Дереккөздер: Қазгидромет, Open-Meteo.',
                    'Жоба туралы — Қазақстан ауасы',
                    'Ашық ақпараттық жоба: мақсаты, авторлары, дереккөздері.'),
 }
@@ -45,7 +45,7 @@ JSON_LD = f'''<script type="application/ld+json">
 {{"@context": "https://schema.org", "@type": "WebSite", "name": "Қазақстан ауасы", "url": "{SITE}",
  "description": "Қазақстан қалаларындағы ауа сапасы картасы және талдау",
  "author": {{"@type": "Person", "name": "{AUTHOR}", "affiliation": {{"@type": "EducationalOrganization", "name": "{SCHOOL}"}}}},
- "keywords": "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы", "inLanguage": "kk"}}
+ "keywords": "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, Атырау НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы", "inLanguage": "kk"}}
 </script>'''
 
 
@@ -71,7 +71,7 @@ def block(page, title, desc, og_t, og_d):
         f'<meta name="description" content="{e(desc)}">',
         f'<link rel="canonical" href="{url}">',
         '<meta name="theme-color" content="#0b4f7a">',
-        f'<meta name="author" content="{AUTHOR}, НЗМ оқушысы">',
+        f'<meta name="author" content="{AUTHOR}, Атырау НЗМ оқушысы">',
         '<meta name="robots" content="index, follow">',
         '<meta property="og:site_name" content="Қазақстан ауасы">',
         '<meta property="og:locale" content="kk_KZ">',
