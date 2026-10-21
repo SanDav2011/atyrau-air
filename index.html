@@ -39,6 +39,16 @@
            filter: drop-shadow(0 2px 14px rgba(0,60,110,.28)); transition: opacity .3s; }
   #title:focus-visible { outline: 2px solid #fff; outline-offset: 8px; border-radius: 12px; }
   /* Рябь — «Таза ауа» суға тиген жерден таралатын жалпақ шеңберлер (бұрынғы «басыңыз» капсуласының контуры) */
+  /* «басыңыз» — көзге түсетін шыны капсула, айналасында толқын шеңбер */
+  #hint { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); min-height: 44px; padding: 10px 26px; cursor: pointer;
+          font: 700 15px/1 Onest, system-ui, sans-serif; color: #fff; letter-spacing: .12em; text-transform: uppercase;
+          background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.85); border-radius: 999px;
+          -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+          text-shadow: 0 1px 6px rgba(0,60,110,.4); box-shadow: 0 4px 18px rgba(0,60,110,.25); transition: background .2s, transform .2s; }
+  #hint::before { content: ''; position: absolute; inset: -1.5px; border-radius: inherit; border: 2px solid rgba(255,255,255,.7);
+          animation: hintRing 2.2s ease-out infinite; pointer-events: none; }
+  #hint:hover { background: rgba(255,255,255,.3); transform: translateX(-50%) scale(1.04); }
+  @keyframes hintRing { from { transform: scale(1); opacity: .9; } to { transform: scale(1.35, 1.7); opacity: 0; } }
   #ripples { position: fixed; z-index: 1; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
   #ripples i { position: absolute; left: 50%; top: 50%; width: 100%; aspect-ratio: 8 / 1; border-radius: 50%;
           border: 2px solid rgba(255,255,255,.95); box-shadow: 0 0 12px rgba(255,255,255,.45), inset 0 0 10px rgba(255,255,255,.25);
@@ -66,7 +76,7 @@
   #cities a:focus-visible { outline: none; }
   #cities span.city { color: rgba(255,255,255,.78); cursor: inherit; text-shadow: 0 1px 2px rgba(0,60,100,.45), 0 2px 14px rgba(0,70,120,.45); }
   #cities small { font-weight: 500; font-size: 14px; letter-spacing: .04em; color: rgba(255,255,255,.9); }
-  @media (prefers-reduced-motion: reduce) { #ripples i { animation: none; opacity: .5; transform: translate(-50%, -50%) scale(.9); } #ripples i:nth-child(n+2) { display: none; } #cities { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { #hint::before { animation: none; opacity: 0; } #ripples i { animation: none; opacity: .5; transform: translate(-50%, -50%) scale(.9); } #ripples i:nth-child(n+2) { display: none; } #cities { transition: none; } }
 </style>
 </head>
 <body>
@@ -82,6 +92,7 @@
 
 <button id="title" type="button" aria-label="Таза ауа — қалалар тізімін ашу">Таза ауа</button>
 <div id="ripples" aria-hidden="true"><i></i><i></i><i></i></div>
+<button id="hint" type="button" tabindex="-1" aria-hidden="true">басыңыз</button>
 
 <section id="cities" aria-label="Қалалар">
   <h2>Қаланы таңдаңыз</h2>
@@ -115,7 +126,7 @@
    оттегі көпіршіктеріне айналып, жоғары көтеріліп ериді; сосын қалалар тізімі шығады. */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ---- «Таза ауа» → көпіршіктер ---- */
-const title = document.getElementById('title'), ripples = document.getElementById('ripples'), cities = document.getElementById('cities');
+const title = document.getElementById('title'), ripples = document.getElementById('ripples'), hint = document.getElementById('hint'), cities = document.getElementById('cities');
 let parts = [], lastT = 0, dissolved = false;
 
 function placeUi(s) {
@@ -124,6 +135,7 @@ function placeUi(s) {
   const r = title.getBoundingClientRect();
   // рябь әріптің төменгі жиегінен (суға батқан бөліктің түбінен) басталады
   ripples.style.top = (horizon + parseFloat(getComputedStyle(title).fontSize) * 0.3) + 'px'; ripples.style.width = Math.round(r.width * 1.5) + 'px'; // су сызығында, жазудың ортасында
+  hint.style.top = (horizon + r.height / 2 + 28) + 'px'; // «басыңыз» жазудың астында
   layoutWheel();
   cities.style.top = Math.min(horizon + 40, H - cities.offsetHeight - 16) + 'px';
 }
@@ -142,7 +154,7 @@ function dissolve() {
       x: r.left + x, y: r.top + y, vx: (Math.random() - 0.5) * 30, vy: 20 + Math.random() * 60,
       r: gap * 0.45, age: 0, delay: Math.random() * 0.5 + (x / oc.width) * 0.35, under: false, life: 2.6 + Math.random() * 1.6, wob: Math.random() * 6 });
   }
-  title.style.opacity = '0'; title.style.pointerEvents = 'none'; ripples.style.display = 'none';
+  title.style.opacity = '0'; title.style.pointerEvents = 'none'; ripples.style.display = 'none'; hint.style.display = 'none';
   setTimeout(() => { cities.style.visibility = 'visible'; placeUi(sc); startWheel();
     requestAnimationFrame(() => cities.classList.add('show')); }, 1100);
 }
@@ -250,6 +262,7 @@ addEventListener('keydown', e => { if (!dissolved || (e.key !== 'ArrowDown' && e
   wTarget = Math.round(wPos) + (e.key === 'ArrowDown' ? 1 : -1); wKick(); });
 
 title.addEventListener('click', dissolve);
+hint.addEventListener('click', dissolve); // капсула да «Таза ауа»-ны ашады
 const sc = createScene(document.getElementById('scene'), { onResize: S => placeUi(S) });
 document.fonts && document.fonts.ready.then(() => placeUi());
 const t0 = performance.now();
