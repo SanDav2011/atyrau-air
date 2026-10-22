@@ -28,7 +28,10 @@ jobs:
           age=$(( $(date +%s) - ${last:-0} ))
           echo "Последний коммит ноутбука: $age с назад"
           if [ "$age" -lt 5400 ]; then echo "fresh=1" >> "$GITHUB_OUTPUT"; fi
+      # ноутбук жинап жатса — Python орнатпаймыз (pip кэші бос қалып, соңғы «Post» қадамы қате береді);
+      # санауыш үшін серверде бар python жеткілікті
       - uses: actions/setup-python@v5
+        if: steps.laptop.outputs.fresh != '1'
         with:
           python-version: "3.12"
           cache: pip
