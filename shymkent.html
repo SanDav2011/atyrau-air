@@ -233,7 +233,7 @@
           <p>Бір сан 6 сағат қатарынан өзгермесе — «тұрып қалған» деп белгіленеді (⚠) және талдауға кірмейді.</p>
         </details>
         <details class="m"><summary>5. Көздерді анықтау</summary>
-          <p>Шымкент үшін әзірге жоқ: ластану көздерінің тізімі жиналмаған. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.</p>
+          <p>Шымкент үшін көздер тізімі — OpenStreetMap пен ашық мәліметтер бойынша жоба: орындары шамамен, биіктіктері болжам, шығарылым құжаттары (НДВ) әлі қосылған жоқ. Нақты орны мен «Көзді анықтау» — құпиясөзбен. Нәтиже — тек бағыт, нақты кінәлі емес.</p>
         </details>
       </div>
     </details>
@@ -511,7 +511,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
-  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">Шымкент үшін ластану көздерінің тізімі әзірге жоқ — көзді анықтау кейін қосылады. Төменде — бекеттер мен жел.</span>'; return; }
+  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">Шымкент үшін көзді анықтау құпиясөзбен ашылады — төмендегі «Ықтимал көздер» бөлімінде. Төменде — бекеттер мен жел.</span>'; return; }
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
@@ -744,7 +744,8 @@ map.on('click', e => {
 });
 
 /* ===== Ықтимал көздер: sources.enc.json (шифрланған) + осы құрылғыдағы түзетулер ===== */
-const SRC_KEY = 'atyrau-air-sources-v1';
+const CITY = 'shymkent'; // sources.enc.json ішінде әр көздің city өрісі бар
+const SRC_KEY = 'atyrau-air-sources-v1-' + CITY;
 const KINDS = { high: 'Биік (құбыр, факел)', low: 'Аласа (резервуар, ғимарат)', ground: 'Жер деңгейі (тоған, тазарту)' };
 const KIND_ICON = { high: '🏭', low: '🛢️', ground: '💧' };
 let sources = [], defaultSources = [], editing = false, placingId = null;
@@ -769,7 +770,7 @@ async function decryptSources(password) {
 
 async function unlock(password, remember) {
   const data = await decryptSources(password); // қате құпиясөз — мұнда қате лақтырады
-  defaultSources = data.sources; stacks = data.stacks || []; locked = false;
+  defaultSources = data.sources.filter(s => (s.city || 'atyrau') === CITY); stacks = CITY === 'atyrau' ? (data.stacks || []) : []; locked = false;
   try { if (remember) sessionStorage.setItem(PW_KEY, password); } catch {}
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SRC_KEY)); } catch {}
@@ -782,6 +783,7 @@ async function loadSources() {
     fetch('sources.enc.json?t=' + Date.now()).then(r => r.json()),
     fetch('sources.public.json?t=' + Date.now()).then(r => r.json()).catch(() => []),
   ]);
+  publicSources = publicSources.filter(s => (s.city || 'atyrau') === CITY);
   let pw = null;
   try { pw = sessionStorage.getItem(PW_KEY); } catch {}
   if (pw) { try { await unlock(pw, false); return; } catch {} }
@@ -810,7 +812,7 @@ function renderSources() {
         .bindTooltip(`${esc(s.name)} · орны шамамен (±500 м)`).addTo(srcLayer);
     $('#srcList').innerHTML = (publicSources.length ? publicSources.map(s => `<div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b></div>`).join('') +
         '<div class="muted" style="margin-top:6px">Картада орындары шамамен (±500 м) көрсетілген.</div>' : '') +
-      `<div class="muted" style="margin-top:8px">🔒 Нақты орны, биіктігі, АНПЗ мұржалары және «Көзді анықтау» — құпиясөзбен.</div>
+      `<div class="muted" style="margin-top:8px">🔒 Нақты орны, биіктігі және «Көзді анықтау» — құпиясөзбен.</div>
       <form id="unlockForm" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
         <input type="password" id="pwInput" placeholder="Құпиясөз" autocomplete="current-password" aria-label="Құпиясөз" style="flex:1;min-width:150px;min-height:44px;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px">
         <button type="submit">🔓 Ашу</button>
@@ -905,7 +907,7 @@ $('#srcReset').onclick = () => {
 
 document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('click', () => { $('#method').open = true; }));
 init().catch(e => { $('#info').textContent = 'Деректер жүктелмеді: ' + e; });
-// Шымкент: ластану көздерінің тізімі әлі жоқ — loadSources шақырылмайды
+loadSources().catch(e => { $('#srcList').textContent = 'Көздер тізімі жүктелмеді: ' + e; });
 </script>
 <footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
 <script>

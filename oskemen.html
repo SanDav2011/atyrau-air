@@ -744,7 +744,8 @@ map.on('click', e => {
 });
 
 /* ===== Ықтимал көздер: sources.enc.json (шифрланған) + осы құрылғыдағы түзетулер ===== */
-const SRC_KEY = 'atyrau-air-sources-v1';
+const CITY = 'oskemen'; // sources.enc.json ішінде әр көздің city өрісі бар
+const SRC_KEY = 'atyrau-air-sources-v1-' + CITY;
 const KINDS = { high: 'Биік (құбыр, факел)', low: 'Аласа (резервуар, ғимарат)', ground: 'Жер деңгейі (тоған, тазарту)' };
 const KIND_ICON = { high: '🏭', low: '🛢️', ground: '💧' };
 let sources = [], defaultSources = [], editing = false, placingId = null;
@@ -769,7 +770,7 @@ async function decryptSources(password) {
 
 async function unlock(password, remember) {
   const data = await decryptSources(password); // қате құпиясөз — мұнда қате лақтырады
-  defaultSources = data.sources; stacks = data.stacks || []; locked = false;
+  defaultSources = data.sources.filter(s => (s.city || 'atyrau') === CITY); stacks = CITY === 'atyrau' ? (data.stacks || []) : []; locked = false;
   try { if (remember) sessionStorage.setItem(PW_KEY, password); } catch {}
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(SRC_KEY)); } catch {}
@@ -782,6 +783,7 @@ async function loadSources() {
     fetch('sources.enc.json?t=' + Date.now()).then(r => r.json()),
     fetch('sources.public.json?t=' + Date.now()).then(r => r.json()).catch(() => []),
   ]);
+  publicSources = publicSources.filter(s => (s.city || 'atyrau') === CITY);
   let pw = null;
   try { pw = sessionStorage.getItem(PW_KEY); } catch {}
   if (pw) { try { await unlock(pw, false); return; } catch {} }
@@ -810,7 +812,7 @@ function renderSources() {
         .bindTooltip(`${esc(s.name)} · орны шамамен (±500 м)`).addTo(srcLayer);
     $('#srcList').innerHTML = (publicSources.length ? publicSources.map(s => `<div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b></div>`).join('') +
         '<div class="muted" style="margin-top:6px">Картада орындары шамамен (±500 м) көрсетілген.</div>' : '') +
-      `<div class="muted" style="margin-top:8px">🔒 Нақты орны, биіктігі, АНПЗ мұржалары және «Көзді анықтау» — құпиясөзбен.</div>
+      `<div class="muted" style="margin-top:8px">🔒 Нақты орны, биіктігі және «Көзді анықтау» — құпиясөзбен.</div>
       <form id="unlockForm" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
         <input type="password" id="pwInput" placeholder="Құпиясөз" autocomplete="current-password" aria-label="Құпиясөз" style="flex:1;min-width:150px;min-height:44px;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px">
         <button type="submit">🔓 Ашу</button>
