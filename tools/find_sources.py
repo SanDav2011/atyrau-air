@@ -130,6 +130,55 @@ leg.innerHTML=Object.keys(n).map(k=>`<div><i style="background:${{COL[k]}}"></i>
     (OUT / f"sources-{key}.html").write_text(h, encoding="utf-8")
 
 
+# Overpass құлаған кезде: Nominatim (1 сұраныс/сек), кілт сөздер бойынша рамка ішінде
+NOM_Q = {
+    "refinery": ["нефтеперерабатывающий завод", "НПЗ", "нефтехимический", "химический завод", "фосфор", "свинцовый завод"],
+    "power": ["ТЭЦ", "ГРЭС", "электростанция", "котельная"],
+    "wastewater": ["очистные сооружения", "канализационные очистные", "поля фильтрации", "отстойник", "накопитель сточных вод"],
+    "landfill": ["полигон ТБО", "полигон отходов", "свалка", "мусорный полигон", "золоотвал", "шлакоотвал"],
+    "metal": ["металлургический завод", "цементный завод", "асфальтобетонный завод", "ферросплавный", "алюминиевый", "комбинат", "кожевенный", "Шымкентцемент", "Стандарт цемент", "ХимФарм", "завод ферросплавов", "мясокомбинат", "птицефабрика"],
+    "fuel": ["нефтебаза", "АЗС нефтебаза", "склад ГСМ"],
+    "quarry": ["карьер"],
+}
+
+
+def nominatim(key):
+    name, lat, lng = CITIES[key]
+    vb = f"{lng - DLNG},{lat + DLAT},{lng + DLNG},{lat - DLAT}"
+    res, seen = [], set()
+    for kind, qs in NOM_Q.items():
+        for q in qs:
+            url = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode(
+                {"q": q, "format": "jsonv2", "viewbox": vb, "bounded": 1, "limit": 40, "accept-language": "ru", "polygon_geojson": 0})
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "atyrau-air-sources/1.0 (sanainwest@gmail.com)"})
+                items = json.load(urllib.request.urlopen(req, timeout=60))
+            except Exception as e:
+                print("  қате", q, e, file=sys.stderr); items = []
+            time.sleep(1.2)
+            for it in items:
+                uid = (it["osm_type"], it["osm_id"])
+                if uid in seen: continue
+                seen.add(uid)
+                if it["category"] in ("highway", "railway", "place", "natural", "amenity", "shop") or (it["category"] == "building" and it["type"] == "yes"):
+                    continue   # аялдама, станция, ұсақ ғимарат — көз емес
+                b = [float(x) for x in it["boundingbox"]]  # s,n,w,e
+                c = (float(it["lat"]), float(it["lon"]))
+                ring = [[b[0], b[2]], [b[0], b[3]], [b[1], b[3]], [b[1], b[2]]] if it["osm_type"] != "node" else None
+                a = round(area_km2([tuple(p) for p in ring]), 3) if ring else 0
+                res.append({"osm": f"{it['osm_type']}/{it['osm_id']}", "kind": kind, "name": it.get("name") or it["display_name"].split(",")[0],
+                            "tags": {"найден_по": q, "osm_class": f"{it['category']}={it['type']}"},
+                            "lat": round(c[0], 5), "lng": round(c[1], 5), "area_km2": a,
+                            "dist_km": round(math.hypot((c[0] - lat) * 110.57, (c[1] - lng) * 111.32 * math.cos(math.radians(lat))), 1),
+                            "ring": ring})
+        print(name, kind, len(res))
+    res.sort(key=lambda r: (r["kind"], -r["area_km2"]))
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / f"sources-{key}.json").write_text(json.dumps({"city": key, "center": [lat, lng], "via": "nominatim", "items": res}, ensure_ascii=False, indent=1), encoding="utf-8")
+    html_map(key, name, lat, lng, res)
+
+
 if __name__ == "__main__":
-    for k in (sys.argv[1:] or list(CITIES)):
-        run(k)
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    for k in (args or list(CITIES)):
+        (nominatim if "--nominatim" in sys.argv else run)(k)
