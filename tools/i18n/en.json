@@ -1,0 +1,40 @@
+{
+ "common": {
+  "Қазақстан ауасы": "Kazakhstan Air",
+  "Негізгі мәзір": "Main menu",
+  ">Басты</a>": ">Home</a>",
+  ">Карта</a>": ">Map</a>",
+  ">Газдар туралы</a>": ">Gases</a>",
+  "aria-current=\"page\">Жоба туралы</a>": "aria-current=\"page\">About</a>",
+  "Санжар Давлетбаев, Атырау НЗМ оқушысы": "Sanzhar Davletbayev, student at NIS Atyrau",
+  "Атырау қаласындағы Назарбаев Зияткерлік мектебі (НЗМ)": "Nazarbayev Intellectual School in Atyrau (NIS)",
+  "\"name\": \"Санжар Давлетбаев\"": "\"name\": \"Sanzhar Davletbayev\""
+ },
+ "about": {
+  "Жоба туралы — Қазақстан ауасы": "About the project — Kazakhstan Air",
+  "«Қазақстан ауасы» — ашық жоба. Автор: Санжар Давлетбаев, Атырау НЗМ оқушысы. Дереккөздер: Қазгидромет, Open-Meteo.": "“Kazakhstan Air” is an open project. Author: Sanzhar Davletbayev, student at NIS Atyrau. Data sources: Kazhydromet, Open-Meteo.",
+  "Ашық ақпараттық жоба: мақсаты, авторлары, дереккөздері.": "An open information project: its purpose, authors and data sources.",
+  "Қазақстан қалаларындағы ауа сапасы картасы және талдау": "Air quality map and analysis for cities of Kazakhstan",
+  "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, Атырау НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы": "air quality, Kazakhstan, H2S, PM2.5, Kazhydromet, NIS Atyrau, Nazarbayev Intellectual School, student project",
+  "<h1>Жоба туралы</h1>": "<h1>About the project</h1>",
+  "«Қазақстан ауасы» — ашық ақпараттық жоба": "“Kazakhstan Air” is an open information project",
+  "Жоба не үшін": "Why this project",
+  "Бұл коммерциялық емес жоба. Ол тұрғындарға ауа сапасын түсінуге көмектеседі: мысалы, Атырауда күкіртсутек иісі қайдан келетінін, желдің бағыты мен күші қалай әсер ететінін көрсетеді.": "This is a non-profit project. It helps residents understand air quality: for example, it shows where the hydrogen sulfide smell in Atyrau comes from and how wind direction and speed affect it.",
+  "Қала картасында әр бекеттің өлшемдері, жел және шекті мәндермен салыстыру бар. Газдар туралы бетте әр заттың не екенін, қалай өлшенетінін және денсаулыққа әсерін түсіндіреміз.": "The city map shows each station’s readings, the wind and a comparison with limit values. The page about gases explains what each substance is, how it is measured and how it affects health.",
+  "Авторлар": "Authors",
+  "Санжар Давлетбаев — жобаның авторы, Атырау НЗМ-нің 10-сынып оқушысы": "Sanzhar Davletbayev — author of the project, 10th-grade student at NIS Atyrau",
+  "Роман Давлетбаев — байланыс тұлғасы": "Roman Davletbayev — contact person",
+  "Деректер қайдан алынады": "Where the data comes from",
+  "<b>Қазгидромет</b> — бекеттердің өлшемдері (ecodata.kz, tabigat.gov.kz)": "<b>Kazhydromet</b> — station measurements (ecodata.kz, tabigat.gov.kz)",
+  "<b>Open-Meteo</b> — жел, температура, бұлттылық": "<b>Open-Meteo</b> — wind, temperature, cloud cover",
+  "<b>OpenStreetMap</b> — облыстар мен қалалардың шекаралары, өнеркәсіп нысандарының орны": "<b>OpenStreetMap</b> — borders of regions and cities, locations of industrial facilities",
+  "<b>ҚР ДСМ-70 бұйрығы</b> — шекті мәндер": "<b>Order No. ҚР ДСМ-70</b> — limit values",
+  "Маңызды ескерту": "Important notice",
+  "Бұл ресми ескерту емес. Көрсетілген көздер мен түстер — модель бағасы, нақты ластануды өлшейтін бекеттердің өзі ресми деректер береді. Медициналық кеңес те емес: жағдайыңыз нашарласа, 103-ке хабарласыңыз немесе дәрігерге барыңыз.": "This is not an official warning. The sources and colours shown are a model estimate; official data on actual pollution comes from the monitoring stations themselves. Nor is this medical advice: if you feel worse, call 103 or see a doctor.",
+  "Байланыс": "Contact",
+  "Сұрақ, ұсыныс немесе қате туралы жазыңыз:": "Write to us with questions, suggestions or to report a mistake:",
+  "// Келушілер саны: алдымен өз доменіміздегі data/visits.json, болмаса — GoatCounter": "// Visitor count: first data/visits.json on our own domain, otherwise GoatCounter",
+  "'👁 Сайт '": "'👁 Site viewed '",
+  "' рет қаралды'": "' times'"
+ }
+}

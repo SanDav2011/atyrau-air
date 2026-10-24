@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO (tools/seo.py) -->
+<title>About the project — Kazakhstan Air</title>
+<meta name="description" content="“Kazakhstan Air” is an open project. Author: Sanzhar Davletbayev, student at NIS Atyrau. Data sources: Kazhydromet, Open-Meteo.">
+<link rel="canonical" href="https://sandav2011.github.io/atyrau-air/en/about.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/about.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/about.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/about.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/about.html">
+<!-- /hreflang -->
+<meta name="theme-color" content="#0b4f7a">
+<meta name="author" content="Sanzhar Davletbayev, student at NIS Atyrau">
+<meta name="robots" content="index, follow">
+<meta property="og:site_name" content="Kazakhstan Air">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About the project — Kazakhstan Air">
+<meta property="og:description" content="An open information project: its purpose, authors and data sources.">
+<meta property="og:url" content="https://sandav2011.github.io/atyrau-air/en/about.html">
+<meta property="og:image" content="https://sandav2011.github.io/atyrau-air/img/og/about.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebSite", "name": "Kazakhstan Air", "url": "https://sandav2011.github.io/atyrau-air/",
+ "description": "Air quality map and analysis for cities of Kazakhstan",
+ "author": {"@type": "Person", "name": "Sanzhar Davletbayev", "affiliation": {"@type": "EducationalOrganization", "name": "Nazarbayev Intellectual School in Atyrau (NIS)"}},
+ "keywords": "air quality, Kazakhstan, H2S, PM2.5, Kazhydromet, NIS Atyrau, Nazarbayev Intellectual School, student project", "inLanguage": "en"}
+</script>
+<!-- /SEO -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --card: rgba(255,255,255,.92); --text: #10233f; --muted: #5b6b82; --accent: #0b6fc4; }
+  * { box-sizing: border-box; }
+  html { background: #0b46b5; }
+  body { margin: 0; font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text); min-height: 100vh;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; font-size: 15px; line-height: 1.6; }
+  header { color: #fff; padding: 0 clamp(16px, 4vw, 48px) 8px; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px;
+                             display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                                    transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 860px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { max-width: 860px; margin: 0 auto; padding: 8px 16px 32px; display: grid; gap: 14px; }
+  .card { background: var(--card); border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 8px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; padding-right: 12px; }
+  .contact a:hover { text-decoration: underline; }
+  #visits { text-align: center; color: rgba(16,35,63,.6); font-size: 14px; }
+
+
+/* lang */ header nav .lang { display: inline-flex; margin-left: 4px; } header nav .lang a { padding: 12px 4px !important; font-size: 13px !important; opacity: .75; } header nav .lang a.cur { opacity: 1; font-weight: 800; } /* /lang */
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Main menu">
+    <a class="brand" href="../">Kazakhstan Air</a>
+    <a href="../">Home</a>
+    <a href="../karta.html">Map</a>
+    <a href="../gazdar.html">Gases</a>
+    <a href="about.html" class="active" aria-current="page">About</a>
+    <!-- lang --><span class="lang"><a href="../about.html" hreflang="kk">KK</a><a href="../ru/about.html" hreflang="ru">RU</a><a href="../en/about.html" hreflang="en" class="cur" aria-current="true">EN</a></span><!-- /lang -->
+  </nav>
+  <div class="hero">
+    <h1>About the project</h1>
+    <p>“Kazakhstan Air” is an open information project</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <h2>Why this project</h2>
+    <p>This is a non-profit project. It helps residents understand air quality: for example, it shows where the hydrogen sulfide smell in Atyrau comes from and how wind direction and speed affect it.</p>
+    <p>The city map shows each station’s readings, the wind and a comparison with limit values. The page about gases explains what each substance is, how it is measured and how it affects health.</p>
+  </section>
+
+  <section class="card">
+    <h2>Authors</h2>
+    <ul>
+      <li>Sanzhar Davletbayev — author of the project, 10th-grade student at NIS Atyrau</li>
+      <li>Roman Davletbayev — contact person</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Where the data comes from</h2>
+    <ul>
+      <li><b>Kazhydromet</b> — station measurements (ecodata.kz, tabigat.gov.kz)</li>
+      <li><b>Open-Meteo</b> — wind, temperature, cloud cover</li>
+      <li><b>OpenStreetMap</b> — borders of regions and cities, locations of industrial facilities</li>
+      <li><b>Order No. ҚР ДСМ-70</b> — limit values</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Important notice</h2>
+    <p>This is not an official warning. The sources and colours shown are a model estimate; official data on actual pollution comes from the monitoring stations themselves. Nor is this medical advice: if you feel worse, call 103 or see a doctor.</p>
+  </section>
+
+  <section class="card contact">
+    <h2>Contact</h2>
+    <p class="muted">Write to us with questions, suggestions or to report a mistake:</p>
+    <a href="mailto:sanainwest@gmail.com">✉️ sanainwest@gmail.com</a><br>
+    <a href="https://instagram.com/roman.d.m" target="_blank" rel="noopener">📷 Instagram: @roman.d.m</a>
+  </section>
+
+  <div id="visits" hidden></div>
+</main>
+<script>
+// Visitor count: first data/visits.json on our own domain, otherwise GoatCounter
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+getJson('../data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Site viewed ' + d.count + ' times'; el.hidden = false; })
+  .catch(() => {});
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

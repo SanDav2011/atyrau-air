@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO (tools/seo.py) -->
+<title>О проекте — Воздух Казахстана</title>
+<meta name="description" content="«Воздух Казахстана» — открытый проект. Автор: Санжар Давлетбаев, ученик Атырауской НИШ. Источники данных: Казгидромет, Open-Meteo.">
+<link rel="canonical" href="https://sandav2011.github.io/atyrau-air/ru/about.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/about.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/about.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/about.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/about.html">
+<!-- /hreflang -->
+<meta name="theme-color" content="#0b4f7a">
+<meta name="author" content="Санжар Давлетбаев, ученик Атырауской НИШ">
+<meta name="robots" content="index, follow">
+<meta property="og:site_name" content="Воздух Казахстана">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+<meta property="og:title" content="О проекте — Воздух Казахстана">
+<meta property="og:description" content="Открытый информационный проект: цель, авторы, источники данных.">
+<meta property="og:url" content="https://sandav2011.github.io/atyrau-air/ru/about.html">
+<meta property="og:image" content="https://sandav2011.github.io/atyrau-air/img/og/about.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebSite", "name": "Воздух Казахстана", "url": "https://sandav2011.github.io/atyrau-air/",
+ "description": "Карта качества воздуха в городах Казахстана и анализ",
+ "author": {"@type": "Person", "name": "Санжар Давлетбаев", "affiliation": {"@type": "EducationalOrganization", "name": "Назарбаев Интеллектуальная школа в городе Атырау (НИШ)"}},
+ "keywords": "качество воздуха, Казахстан, H2S, PM2.5, Казгидромет, Атырауская НИШ, Назарбаев Интеллектуальная школа, школьный проект", "inLanguage": "ru"}
+</script>
+<!-- /SEO -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --card: rgba(255,255,255,.92); --text: #10233f; --muted: #5b6b82; --accent: #0b6fc4; }
+  * { box-sizing: border-box; }
+  html { background: #0b46b5; }
+  body { margin: 0; font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text); min-height: 100vh;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; font-size: 15px; line-height: 1.6; }
+  header { color: #fff; padding: 0 clamp(16px, 4vw, 48px) 8px; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px;
+                             display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                                    transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 860px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { max-width: 860px; margin: 0 auto; padding: 8px 16px 32px; display: grid; gap: 14px; }
+  .card { background: var(--card); border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 8px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; padding-right: 12px; }
+  .contact a:hover { text-decoration: underline; }
+  #visits { text-align: center; color: rgba(16,35,63,.6); font-size: 14px; }
+
+
+/* lang */ header nav .lang { display: inline-flex; margin-left: 4px; } header nav .lang a { padding: 12px 4px !important; font-size: 13px !important; opacity: .75; } header nav .lang a.cur { opacity: 1; font-weight: 800; } /* /lang */
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Главное меню">
+    <a class="brand" href="../">Воздух Казахстана</a>
+    <a href="../">Главная</a>
+    <a href="../karta.html">Карта</a>
+    <a href="../gazdar.html">О газах</a>
+    <a href="about.html" class="active" aria-current="page">О проекте</a>
+    <!-- lang --><span class="lang"><a href="../about.html" hreflang="kk">KK</a><a href="../ru/about.html" hreflang="ru" class="cur" aria-current="true">RU</a><a href="../en/about.html" hreflang="en">EN</a></span><!-- /lang -->
+  </nav>
+  <div class="hero">
+    <h1>О проекте</h1>
+    <p>«Воздух Казахстана» — открытый информационный проект</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <h2>Зачем этот проект</h2>
+    <p>Это некоммерческий проект. Он помогает жителям разобраться в качестве воздуха: например, показывает, откуда в Атырау приходит запах сероводорода и как на это влияют направление и сила ветра.</p>
+    <p>На карте города есть измерения каждого поста, ветер и сравнение с предельными значениями. На странице о газах мы объясняем, что такое каждое вещество, как его измеряют и как оно влияет на здоровье.</p>
+  </section>
+
+  <section class="card">
+    <h2>Авторы</h2>
+    <ul>
+      <li>Санжар Давлетбаев — автор проекта, ученик 10 класса Атырауской НИШ</li>
+      <li>Роман Давлетбаев — контактное лицо</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Откуда берутся данные</h2>
+    <ul>
+      <li><b>Казгидромет</b> — измерения постов (ecodata.kz, tabigat.gov.kz)</li>
+      <li><b>Open-Meteo</b> — ветер, температура, облачность</li>
+      <li><b>OpenStreetMap</b> — границы областей и городов, расположение промышленных объектов</li>
+      <li><b>Приказ № ҚР ДСМ-70</b> — предельные значения</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Важное предупреждение</h2>
+    <p>Это не официальное предупреждение. Показанные источники и цвета — оценка модели; официальные данные о реальном загрязнении дают сами посты наблюдений. Это и не медицинская консультация: если вам стало хуже, позвоните по номеру 103 или обратитесь к врачу.</p>
+  </section>
+
+  <section class="card contact">
+    <h2>Контакты</h2>
+    <p class="muted">Пишите по вопросам, предложениям или об ошибках:</p>
+    <a href="mailto:sanainwest@gmail.com">✉️ sanainwest@gmail.com</a><br>
+    <a href="https://instagram.com/roman.d.m" target="_blank" rel="noopener">📷 Instagram: @roman.d.m</a>
+  </section>
+
+  <div id="visits" hidden></div>
+</main>
+<script>
+// Число посетителей: сначала data/visits.json на нашем домене, иначе GoatCounter
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+getJson('../data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт просмотрели ' + d.count + ' раз'; el.hidden = false; })
+  .catch(() => {});
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
