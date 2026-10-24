@@ -10,25 +10,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://sandav2011.github.io/atyrau-air/"
 LANGS = ["ru", "en"]
-BUILT = ["about"]  # аударылған беттер; жаңасын осында қос
+BUILT = ["about", "index"]  # аударылған беттер; жаңасын осында қос
 LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")
 CYRILLIC = re.compile("[А-Яа-яЁё]")
 ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский"]  # ресми белгілеу, аударылмайды
 
-LANG_CSS = ("/* lang */ header nav details.lang { position: relative; margin-left: 4px; } "
-            "header nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; "
+# орыс нұсқасында қала атаулары қазақша қалады (Роман, 2026-10-24)
+CITIES_KK = ["Ақтөбе", "Ақтау", "Қарағанды", "Өскемен", "Қостанай", "Талдықорған", "Қызылорда", "Көкшетау", "Түркістан", "Жезқазған"]
+LANG_CSS = ("/* lang */ nav details.lang { position: relative; margin-left: 4px; } "
+            "nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; "
             "display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } "
-            "header nav details.lang summary::-webkit-details-marker { display: none; } "
-            "header nav details.lang summary::after { content: '▾'; font-size: 12px; } "
-            "header nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; "
+            "nav details.lang summary::-webkit-details-marker { display: none; } "
+            "nav details.lang summary::after { content: '▾'; font-size: 12px; } "
+            "nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; "
             "box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } "
-            "header nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; "
+            "nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; "
             "display: flex !important; align-items: center; text-decoration: none; } "
-            "header nav details.lang .menu a::after { display: none !important; } "
-            "header nav details.lang .menu a:hover { background: #e8f1fb; } "
-            "header nav details.lang .menu a.cur { font-weight: 800; } /* /lang */")
+            "nav details.lang .menu a::after { display: none !important; } "
+            "nav details.lang .menu a:hover { background: #e8f1fb; } "
+            "nav details.lang .menu a.cur { font-weight: 800; } /* /lang */")
 NAME = {"kk": "Қазақша", "ru": "Русский", "en": "English"}
 
 
@@ -110,9 +112,10 @@ def build(page, lang):
 
     # Қалған қазақ әріптері (ресми белгілеуден басқа) — аударылмаған жолдар
     left = []
-    for ln in html.splitlines():
-        t = ln
-        for a in ALLOWED_KK:
+    nocomm = re.sub(r"<!--.*?-->|/\*.*?\*/", "", html, flags=re.S)  # түсіндірмелер аударылмайды
+    for ln in nocomm.splitlines():
+        t = re.sub(r"(^|\s)//.*$", "", ln)
+        for a in ALLOWED_KK + (CITIES_KK if lang == "ru" else []):
             t = t.replace(a, "")
         if KK_LETTERS.search(t) or (lang == "en" and CYRILLIC.search(t)):
             left.append(ln.strip()[:160])
