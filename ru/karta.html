@@ -91,6 +91,13 @@
   #clock { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); }
   @media (prefers-reduced-motion: reduce) { .city .halo { animation: none; } }
 
+
+
+
+
+
+
+
 /* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
 </style>
 </head>
@@ -134,7 +141,7 @@ const DN = {"Абай облысы": "область Абай", "Ақмола о
 const dn = n => DN[n] || n;
 // Толық картасы бар қалалар: беті, деректер файлы, басты зат және оның шегі (мкг/м³, ҚР ДСМ-70, бір реттік)
 const ACTIVE = {
-  'Атырау': { href: '../atyrau.html', file: '../data/stations.csv', pol: 'H2S', limit: 8 },
+  'Атырау': { href: 'atyrau.html', file: '../data/stations.csv', pol: 'H2S', limit: 8 },
   'Алматы': { href: '../almaty.html', file: '../data/almaty/stations.csv', pol: 'PM2.5', limit: 160 },
   'Астана': { href: '../astana.html', file: '../data/astana/stations.csv', pol: 'PM2.5', limit: 160 },
   'Ақтөбе': { href: '../aktobe.html', file: '../data/aktobe/stations.csv', pol: 'H2S', limit: 8 },

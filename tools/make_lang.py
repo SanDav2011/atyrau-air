@@ -10,14 +10,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://sandav2011.github.io/atyrau-air/"
 LANGS = ["ru", "en"]
-BUILT = ["about", "index", "karta"]  # аударылған беттер; жаңасын осында қос
+BUILT = ["about", "index", "karta", "atyrau"]  # аударылған беттер; жаңасын осында қос
 LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")
 CYRILLIC = re.compile("[А-Яа-яЁё]")
 ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский", "['Атырау']", "|| 'Атырау'"]
+ALLOWED_RU = ["Сасық сай"]
 # код жолдары: атау кілттері (аударылмайды)
-IGNORE_LINE = re.compile(r"^\s*const DN = |^\s*'[^']+': \{ href: '")  # ресми белгілеу, аударылмайды
+IGNORE_LINE = re.compile(r"^\s*const (DN|SN) = |^\s*'[^']+': \{ href: '|row: \d+,\s+name:|test\(name\)|населенный пункт|\.replace\(/\^\(с|=== 'Атырау' \? ''|ownerOf")
 
 # орыс нұсқасында қала атаулары қазақша қалады (Роман, 2026-10-24)
 CITIES_KK = ["Ақтөбе", "Ақтау", "Қарағанды", "Өскемен", "Қостанай", "Талдықорған", "Қызылорда", "Көкшетау", "Түркістан", "Жезқазған"]
@@ -121,7 +122,7 @@ def build(page, lang):
         if IGNORE_LINE.search(ln):
             continue
         t = re.sub(r"(^|\s)//.*$", "", ln)
-        for a in ALLOWED_KK + (CITIES_KK if lang == "ru" else []):
+        for a in ALLOWED_KK + (CITIES_KK + ALLOWED_RU if lang == "ru" else []):
             t = t.replace(a, "")
         if KK_LETTERS.search(t) or (lang == "en" and CYRILLIC.search(t)):
             left.append(ln.strip()[:160])
