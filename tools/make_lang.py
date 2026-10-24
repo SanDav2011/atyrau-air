@@ -10,12 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://sandav2011.github.io/atyrau-air/"
 LANGS = ["ru", "en"]
-BUILT = ["about", "index"]  # аударылған беттер; жаңасын осында қос
+BUILT = ["about", "index", "karta"]  # аударылған беттер; жаңасын осында қос
 LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")
 CYRILLIC = re.compile("[А-Яа-яЁё]")
-ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский"]  # ресми белгілеу, аударылмайды
+ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский", "['Атырау']", "|| 'Атырау'"]
+# код жолдары: атау кілттері (аударылмайды)
+IGNORE_LINE = re.compile(r"^\s*const DN = |^\s*'[^']+': \{ href: '")  # ресми белгілеу, аударылмайды
 
 # орыс нұсқасында қала атаулары қазақша қалады (Роман, 2026-10-24)
 CITIES_KK = ["Ақтөбе", "Ақтау", "Қарағанды", "Өскемен", "Қостанай", "Талдықорған", "Қызылорда", "Көкшетау", "Түркістан", "Жезқазған"]
@@ -93,6 +95,8 @@ def build(page, lang):
     # ресурстар жолы: data/, img/, model.js т.б. — бір деңгей жоғары
     html = re.sub(r"""(['"])(data/|img/|sources[\w.]*\.json|(?:model|scene|mol)\.js)""", r"\1../\2", html)
     html = re.sub(r'(<script src=")((?:model|scene|mol)\.js)', r"\1../\2", html)
+    # JS ішіндегі бет сілтемелері (href: 'atyrau.html'): аударылмаған бет — қазақша түпнұсқаға
+    html = re.sub(r"href: '(\w+)\.html'", lambda m: m.group(0) if m.group(1) in BUILT else "href: '../%s.html'" % m.group(1), html)
 
     # ішкі сілтемелер: аударылған бет — сол жерде, әйтпесе қазақша түпнұсқаға
     def fix_href(m):
@@ -114,6 +118,8 @@ def build(page, lang):
     left = []
     nocomm = re.sub(r"<!--.*?-->|/\*.*?\*/", "", html, flags=re.S)  # түсіндірмелер аударылмайды
     for ln in nocomm.splitlines():
+        if IGNORE_LINE.search(ln):
+            continue
         t = re.sub(r"(^|\s)//.*$", "", ln)
         for a in ALLOWED_KK + (CITIES_KK if lang == "ru" else []):
             t = t.replace(a, "")

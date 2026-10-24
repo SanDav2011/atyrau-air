@@ -7,6 +7,12 @@
 <title>Қазақстан картасы — ауа сапасы | Қазақстан ауасы</title>
 <meta name="description" content="Қазақстан картасы: облыстар, бекеттер орналасқан елді мекендер, қалалардағы ауа күйі және жел — сағат сайын.">
 <link rel="canonical" href="https://sandav2011.github.io/atyrau-air/karta.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/karta.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/karta.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/karta.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/karta.html">
+<!-- /hreflang -->
 <meta name="theme-color" content="#0b4f7a">
 <meta name="author" content="Санжар Давлетбаев, Атырау НЗМ оқушысы">
 <meta name="robots" content="index, follow">
@@ -84,6 +90,7 @@
   #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
   #clock { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); }
   @media (prefers-reduced-motion: reduce) { .city .halo { animation: none; } }
+/* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
 </style>
 </head>
 <body>
@@ -96,7 +103,8 @@
   <a href="karta.html" class="active" aria-current="page">Карта</a>
   <a href="gazdar.html">Газдар туралы</a>
   <a href="about.html">Жоба туралы</a>
-</nav>
+  <!-- lang --><details class="lang"><summary aria-label="Language">KK</summary><div class="menu"><a href="karta.html" hreflang="kk" class="cur" aria-current="true">Қазақша</a><a href="ru/karta.html" hreflang="ru">Русский</a><a href="en/karta.html" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
+  </nav>
 
 <div id="flagWrap"><canvas id="flag" aria-label="Қазақстан Туы" role="img"></canvas></div>
 <div id="flagCap"></div>
@@ -121,6 +129,8 @@
    жалау — Атыраудағы нақты желмен желбірейді. */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
+const DN = {}; // атаулардың аудармасы: ru/en нұсқада tools/make_lang.py толтырады
+const dn = n => DN[n] || n;
 // Толық картасы бар қалалар: беті, деректер файлы, басты зат және оның шегі (мкг/м³, ҚР ДСМ-70, бір реттік)
 const ACTIVE = {
   'Атырау': { href: 'atyrau.html', file: 'data/stations.csv', pol: 'H2S', limit: 8 },
@@ -193,7 +203,7 @@ function buildWorld() {
       const name = f.properties.name;
       const path = el('path', { d: f.geometry.coordinates.map(poly => poly.map(ringPath).join('')).join(''), class: 'region' + (f.properties.city ? ' cityreg' : '') }, world);
       regionEls[name] = path;
-      path.addEventListener('mousemove', e => showTip(`${name} · ${postsByRegion[name] || 0} бекет`, e));
+      path.addEventListener('mousemove', e => showTip(`${dn(name)} · ${postsByRegion[name] || 0} бекет`, e));
       path.addEventListener('mouseleave', hideTip);
       path.addEventListener('click', () => { if (!dragMoved) zoomToRegion(f); });
     }
@@ -208,7 +218,7 @@ function applyView() {
   renderPoints();
   const rb = $('#regionBar');
   rb.hidden = !selected && view.k < 1.05;
-  $('#regionName').textContent = selected ? `${selected} · ${postsByRegion[selected] || 0} бекет` : '';
+  $('#regionName').textContent = selected ? `${dn(selected)} · ${postsByRegion[selected] || 0} бекет` : '';
 }
 
 function renderPoints() {
@@ -235,15 +245,15 @@ function renderPoints() {
     const A = ACTIVE[c.name], active = !!A, st = active ? cityStatus[c.name] : null;
     const col = active ? statusColor(st && st.max, A.limit) : c.posts ? '#ffffff' : 'var(--soon)';
     const g = el('g', { class: 'city' + (c.cap ? ' cap' : ' set') }, pts);
-    const host = active ? el('a', { href: A.href, 'aria-label': `${c.name} — картаны ашу` }, g) : g;
+    const host = active ? el('a', { href: A.href, 'aria-label': `${dn(c.name)} — картаны ашу` }, g) : g;
     if (active) el('circle', { cx: x, cy: y, r: 9, fill: col, class: 'halo' }, host);
     el('circle', { cx: x, cy: y, r: c.cap ? (active ? 7 : 5.5) : 3.6, fill: col, stroke: c.cap ? 'rgba(255,255,255,.9)' : 'rgba(0,50,100,.5)', 'stroke-width': c.cap ? 2 : 1, class: 'dot' }, host);
     if (!active) { // басқа қалалар: тұсында — бекет саны
-      g.addEventListener('mousemove', e => showTip(`${c.name} · ${c.posts ? c.posts + ' бекет' : 'бекет жоқ'} · толық картасы жақында`, e));
+      g.addEventListener('mousemove', e => showTip(`${dn(c.name)} · ${c.posts ? c.posts + ' бекет' : 'бекет жоқ'} · толық картасы жақында`, e));
       g.addEventListener('mouseleave', hideTip);
     }
     // жазу: алдымен оң жақ, сыймаса — сол жақ, сыймаса — астына, бәрі бос емес болса — жазусыз (нүкте қалады)
-    const fs = (c.cap ? 15 : 12) * zf, w = c.name.length * fs * 0.6 + 6, h = fs + 4;
+    const fs = (c.cap ? 15 : 12) * zf, w = dn(c.name).length * fs * 0.6 + 6, h = fs + 4;
     const sub = active ? `${A.pol} ${st && st.max != null ? st.max + ' мкг/м³' : '—'}` : '';
     const hh = h + (sub ? fs : 0);
     const cand = [{ x: x + 9, y: y - h / 2, a: 'start' }, { x: x - 9 - w, y: y - h / 2, a: 'end' }, { x: x - w / 2, y: y + 7, a: 'middle' }];
@@ -254,7 +264,7 @@ function renderPoints() {
       placed.push({ x: spot.x, y: spot.y, w, h: withSub ? hh : h });
       const tx = spot.a === 'start' ? spot.x : spot.a === 'end' ? spot.x + w : x;
       const t = el('text', { x: tx, y: spot.y + fs * 0.85, 'text-anchor': spot.a, style: `font-size:${fs.toFixed(1)}px`, class: c.cap ? '' : 'small' }, host);
-      t.textContent = c.name;
+      t.textContent = dn(c.name);
       if (sub && withSub) { const s2 = el('text', { x: tx, y: spot.y + fs * 1.85, 'text-anchor': spot.a, class: 'sub', style: `font-size:${(fs * 0.78).toFixed(1)}px` }, host); s2.textContent = sub; }
     }
     const wd = wind[c.name];
@@ -421,7 +431,7 @@ function drawFlag(t) {
     }
   }
   fctx.restore();
-  $('#flagCap').textContent = w ? `${capName}: жел ${w.speed.toFixed(1)} м/с` : '';
+  $('#flagCap').textContent = w ? `${dn(capName)}: жел ${w.speed.toFixed(1)} м/с` : '';
 }
 
 /* ---- іске қосу ---- */

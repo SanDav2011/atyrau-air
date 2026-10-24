@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO (tools/seo.py) -->
+<title>Карта Казахстана — качество воздуха | Воздух Казахстана</title>
+<meta name="description" content="Карта Казахстана: области, населённые пункты с постами наблюдений, состояние воздуха в городах и ветер — каждый час.">
+<link rel="canonical" href="https://sandav2011.github.io/atyrau-air/ru/karta.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/karta.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/karta.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/karta.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/karta.html">
+<!-- /hreflang -->
+<meta name="theme-color" content="#0b4f7a">
+<meta name="author" content="Санжар Давлетбаев, ученик Атырауской НИШ">
+<meta name="robots" content="index, follow">
+<meta property="og:site_name" content="Воздух Казахстана">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Карта Казахстана — качество воздуха">
+<meta property="og:description" content="Области, посты и состояние воздуха в городах на одной карте.">
+<meta property="og:url" content="https://sandav2011.github.io/atyrau-air/ru/karta.html">
+<meta property="og:image" content="https://sandav2011.github.io/atyrau-air/img/og/karta.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /SEO -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #fff; --ink-soft: rgba(255,255,255,.8); --ok: #34d399; --warn: #fbbf24; --bad: #f87171; --soon: rgba(255,255,255,.55); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0e5fb3; font-family: Onest, system-ui, sans-serif; color: var(--ink); }
+  canvas#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 14px clamp(16px, 4vw, 48px); }
+  nav .brand { font-weight: 800; letter-spacing: .02em; margin-right: auto; font-size: 18px; text-shadow: 0 1px 8px rgba(0,40,90,.35); color: #fff; text-decoration: none; }
+  nav a { color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px; display: inline-flex; align-items: center;
+          position: relative; text-shadow: 0 1px 8px rgba(0,40,90,.35); transition: color .2s; white-space: nowrap; }
+  nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                 transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+  nav a:hover, nav a.active { color: #fff; }
+  nav a:not(.brand):hover::after, nav a.active::after { transform: scaleX(1); }
+  @media (max-width: 800px) { nav .brand { font-size: 16px; } nav a { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { nav .brand { display: none; } nav { justify-content: center; gap: 0; } }
+
+  /* Жалау — тұғырда, нақты желмен желбірейді */
+  #flagWrap { position: fixed; z-index: 3; pointer-events: none; }
+  #flag { display: block; }
+  #flagCap { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.4); pointer-events: none; }
+
+  /* Карта — «шыны» пішін, өз фоны жоқ */
+  #mapBox { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%); }
+  #kz { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 10px 30px rgba(0,40,90,.35)); }
+  #kz .region { fill: rgba(255,255,255,.13); stroke: rgba(255,255,255,.55); stroke-width: .8; transition: fill .25s; vector-effect: non-scaling-stroke; }
+  #kz .region:hover { fill: rgba(255,255,255,.3); }
+  #kz .outline { fill: none; stroke: rgba(255,255,255,.95); stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .city { cursor: default; }
+  .city a { cursor: pointer; }
+  .city .halo { animation: pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+  .city text { font: 700 17px Onest, system-ui, sans-serif; fill: #fff; paint-order: stroke; stroke: rgba(0,50,100,.55); stroke-width: 3px; }
+  .city text.sub { font-weight: 500; font-size: 13px; fill: rgba(255,255,255,.85); }
+  .city a:focus-visible circle.dot { stroke: #fff; stroke-width: 3; }
+  .wind { stroke: rgba(255,255,255,.85); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+
+  #mapBox { touch-action: none; user-select: none; }
+  #kz { overflow: hidden; border-radius: 18px; cursor: grab; }
+  #kz:active { cursor: grabbing; }
+  #kz .region { cursor: pointer; }
+  #kz .region.dim { fill: rgba(255,255,255,.04); stroke: rgba(255,255,255,.25); }
+  #kz .region.cityreg { fill: rgba(255,255,255,.22); }
+  .city text.small { font-weight: 600; }
+  #zoomCtl { position: absolute; right: 8px; top: 8px; display: flex; flex-direction: column; gap: 6px; }
+  #zoomCtl button, #regionBar button { min-width: 44px; min-height: 44px; border: 1px solid rgba(255,255,255,.55); border-radius: 12px; cursor: pointer;
+        background: rgba(255,255,255,.14); color: #fff; font: 600 20px/1 Onest, system-ui, sans-serif; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  #zoomCtl button:hover, #regionBar button:hover { background: rgba(255,255,255,.28); }
+  #regionBar { position: absolute; left: 8px; top: 8px; display: flex; align-items: center; gap: 10px; }
+  #regionBar[hidden] { display: none; }
+  @media (max-width: 640px) { #zoomCtl { top: auto; bottom: -52px; right: 0; flex-direction: row; } #regionBar { top: -52px; left: 0; } #regionName { font-size: 14px; } }
+  #regionBar button { font-size: 15px; padding: 0 14px; white-space: nowrap; }
+  #regionName { font-weight: 700; font-size: 16px; text-shadow: 0 1px 8px rgba(0,40,90,.5); }
+  #legend .hint { flex-basis: 100%; text-align: center; font-size: 13px; opacity: .85; }
+  #tip { position: fixed; z-index: 6; pointer-events: none; font-size: 14px; font-weight: 600; color: #fff; text-shadow: 0 1px 8px rgba(0,40,90,.6); opacity: 0; transition: opacity .15s; }
+  #legend { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px;
+            font-size: 14px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); width: min(720px, 94vw); }
+  #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+  #clock { position: fixed; z-index: 3; font-size: 13px; color: var(--ink-soft); text-shadow: 0 1px 6px rgba(0,40,90,.45); }
+  @media (prefers-reduced-motion: reduce) { .city .halo { animation: none; } }
+
+/* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
+</style>
+</head>
+<body>
+<!-- SEO: көрінбейтін негізгі тақырып (h1) -->
+<h1 style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Карта Казахстана — качество воздуха</h1>
+<canvas id="scene" aria-hidden="true"></canvas>
+<nav aria-label="Главное меню">
+  <a class="brand" href="./">Воздух Казахстана</a>
+  <a href="./">Главная</a>
+  <a href="karta.html" class="active" aria-current="page">Карта</a>
+  <a href="../gazdar.html">О газах</a>
+  <a href="about.html">О проекте</a>
+    <!-- lang --><details class="lang"><summary aria-label="Language">RU</summary><div class="menu"><a href="../karta.html" hreflang="kk">Қазақша</a><a href="../ru/karta.html" hreflang="ru" class="cur" aria-current="true">Русский</a><a href="../en/karta.html" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
+  </nav>
+
+<div id="flagWrap"><canvas id="flag" aria-label="Флаг Казахстана" role="img"></canvas></div>
+<div id="flagCap"></div>
+<div id="mapBox"><svg id="kz" role="img" aria-label="Карта Казахстана: области и города"></svg>
+  <div id="zoomCtl"><button id="zIn" type="button" aria-label="Приблизить">+</button><button id="zOut" type="button" aria-label="Отдалить">−</button></div>
+  <div id="regionBar" hidden><button id="zReset" type="button">← Казахстан</button><span id="regionName"></span></div>
+</div>
+<div id="tip"></div>
+<div id="legend">
+  <span>Состояние воздуха (основное вещество указано на странице города: H2S, PM2,5, SO2 или NO2): <i style="background:var(--ok)"></i>чисто <i style="background:var(--warn);margin-left:8px"></i>близко к пределу <i style="background:var(--bad);margin-left:8px"></i>выше предела</span>
+  <span><i style="background:#fff"></i>есть датчик</span>
+  <span><i style="background:var(--soon)"></i>нет датчика</span>
+  <span>➝ ветер</span>
+  <span class="hint">Нажмите на область или приблизьте карту — появятся населённые пункты с датчиками</span>
+</div>
+<div id="clock"></div>
+
+<script src="../scene.js"></script>
+<script>
+/* Қазақстан картасы: фон — ортақ көрініс (тәулік уақытымен), облыстар — OSM (data/kz-regions.json),
+   қалалар — ауа күйі (Атырау: соңғы сағаттағы ең жоғары H2S), жел — Open-Meteo (әр қала, қазіргі),
+   жалау — Атыраудағы нақты желмен желбірейді. */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const DN = {"Абай облысы": "область Абай", "Ақмола облысы": "Акмолинская область", "Ақтөбе облысы": "Актюбинская область", "Алматы облысы": "Алматинская область", "Атырау облысы": "Атырауская область", "Батыс Қазақстан облысы": "Западно-Казахстанская область", "Жамбыл облысы": "Жамбылская область", "Қарағанды облысы": "Карагандинская область", "Қостанай облысы": "Костанайская область", "Қызылорда облысы": "Кызылординская область", "Маңғыстау облысы": "Мангистауская область", "Павлодар облысы": "Павлодарская область", "Солтүстік Қазақстан облысы": "Северо-Казахстанская область", "Түркістан облысы": "Туркестанская область", "Ұлытау облысы": "область Улытау", "Шығыс Қазақстан облысы": "Восточно-Казахстанская область", "Жетісу облысы": "область Жетісу"}; // атаулардың аудармасы: ru/en нұсқада tools/make_lang.py толтырады
+const dn = n => DN[n] || n;
+// Толық картасы бар қалалар: беті, деректер файлы, басты зат және оның шегі (мкг/м³, ҚР ДСМ-70, бір реттік)
+const ACTIVE = {
+  'Атырау': { href: '../atyrau.html', file: '../data/stations.csv', pol: 'H2S', limit: 8 },
+  'Алматы': { href: '../almaty.html', file: '../data/almaty/stations.csv', pol: 'PM2.5', limit: 160 },
+  'Астана': { href: '../astana.html', file: '../data/astana/stations.csv', pol: 'PM2.5', limit: 160 },
+  'Ақтөбе': { href: '../aktobe.html', file: '../data/aktobe/stations.csv', pol: 'H2S', limit: 8 },
+  'Ақтау': { href: '../aktau.html', file: '../data/aktau/stations.csv', pol: 'H2S', limit: 8 },
+  'Орал': { href: '../oral.html', file: '../data/oral/stations.csv', pol: 'H2S', limit: 8 },
+  'Шымкент': { href: '../shymkent.html', file: '../data/shymkent/stations.csv', pol: 'H2S', limit: 8 },
+  'Қарағанды': { href: '../karaganda.html', file: '../data/karaganda/stations.csv', pol: 'H2S', limit: 8 },
+  'Павлодар': { href: '../pavlodar.html', file: '../data/pavlodar/stations.csv', pol: 'H2S', limit: 8 },
+  'Өскемен': { href: '../oskemen.html', file: '../data/oskemen/stations.csv', pol: 'H2S', limit: 8 },
+  'Семей': { href: '../semey.html', file: '../data/semey/stations.csv', pol: 'H2S', limit: 8 },
+  'Қостанай': { href: '../kostanay.html', file: '../data/kostanay/stations.csv', pol: 'NO2', limit: 200 },
+  'Тараз': { href: '../taraz.html', file: '../data/taraz/stations.csv', pol: 'NO2', limit: 200 },
+  'Талдықорған': { href: '../taldykorgan.html', file: '../data/taldykorgan/stations.csv', pol: 'H2S', limit: 8 },
+  'Қызылорда': { href: '../kyzylorda.html', file: '../data/kyzylorda/stations.csv', pol: 'SO2', limit: 500 },
+  'Көкшетау': { href: '../kokshetau.html', file: '../data/kokshetau/stations.csv', pol: 'SO2', limit: 500 },
+  'Түркістан': { href: '../turkistan.html', file: '../data/turkistan/stations.csv', pol: 'NO2', limit: 200 },
+  'Жезқазған': { href: '../zhezkazgan.html', file: '../data/zhezkazgan/stations.csv', pol: 'H2S', limit: 8 },
+  'Петропавл': { href: '../petropavl.html', file: '../data/petropavl/stations.csv', pol: 'H2S', limit: 8 },
+};
+let regions = null, box = null, places = null, wind = {}, cityStatus = {}, postsByRegion = {};
+let view = { k: 1, tx: 0, ty: 0 }, selected = null, MW = 0, MH = 0, anim = null;
+const DETAIL_K = 2.2; // осы масштабтан бастап — датчигі бар елді мекендер де көрінеді
+
+/* ---- проекция: тең бұрышты, cos(48°) түзетуімен; k=1 — бүкіл Қазақстан контейнерге сыяды ---- */
+const K = Math.cos(48 * Math.PI / 180);
+let proj = (lng, lat) => [lng, lat];
+function fitProjection(w, h) {
+  const b = box || { minLng: 46.4, maxLng: 87.4, minLat: 40.5, maxLat: 55.5 };
+  const sx = w / ((b.maxLng - b.minLng) * K), sy = h / (b.maxLat - b.minLat), s = Math.min(sx, sy);
+  const ox = (w - (b.maxLng - b.minLng) * K * s) / 2, oy = (h - (b.maxLat - b.minLat) * s) / 2;
+  proj = (lng, lat) => [ox + (lng - b.minLng) * K * s, oy + (b.maxLat - lat) * s];
+}
+const toScreen = (lng, lat) => { const [x, y] = proj(lng, lat); return [x * view.k + view.tx, y * view.k + view.ty]; };
+
+/* ---- орналасу ---- */
+function layout(sc) {
+  const W = sc.W, H = sc.H, mob = W < 640;
+  const flagSpace = mob ? 0 : 230; // жалауға сол жақтан орын
+  MW = Math.min((W - flagSpace) * (mob ? 0.96 : 0.9), 1150); MH = Math.min(H * (mob ? 0.42 : 0.62), MW * 0.56);
+  const top = Math.max(mob ? 200 : 80, sc.horizon - MH * 0.55);
+  Object.assign($('#mapBox').style, { width: MW + 'px', height: MH + 'px', top: top + 'px', left: (flagSpace + (W - flagSpace) / 2) + 'px' });
+  $('#kz').setAttribute('viewBox', `0 0 ${MW} ${MH}`);
+  $('#legend').style.top = (top + MH + (mob ? 62 : 14)) + 'px'; // телефонда +/− картаның астында
+  fitProjection(MW, MH);
+  // өлшем өзгергенде: анимацияны тоқтатып, таңдалған облыс болса — соған қайта жақындаймыз
+  cancelAnimationFrame(anim);
+  const keep = selected; view = { k: 1, tx: 0, ty: 0 }; selected = null;
+  buildWorld(); applyView();
+  const f = keep && regions && regions.features.find(x => x.properties.name === keep);
+  if (f) zoomToRegion(f);
+  placeFlag(sc);
+  $('#clock').style.cssText += `;left:${mob ? 16 : 32}px;bottom:16px`;
+}
+
+/* ---- SVG: облыстар (масштабталатын топ) + нүктелер (әр өзгерісте экран координатымен қайта салынады) ---- */
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const ringPath = ring => ring.map(([lng, lat], i) => (i ? 'L' : 'M') + proj(lng, lat).map(v => v.toFixed(1)).join(',')).join('') + 'Z';
+const statusColor = (st, lim) => st == null ? 'var(--soon)' : st < lim / 2 ? 'var(--ok)' : st <= lim ? 'var(--warn)' : 'var(--bad)';
+let world = null, pts = null, regionEls = {};
+
+function buildWorld() {
+  const svg = $('#kz'); svg.innerHTML = '';
+  world = el('g', { id: 'world' }, svg); regionEls = {};
+  if (regions) {
+    for (const f of regions.features) {
+      const name = f.properties.name;
+      const path = el('path', { d: f.geometry.coordinates.map(poly => poly.map(ringPath).join('')).join(''), class: 'region' + (f.properties.city ? ' cityreg' : '') }, world);
+      regionEls[name] = path;
+      path.addEventListener('mousemove', e => showTip(`${dn(name)} · постов: ${postsByRegion[name] || 0}`, e));
+      path.addEventListener('mouseleave', hideTip);
+      path.addEventListener('click', () => { if (!dragMoved) zoomToRegion(f); });
+    }
+    if (regions.outline) el('path', { d: regions.outline.coordinates.map(poly => poly.map(ringPath).join('')).join(''), class: 'outline' }, world);
+  }
+  pts = el('g', { id: 'pts' }, svg);
+}
+
+function applyView() {
+  if (world) world.setAttribute('transform', `translate(${view.tx},${view.ty}) scale(${view.k})`);
+  for (const [n, p] of Object.entries(regionEls)) p.classList.toggle('dim', !!selected && n !== selected);
+  renderPoints();
+  const rb = $('#regionBar');
+  rb.hidden = !selected && view.k < 1.05;
+  $('#regionName').textContent = selected ? `${dn(selected)} · постов: ${postsByRegion[selected] || 0}` : '';
+}
+
+function renderPoints() {
+  if (!pts) return;
+  pts.innerHTML = '';
+  if (!places) return;
+  const detail = !!selected || view.k >= DETAIL_K;
+  let items = places.capitals.map(c => ({ ...c, cap: true }));
+  if (detail) items = items.concat(places.settlements);
+  if (selected) items = items.filter(s => s.region === selected);
+  // басымдық: белсенді қала → орталықтар → бекеті көп
+  items.sort((a, b) => (!!ACTIVE[b.name] - !!ACTIVE[a.name]) || (!!b.cap - !!a.cap) || (b.posts - a.posts));
+  const zf = Math.min(1.4, 0.92 + 0.14 * Math.log2(Math.max(1, view.k))); // атау өлшемі масштабпен бірге өседі
+  // орталықтың атауы ауылдардың нүктелеріне қарамайды (тек атауларға және орталық нүктелеріне)
+  const placed = [], fits = (r, cap) => !placed.some(q => (!cap || !q.dot || q.cap) && r.x < q.x + q.w && r.x + r.w > q.x && r.y < q.y + q.h && r.y + r.h > q.y);
+  // алдымен барлық нүктелердің орнын «бос емес» деп белгілейміз — атаулар нүктелерді жаппасын
+  const vis = [];
+  for (const c of items) {
+    const [x, y] = toScreen(c.lng, c.lat);
+    if (x < -10 || y < -10 || x > MW + 10 || y > MH + 10) continue;
+    vis.push({ c, x, y }); placed.push({ x: x - 5, y: y - 5, w: 10, h: 10, dot: true, cap: !!c.cap });
+  }
+  for (const { c, x, y } of vis) {
+    const A = ACTIVE[c.name], active = !!A, st = active ? cityStatus[c.name] : null;
+    const col = active ? statusColor(st && st.max, A.limit) : c.posts ? '#ffffff' : 'var(--soon)';
+    const g = el('g', { class: 'city' + (c.cap ? ' cap' : ' set') }, pts);
+    const host = active ? el('a', { href: A.href, 'aria-label': `${dn(c.name)} — открыть карту` }, g) : g;
+    if (active) el('circle', { cx: x, cy: y, r: 9, fill: col, class: 'halo' }, host);
+    el('circle', { cx: x, cy: y, r: c.cap ? (active ? 7 : 5.5) : 3.6, fill: col, stroke: c.cap ? 'rgba(255,255,255,.9)' : 'rgba(0,50,100,.5)', 'stroke-width': c.cap ? 2 : 1, class: 'dot' }, host);
+    if (!active) { // басқа қалалар: тұсында — бекет саны
+      g.addEventListener('mousemove', e => showTip(`${dn(c.name)} · ${c.posts ? 'постов: ' + c.posts : 'постов нет'} · полная карта скоро`, e));
+      g.addEventListener('mouseleave', hideTip);
+    }
+    // жазу: алдымен оң жақ, сыймаса — сол жақ, сыймаса — астына, бәрі бос емес болса — жазусыз (нүкте қалады)
+    const fs = (c.cap ? 15 : 12) * zf, w = dn(c.name).length * fs * 0.6 + 6, h = fs + 4;
+    const sub = active ? `${A.pol} ${st && st.max != null ? st.max + ' мкг/м³' : '—'}` : '';
+    const hh = h + (sub ? fs : 0);
+    const cand = [{ x: x + 9, y: y - h / 2, a: 'start' }, { x: x - 9 - w, y: y - h / 2, a: 'end' }, { x: x - w / 2, y: y + 7, a: 'middle' }];
+    const tryFit = hgt => cand.find(r => r.x > -4 && r.x + w < MW + 4 && r.y > -4 && r.y + hgt < MH + 4 && fits({ x: r.x, y: r.y, w, h: hgt }, c.cap));
+    let spot = tryFit(hh), withSub = !!sub;
+    if (!spot && sub) { spot = tryFit(h); withSub = false; } // мәнге орын жетпесе — тек қала аты
+    if (spot) {
+      placed.push({ x: spot.x, y: spot.y, w, h: withSub ? hh : h });
+      const tx = spot.a === 'start' ? spot.x : spot.a === 'end' ? spot.x + w : x;
+      const t = el('text', { x: tx, y: spot.y + fs * 0.85, 'text-anchor': spot.a, style: `font-size:${fs.toFixed(1)}px`, class: c.cap ? '' : 'small' }, host);
+      t.textContent = dn(c.name);
+      if (sub && withSub) { const s2 = el('text', { x: tx, y: spot.y + fs * 1.85, 'text-anchor': spot.a, class: 'sub', style: `font-size:${(fs * 0.78).toFixed(1)}px` }, host); s2.textContent = sub; }
+    }
+    const wd = wind[c.name];
+    if (c.cap && wd && !detail) { // жел бағдаршасы (тек ел деңгейінде)
+      const to = (wd.dir + 180) * Math.PI / 180, L = 14 + Math.min(wd.speed, 12) * 1.8;
+      const ax = x + Math.sin(to) * L, ay = y - Math.cos(to) * L;
+      el('path', { d: `M${x + Math.sin(to) * 9},${y - Math.cos(to) * 9}L${ax},${ay}M${ax},${ay}L${ax - Math.sin(to - .5) * 6},${ay + Math.cos(to - .5) * 6}M${ax},${ay}L${ax - Math.sin(to + .5) * 6},${ay + Math.cos(to + .5) * 6}`, class: 'wind' }, g);
+    }
+  }
+}
+function showTip(text, e) { const t = $('#tip'); t.textContent = text; t.style.left = (e.clientX + 14) + 'px'; t.style.top = (e.clientY + 10) + 'px'; t.style.opacity = 1; }
+function hideTip() { $('#tip').style.opacity = 0; }
+
+/* ---- масштабтау: доңғалақ, сүйреу, екі саусақ, батырмалар, облысты басу ---- */
+const clampView = v => {
+  v.k = Math.max(1, Math.min(14, v.k));
+  // картаның кез келген нүктесін экран ортасына әкелуге болады, одан әрі — жоқ
+  v.tx = Math.min(MW / 2, Math.max(MW / 2 - v.k * MW, v.tx)); v.ty = Math.min(MH / 2, Math.max(MH / 2 - v.k * MH, v.ty));
+  if (v.k === 1) { v.tx = 0; v.ty = 0; }
+  return v;
+};
+function zoomAt(f, cx, cy) { // (cx, cy) нүктесі орнында қалады
+  cancelAnimationFrame(anim); // адам өзі басқарса — анимацияны тоқтатамыз
+  const k = Math.max(1, Math.min(14, view.k * f)), r = k / view.k;
+  view = clampView({ k, tx: cx - (cx - view.tx) * r, ty: cy - (cy - view.ty) * r });
+  if (view.k < 1.05) selected = null;
+  applyView();
+}
+function animateTo(target) {
+  cancelAnimationFrame(anim);
+  const from = { ...view }, t0 = performance.now(), dur = reduce ? 0 : 450;
+  const step = now => {
+    const q = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - Math.pow(1 - q, 3);
+    view = { k: from.k + (target.k - from.k) * e, tx: from.tx + (target.tx - from.tx) * e, ty: from.ty + (target.ty - from.ty) * e };
+    applyView(); if (q < 1) anim = requestAnimationFrame(step);
+  };
+  anim = requestAnimationFrame(step);
+}
+function zoomToRegion(f) {
+  let minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+  for (const poly of f.geometry.coordinates) for (const [lng, lat] of poly[0]) {
+    const [x, y] = proj(lng, lat); minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+  }
+  const k = Math.max(1.6, Math.min(14, 0.82 * Math.min(MW / (maxX - minX), MH / (maxY - minY))));
+  selected = f.properties.name; hideTip();
+  animateTo(clampView({ k, tx: MW / 2 - k * (minX + maxX) / 2, ty: MH / 2 - k * (minY + maxY) / 2 }));
+}
+function resetView() { selected = null; animateTo({ k: 1, tx: 0, ty: 0 }); }
+
+const local = e => { const r = $('#kz').getBoundingClientRect(); return [(e.clientX - r.left) * MW / r.width, (e.clientY - r.top) * MH / r.height]; };
+let pointers = new Map(), dragStart = null, pinch0 = null, dragMoved = false;
+$('#kz').addEventListener('wheel', e => { e.preventDefault(); const [x, y] = local(e); zoomAt(e.deltaY < 0 ? 1.25 : 0.8, x, y); }, { passive: false });
+$('#kz').addEventListener('pointerdown', e => {
+  pointers.set(e.pointerId, local(e)); dragMoved = false; cancelAnimationFrame(anim);
+  if (pointers.size === 1) dragStart = { p: local(e), tx: view.tx, ty: view.ty };
+  if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch0 = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), k: view.k, c: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] }; }
+});
+addEventListener('pointermove', e => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, local(e));
+  if (pointers.size === 2 && pinch0) {
+    const [a, b] = [...pointers.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+    zoomAt((pinch0.k * d / pinch0.d) / view.k, pinch0.c[0], pinch0.c[1]); dragMoved = true;
+  } else if (dragStart && view.k > 1) {
+    const [x, y] = local(e), dx = x - dragStart.p[0], dy = y - dragStart.p[1];
+    if (Math.abs(dx) + Math.abs(dy) > 4) dragMoved = true;
+    view = clampView({ k: view.k, tx: dragStart.tx + dx, ty: dragStart.ty + dy }); applyView();
+  }
+});
+const endPtr = e => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch0 = null; if (!pointers.size) dragStart = null; };
+addEventListener('pointerup', endPtr); addEventListener('pointercancel', endPtr);
+$('#zIn').onclick = () => zoomAt(1.5, MW / 2, MH / 2);
+$('#zOut').onclick = () => zoomAt(1 / 1.5, MW / 2, MH / 2);
+$('#zReset').onclick = resetView;
+addEventListener('keydown', e => { if (e.key === 'Escape') resetView(); });
+
+/* ---- деректер ---- */
+async function loadRegions() {
+  try {
+    regions = await fetch('../data/kz-regions.json').then(r => r.json());
+    let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
+    for (const f of regions.features) for (const poly of f.geometry.coordinates) for (const [lng, lat] of poly[0]) {
+      minLng = Math.min(minLng, lng); maxLng = Math.max(maxLng, lng); minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+    }
+    box = { minLng, maxLng, minLat, maxLat };
+  } catch { regions = null; }
+}
+async function loadPlaces() { // облыс орталықтары + датчигі бар елді мекендер; облыстағы бекет саны
+  try {
+    places = await fetch('../data/places-kz.json').then(r => r.json());
+    const posts = await fetch('../data/posts-kz.json').then(r => r.json());
+    postsByRegion = {};
+    for (const p of posts.posts) postsByRegion[p.region] = (postsByRegion[p.region] || 0) + 1;
+  } catch { places = null; }
+}
+async function loadWind() { // Open-Meteo: барлық орталықтар бір сұраумен
+  if (!places) return;
+  try {
+    const c = places.capitals;
+    const q = `latitude=${c.map(x => x.lat).join(',')}&longitude=${c.map(x => x.lng).join(',')}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms`;
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?' + q).then(r => r.json());
+    (Array.isArray(r) ? r : [r]).forEach((d, i) => { wind[c[i].name] = { speed: d.current.wind_speed_10m, dir: d.current.wind_direction_10m }; });
+    wind.atyrau = wind['Атырау'];
+  } catch {}
+}
+async function loadCityStatus(name) { // соңғы толық сағаттағы басты заттың ең жоғары мәні (6 сағат өзгермеген мәндерді елемейміз)
+  const A = ACTIVE[name];
+  try {
+    const txt = await fetch(A.file + '?t=' + Date.now()).then(r => r.text());
+    const rows = txt.trim().split('\n').slice(1).map(l => l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/))
+      .filter(r => r[6] === A.pol).map(r => ({ st: r[1], h: r[5].slice(0, 13), v: +r[7] }));
+    const hours = [...new Set(rows.map(r => r.h))].sort();
+    const last = hours[hours.length - 1], prev6 = hours.slice(-7, -1);
+    const byStation = {};
+    for (const r of rows) (byStation[r.st] ??= {})[r.h] = r.v;
+    let max = null;
+    for (const s of Object.values(byStation)) {
+      const v = s[last]; if (v == null || isNaN(v)) continue;
+      const stuck = prev6.length >= 6 && prev6.every(h => s[h] === v) && v >= 3;
+      if (!stuck) max = Math.max(max ?? 0, v);
+    }
+    cityStatus[name] = { max, hour: last };
+  } catch {}
+}
+
+/* ---- желбірейтін жалау: сурет тік жолақтарға бөлініп, әрқайсысы синус бойынша ығысады (тұғырдан алыстаған сайын көбірек) ---- */
+const flagImg = new Image(); flagImg.src = '../img/flag-kz.png';
+const fc = $('#flag'), fctx = fc.getContext('2d');
+let FW = 180, FH = 90, poleH = 0;
+function placeFlag(sc) {
+  const mob = sc.W < 640; FW = mob ? 84 : 170; FH = FW / 2; poleH = mob ? FH * 2.4 : Math.max(FH * 2.6, sc.horizon - 70);
+  const dpr = Math.min(devicePixelRatio || 1, 2), cw = FW + 40, ch = poleH + 10;
+  fc.width = cw * dpr; fc.height = ch * dpr; fc.style.width = cw + 'px'; fc.style.height = ch + 'px';
+  fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const left = mob ? 10 : 36;
+  const ftop = mob ? 64 : sc.horizon - poleH; // телефонда — мәзірдің астында, қысқа тұғырмен
+  Object.assign($('#flagWrap').style, { left: left + 'px', top: ftop + 'px' });
+  Object.assign($('#flagCap').style, mob ? { left: (left + FW + 50) + 'px', top: (ftop + 20) + 'px' } : { left: left + 'px', top: (sc.horizon + 14) + 'px' });
+}
+function drawFlag(t) {
+  // таңдалған облыстың орталығындағы жел; ештеңе таңдалмаса — Атырау
+  const capName = (selected && places?.capitals.find(c => c.region === selected)?.name) || 'Атырау';
+  const cw = FW + 40, w = wind[capName], sp = w ? w.speed : 4;
+  // жел шығысқа соқса — жалау оңға, батысқа соқса — солға (экранда тек көлденең бағыт)
+  const toEast = w ? Math.sin((w.dir + 180) * Math.PI / 180) >= 0 : true;
+  fctx.clearRect(0, 0, cw, poleH + 10);
+  fctx.save();
+  if (!toEast) { fctx.translate(cw, 0); fctx.scale(-1, 1); }
+  const px = 8; // тұғыр
+  const pg = fctx.createLinearGradient(px - 3, 0, px + 3, 0); pg.addColorStop(0, '#9aa5b1'); pg.addColorStop(.5, '#f1f5f9'); pg.addColorStop(1, '#7b8794');
+  fctx.fillStyle = pg; fctx.fillRect(px - 2.5, 6, 5, poleH);
+  fctx.fillStyle = '#e8c35a'; fctx.beginPath(); fctx.arc(px, 6, 5, 0, 7); fctx.fill();
+  if (flagImg.complete && flagImg.naturalWidth) {
+    const amp = Math.min(3 + sp * 1.1, 14) * (FW / 170), speed = 2 + Math.min(sp, 15) * 0.35, k = (2 * Math.PI) / (FW * 0.9);
+    const slice = 1, x0 = px + 2, y0 = 12;
+    for (let x = 0; x < FW; x += slice) {
+      const f = x / FW, phase = k * x - t * speed;
+      const dy = Math.sin(phase) * amp * f, slope = Math.cos(phase) * f; // көлбеу → жарық/көлеңке
+      fctx.drawImage(flagImg, (x / FW) * flagImg.naturalWidth, 0, (slice / FW) * flagImg.naturalWidth, flagImg.naturalHeight,
+        x0 + x, y0 + dy, slice + 0.8, FH);
+      const shade = slope * 0.16;
+      fctx.fillStyle = shade > 0 ? `rgba(255,255,255,${shade})` : `rgba(0,30,60,${-shade})`;
+      fctx.fillRect(x0 + x, y0 + dy, slice + 0.8, FH);
+    }
+  }
+  fctx.restore();
+  $('#flagCap').textContent = w ? `${dn(capName)}: ветер ${w.speed.toFixed(1)} м/с` : '';
+}
+
+/* ---- іске қосу ---- */
+const sc = createScene(document.getElementById('scene'), { horizon: 0.5, timeOfDay: true, dim: 0.06, onResize: S => layout(S) });
+(async () => {
+  await Promise.all([loadRegions(), loadPlaces(), ...Object.keys(ACTIVE).map(loadCityStatus)]);
+  layout(sc);
+  await loadWind(); applyView();
+})();
+function tickClock() {
+  const h = sc.localHour(), hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
+  $('#clock').textContent = `Время в Атырау ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}` + (cityStatus['Атырау']?.hour ? ` · последнее измерение ${cityStatus['Атырау'].hour.slice(11)}:00` : '');
+}
+tickClock(); setInterval(tickClock, 30000);
+const t0 = performance.now();
+function loop(now) { const t = (now - t0) / 1000; sc.draw(t); drawFlag(reduce ? 0 : t); if (!reduce) requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

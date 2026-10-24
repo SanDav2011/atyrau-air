@@ -108,6 +108,7 @@
   @media (prefers-reduced-motion: reduce) { #hint::before { animation: none; opacity: 0; } #ripples i { animation: none; opacity: .5; transform: translate(-50%, -50%) scale(.9); } #ripples i:nth-child(n+2) { display: none; } #cities { transition: none; } }
 
 
+
 /* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
 </style>
 </head>
@@ -119,7 +120,7 @@
 <nav aria-label="Главное меню">
   <a class="brand" href="./" aria-label="Главная — начать заново">Воздух Казахстана</a>
   <a href="./" class="active" aria-current="page">Главная</a>
-  <a href="../karta.html">Карта</a>
+  <a href="karta.html">Карта</a>
   <a href="../gazdar.html">О газах</a>
   <a href="about.html">О проекте</a>
     <!-- lang --><details class="lang"><summary aria-label="Language">RU</summary><div class="menu"><a href="../" hreflang="kk">Қазақша</a><a href="../ru/" hreflang="ru" class="cur" aria-current="true">Русский</a><a href="../en/" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
