@@ -95,6 +95,7 @@ def build(page, lang):
     stale = [k for k in tr.get(page, {}) if k not in used]
 
     html = html.replace('<html lang="kk">', '<html lang="%s">' % lang)
+    html = html.replace(SITE + "img/og/", SITE + "img/og/%s/" % lang)  # ru/en OG-суреттері (tools/og_images.py)
     html = html.replace('content="kk_KZ"', 'content="%s"' % LOCALE[lang])
     html = html.replace('"inLanguage": "kk"', '"inLanguage": "%s"' % lang)
     # canonical және og:url — осы тілдің бетіне
