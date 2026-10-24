@@ -149,7 +149,7 @@
     <a class="brand" href="./">Kazakhstan Air</a>
     <a href="./">Home</a>
     <a href="karta.html" class="active">Map</a>
-    <a href="../gazdar.html">Gases</a>
+    <a href="gazdar.html">Gases</a>
     <a href="about.html">About</a>
     <!-- lang --><details class="lang"><summary aria-label="Language">EN</summary><div class="menu"><a href="../taldykorgan.html" hreflang="kk">Қазақша</a><a href="../ru/taldykorgan.html" hreflang="ru">Русский</a><a href="../en/taldykorgan.html" hreflang="en" class="cur" aria-current="true">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
   </nav>
@@ -450,7 +450,7 @@ function render() {
   renderAttribution();
 
   $('#legend').innerHTML = lim
-    ? `<b>${pollutant}, limit ${lim} µg/m³ <span class="info" tabindex="0" aria-label="Source">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">open adilet.zan.kz</a><br><a href="../gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">more about ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>no data for this hour</span>`
+    ? `<b>${pollutant}, limit ${lim} µg/m³ <span class="info" tabindex="0" aria-label="Source">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">open adilet.zan.kz</a><br><a href="gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">more about ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>no data for this hour</span>`
     : `<b>${pollutant}</b><span class="muted">No limit value entered — shown in blue</span>`;
 }
 

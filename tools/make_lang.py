@@ -13,7 +13,7 @@ from city_rules import city_rules
 SITE = "https://sandav2011.github.io/atyrau-air/"
 LANGS = ["ru", "en"]
 CITY_PAGES = ["atyrau", "almaty", "astana", "aktobe", "aktau", "oral", "shymkent", "karaganda", "pavlodar", "oskemen", "semey", "kostanay", "taraz", "taldykorgan", "kyzylorda", "kokshetau", "turkistan", "zhezkazgan", "petropavl"]  # қала беттері: ортақ сөздік "city" (+ беттің өз сөздігі)
-BUILT = ["about", "index", "karta"] + CITY_PAGES  # аударылған беттер; жаңасын осында қос
+BUILT = ["about", "index", "karta", "gazdar"] + CITY_PAGES  # аударылған беттер; жаңасын осында қос
 LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")

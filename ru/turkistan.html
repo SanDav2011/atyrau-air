@@ -149,7 +149,7 @@
     <a class="brand" href="./">Воздух Казахстана</a>
     <a href="./">Главная</a>
     <a href="karta.html" class="active">Карта</a>
-    <a href="../gazdar.html">О газах</a>
+    <a href="gazdar.html">О газах</a>
     <a href="about.html">О проекте</a>
     <!-- lang --><details class="lang"><summary aria-label="Language">RU</summary><div class="menu"><a href="../turkistan.html" hreflang="kk">Қазақша</a><a href="../ru/turkistan.html" hreflang="ru" class="cur" aria-current="true">Русский</a><a href="../en/turkistan.html" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
   </nav>
@@ -450,7 +450,7 @@ function render() {
   renderAttribution();
 
   $('#legend').innerHTML = lim
-    ? `<b>${pollutant}, предельное значение ${lim} мкг/м³ <span class="info" tabindex="0" aria-label="Источник">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">открыть adilet.zan.kz</a><br><a href="../gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">подробнее о ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>в этот час данных нет</span>`
+    ? `<b>${pollutant}, предельное значение ${lim} мкг/м³ <span class="info" tabindex="0" aria-label="Источник">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">открыть adilet.zan.kz</a><br><a href="gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">подробнее о ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>в этот час данных нет</span>`
     : `<b>${pollutant}</b><span class="muted">Предельное значение не введено — синим цветом</span>`;
 }
 
