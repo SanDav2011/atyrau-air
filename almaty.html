@@ -179,7 +179,7 @@
       <div id="attr" style="margin-top:8px"></div>
       <div id="chronic" style="margin-top:8px"></div>
       <label class="muted" style="display:flex;gap:6px;align-items:center;margin-top:8px;cursor:pointer">
-        <input type="checkbox" id="roseChk"> 🧭 Жел розасы және талдау сызықтары
+        <input type="checkbox" id="roseChk" checked> 🧭 Жел розасы және талдау сызықтары
       </label>
       <div id="roseBox" hidden style="margin-top:6px">
         <svg id="rose" viewBox="-100 -100 200 200" width="200" height="200" style="display:block;margin:0 auto"></svg>
@@ -590,7 +590,7 @@ $('#lineKm').oninput = e => {
   renderAttribution();
 };
 const ROSE_DIRS = ['С', 'СШ', 'Ш', 'ОШ', 'О', 'ОБ', 'Б', 'СБ']; // солтүстік, шығыс, оңтүстік, батыс
-try { $('#roseChk').checked = localStorage.getItem('atyrau-air-rose') === '1'; } catch {}
+try { $('#roseChk').checked = localStorage.getItem('atyrau-air-rose') !== '0'; } catch {}
 $('#roseChk').onchange = () => { try { localStorage.setItem('atyrau-air-rose', $('#roseChk').checked ? '1' : '0'); } catch {} renderAttribution(); };
 
 // бекеттен «жел келген жаққа» қарай нүкте
