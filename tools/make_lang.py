@@ -33,6 +33,7 @@ LANG_CSS = ("/* lang */ nav details.lang { position: relative; margin-left: 4px;
             "display: flex !important; align-items: center; text-decoration: none; } "
             "nav details.lang .menu a::after { display: none !important; } "
             "nav details.lang .menu a:hover { background: #e8f1fb; } "
+            "@media (max-width: 420px) { nav details.lang { margin-left: 0; } nav details.lang summary { padding: 0 3px; } } "
             "nav details.lang .menu a.cur { font-weight: 800; } /* /lang */")
 NAME = {"kk": "Қазақша", "ru": "Русский", "en": "English"}
 
@@ -53,7 +54,8 @@ def add_lang_blocks(html, page, cur):
     """hreflang және тіл ауыстырғышты қосу (қайталап орындауға болады)."""
     html = strip_marked(html, "hreflang")
     html = strip_marked(html, "lang")
-    html = re.sub(r"/\* lang \*/.*?/\* /lang \*/ ?", "", html, flags=re.S)
+    html = re.sub(r"/\* lang \*/.*?/\* /lang \*/ ?\n?", "", html, flags=re.S)
+    html = re.sub(r"\n{2,}</style>", "\n</style>", html)  # алдыңғы іске қосудан қалған бос жолдар
     hl = "<!-- hreflang -->\n"
     for lg in ["kk"] + LANGS:
         hl += '<link rel="alternate" hreflang="%s" href="%s">\n' % (
