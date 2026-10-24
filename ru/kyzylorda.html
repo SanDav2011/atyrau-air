@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO (tools/seo.py) -->
+<title>Қызылорда — качество воздуха | Воздух Казахстана</title>
+<meta name="description" content="Качество воздуха, Қызылорда: диоксид серы (SO2), NO2, CO и мелкая пыль. Посты Казгидромета и ветер — обновляется каждый час.">
+<link rel="canonical" href="https://sandav2011.github.io/atyrau-air/ru/kyzylorda.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/kyzylorda.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/kyzylorda.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/kyzylorda.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/kyzylorda.html">
+<!-- /hreflang -->
+<meta name="theme-color" content="#0b4f7a">
+<meta name="author" content="Санжар Давлетбаев, ученик Атырауской НИШ">
+<meta name="robots" content="index, follow">
+<meta property="og:site_name" content="Воздух Казахстана">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Қызылорда — качество воздуха">
+<meta property="og:description" content="Реальные показатели качества воздуха, Қызылорда: посты и ветер.">
+<meta property="og:url" content="https://sandav2011.github.io/atyrau-air/ru/kyzylorda.html">
+<meta property="og:image" content="https://sandav2011.github.io/atyrau-air/img/og/kyzylorda.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /SEO -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../model.js"></script><script>Object.assign(AirModel.NAMES, {"A": "очень неустойчивая (сильное солнце, штиль)", "B": "неустойчивая", "C": "слегка неустойчивая", "D": "нейтральная (облачно или сильный ветер)", "E": "устойчивая (ночь)", "F": "очень устойчивая (ясная ночь, штиль — инверсия)"});</script>
+<style>
+  :root { --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #6b7280; --line: #e3e6ea; --accent: #0f766e; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { background: var(--accent); color: #fff; padding: 12px 16px; }
+  header h1 { margin: 0; font-size: 19px; }
+  header p { margin: 2px 0 0; opacity: .85; font-size: 13px; }
+  .hdr-link { display: inline-block; color: #fff; padding: 10px 0 2px; font-size: 14px; font-weight: 600; }
+  main { max-width: 1200px; margin: 0 auto; padding: 12px 16px 24px; display: grid; gap: 12px; grid-template-columns: 1fr 340px; }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); } } /* minmax: ішіндегі кең элемент бағанды экраннан шығармасын */
+  .card { background: var(--card); border-radius: 10px; padding: 12px; }
+  #map { height: 62vh; min-height: 360px; border-radius: 10px; }
+  .time { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .time input { flex: 1; }
+  .time input { min-width: 0; }
+  .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
+  button { border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; background: var(--bg); color: var(--text); }
+  button.on { background: var(--accent); color: #fff; }
+  .wind { display: flex; gap: 12px; align-items: center; }
+  .wind svg { flex: none; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .mvf { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .mvf th, .mvf td { padding: 3px 4px; text-align: right; border-bottom: 1px solid var(--line); }
+  .mvf th:first-child, .mvf td:first-child { text-align: left; }
+  .mvf th { color: var(--muted); font-weight: 600; }
+  .legend { display: grid; gap: 4px; font-size: 13px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  h2 { font-size: 15px; margin: 0 0 8px; }
+  ol { margin: 0; padding-left: 20px; }
+  ol li { margin: 2px 0; cursor: pointer; }
+  .side { display: grid; gap: 12px; align-content: start; }
+  .station-label { background: none; border: 0; box-shadow: none; padding: 0; font-weight: 700; font-size: 13px; color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000; }
+  .station-label::before { display: none; }
+  .info { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%;
+          background: var(--accent); color: #fff; font: italic 700 14px/1 Georgia, serif; cursor: help; vertical-align: 1px; margin-left: 4px; }
+  .info .tip { display: none; position: absolute; right: -8px; top: 22px; z-index: 2000; width: min(300px, 80vw); background: #1d2330; color: #fff;
+               font: 14px/1.45 system-ui, sans-serif; font-style: normal; font-weight: 400; padding: 10px 12px; border-radius: 8px; white-space: pre-line; text-align: left; }
+  .info .tip a { color: #7dd3fc; }
+  .info:hover .tip, .info:focus .tip, .info:focus-within .tip { display: block; }
+  @media (max-width: 860px) { .info .tip { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; width: auto; } }
+  /* әдістеме: әр бөлім жеке ашылады */
+  details.m { border-top: 1px solid rgba(0,0,0,.08); }
+  details.m summary { cursor: pointer; font-weight: 600; padding: 9px 0; min-height: 24px; list-style-position: inside; }
+  details.m summary:hover { color: #1d4ed8; }
+  details.m p { margin: 0 0 10px; }
+  .wind-arrow svg { display: block; overflow: visible; }
+  .src-icon { font-size: 22px; line-height: 1; text-align: center; filter: drop-shadow(0 0 2px #fff); }
+  .src-item { border-top: 1px solid var(--line); padding: 8px 0; font-size: 14px; }
+  .src-item .meta { color: var(--muted); font-size: 13px; }
+  .src-item input, .src-item select { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; }
+  .src-item .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+  .src-item.placing { background: #fef3c7; }
+  .bar { display: grid; grid-template-columns: 1fr 44px; gap: 6px; align-items: center; font-size: 13px; margin: 4px 0; }
+  .bar .track { background: var(--bg); border-radius: 4px; height: 8px; margin-top: 3px; }
+  .bar .fill { background: #b45309; height: 8px; border-radius: 4px; }
+  /* Саусақпен басуға ыңғайлы өлшем — кемінде 44×44 px */
+  button, select { min-height: 44px; }
+  button { min-width: 44px; }
+  select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); }
+  input[type=range] { height: 44px; margin: 0; }
+  input[type=checkbox] { width: 22px; height: 22px; margin: 0; accent-color: var(--accent); }
+  label:has(> input[type=checkbox]) { min-height: 44px; }
+  summary { padding: 12px 0; }
+  ol li { padding: 6px 0; }
+  #info a { display: inline-block; padding: 12px 0; }
+  .leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 22px; }
+
+  /* ===== Бірыңғай дизайн (басты бетпен сай): аспан → су фоны, Onest, шыны карточкалар ===== */
+  :root { --bg: rgba(11,70,181,.07); --card: rgba(255,255,255,.9); --text: #10233f; --muted: #5b6b82; --line: rgba(16,35,63,.12); --accent: #0b6fc4; }
+  html { background: #0b46b5; }
+  body { font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; min-height: 100vh; }
+  header { background: transparent; padding: 0 clamp(16px, 4vw, 48px) 8px; color: #fff; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px; display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 1200px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(34px, 6vw, 56px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { font-size: 15px; opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { padding-top: 8px; }
+  .card { border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  #map { border-radius: 16px; box-shadow: 0 10px 34px rgba(0,40,90,.22); }
+  /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
+  @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
+  h2 { font-weight: 700; }
+  button { background: rgba(11,111,196,.08); font-weight: 500; transition: background .2s; }
+  button:hover { background: rgba(11,111,196,.16); }
+  button.on { background: var(--accent); }
+  #visits { color: rgba(16,35,63,.6) !important; }
+  /* maphint */
+  .maphelp { position: relative; }
+  .mh-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(0,0,0,.2); background: #fff; color: #0b4f7a; font: 800 22px/1 Onest, system-ui, sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,40,90,.3); }
+  .mh-btn:hover { background: #f1f6fb; }
+  .mh-card { position: absolute; right: 0; top: 50px; width: min(300px, calc(100vw - 150px)); background: #fff; border-radius: 12px; padding: 12px 14px 12px 14px; box-shadow: 0 8px 30px rgba(0,40,90,.35); font-size: 13.5px; line-height: 1.45; color: #10233f; text-align: left; }
+  .mh-card[hidden] { display: none; }
+  .mh-card ul { margin: 6px 0 0; padding-left: 18px; }
+  .mh-card li { margin: 4px 0; }
+  .mh-x { position: absolute; top: 2px; right: 2px; width: 44px; height: 44px; border: 0; background: none; font-size: 24px; color: #5b6b82; cursor: pointer; }
+  .mh-card > b { display: block; padding-right: 36px; }
+  /* /maphint */
+/* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } @media (max-width: 420px) { nav details.lang { margin-left: 0; } nav details.lang summary { padding: 0 3px; } } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Главное меню">
+    <a class="brand" href="./">Воздух Казахстана</a>
+    <a href="./">Главная</a>
+    <a href="karta.html" class="active">Карта</a>
+    <a href="../gazdar.html">О газах</a>
+    <a href="about.html">О проекте</a>
+    <!-- lang --><details class="lang"><summary aria-label="Language">RU</summary><div class="menu"><a href="../kyzylorda.html" hreflang="kk">Қазақша</a><a href="../ru/kyzylorda.html" hreflang="ru" class="cur" aria-current="true">Русский</a><a href="../en/kyzylorda.html" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
+  </nav>
+  <div class="hero">
+    <h1>Қызылорда</h1>
+    <p>Диоксид серы (SO2), NO2, CO и мелкая пыль — посты и ветер, по часам</p>
+  </div>
+</header>
+<main>
+  <div>
+    <div id="map"></div>
+    <div class="card time">
+      <button id="play" title="Воспроизвести" aria-label="Воспроизвести часы">▶</button>
+      <input type="range" id="slider" min="0" max="0" value="0" aria-label="Выбор часа">
+      <select id="hourSel" aria-label="Выбор часа из списка"></select>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Вещество</h2>
+      <div id="pollutants" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      <div class="legend" id="legend" style="margin-top:10px"></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2 id="chartTitle">Выберите пост — график по времени</h2>
+      <canvas id="chart" height="110"></canvas>
+    </div>
+  </div>
+  <div class="side">
+    <div class="card wind">
+      <svg id="windArrow" width="64" height="64" viewBox="-32 -32 64 64">
+        <circle r="30" fill="none" stroke="#e3e6ea" stroke-width="2"/>
+        <text y="-17" text-anchor="middle" font-size="12" fill="#6b7280">С</text>
+        <g id="arrowG"><path d="M0,-22 L7,6 L0,1 L-7,6 Z" fill="#0f766e"/><line x1="0" y1="1" x2="0" y2="22" stroke="#0f766e" stroke-width="3"/></g>
+      </svg>
+      <div><b id="windText">Ветер: —</b><div class="muted" id="windSub">Open-Meteo, центр города</div></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <h2 style="margin:0">🧭 Ветер и постоянно высокие посты <span class="info" tabindex="0" aria-label="Метод">i<span class="tip">Расчёт — модель гауссова шлейфа (атмосферное рассеивание): для каждого источника по ветру этого часа, устойчивости атмосферы и высоте выброса считается, сколько вещества и за какое время дойдёт до постов, затем результат сравнивается с реальным измерением.<br><a href="#method">Полная методика ↓</a></span></span></h2>
+        <select id="attrWindow" aria-label="Период анализа">
+          <option value="1">выбранный час</option>
+          <option value="3" selected>последние 3 часа</option>
+          <option value="6">последние 6 часов</option>
+          <option value="12">последние 12 часов</option>
+        </select>
+      </div>
+      <div id="attr" style="margin-top:8px"></div>
+      <div id="chronic" style="margin-top:8px"></div>
+      <label class="muted" style="display:flex;gap:6px;align-items:center;margin-top:8px;cursor:pointer">
+        <input type="checkbox" id="roseChk" checked> 🧭 Роза ветров и линии анализа
+      </label>
+      <div id="roseBox" hidden style="margin-top:6px">
+        <svg id="rose" viewBox="-100 -100 200 200" width="200" height="200" style="display:block;margin:0 auto"></svg>
+        <div class="muted" id="roseNote"></div>
+        <label class="muted" style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          Длина линии <input type="range" id="lineKm" min="3" max="20" step="1" value="12" style="flex:1"> <b id="lineKmVal">12 км</b>
+        </label>
+        <div style="margin-top:8px">
+          <b style="font-size:14px">📍 Точки жалоб</b>
+          <div class="muted">Нажмите на карту — место, где почувствовали запах. Для каждого часа выбранного периода рисуется линия в ту сторону, откуда дул ветер (фиолетовая).</div>
+          <div id="complaints"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Самые высокие (выбранный час)</h2>
+      <ol id="top"></ol>
+    </div>
+    <div class="card" hidden>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <h2 style="margin:0">Возможные источники</h2>
+        <button id="editBtn">✏️ Править</button>
+      </div>
+      <div id="srcList" style="margin-top:8px"></div>
+      <div id="srcTools" hidden>
+        <p class="muted" id="srcHint">Перетащите метку на карте. Изменения сохраняются на этом устройстве.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button id="srcAdd">➕ Новый источник</button>
+          <button id="srcExport">⬇️ Сохранить в файл</button>
+          <button id="srcReset">↺ Исходный список</button>
+        </div>
+      </div>
+    </div>
+    <div class="card muted" id="info"></div>
+    <details class="card" id="method">
+      <summary style="cursor:pointer;font-weight:600">📘 Методика и примечания</summary>
+      <div style="font-size:13.5px;line-height:1.55;margin-top:8px">
+        <p class="muted" style="margin:0 0 6px">Нажмите на раздел, чтобы открыть.</p>
+        <details class="m"><summary>1. Данные</summary>
+          <p>Посты — карта Казгидромета (ecodata.kz), каждый час. Ветер, солнечная радиация, облачность — Open-Meteo, центр города (44.827, 65.5141).
+          Сбор данных по городу Қызылорда начат 21 октября 2026 года — история пока короткая.</p>
+        </details>
+        <details class="m"><summary>2. Главный вопрос</summary>
+          <p>В качестве основного вещества взят SO2 (решение проекта: большинство постов измеряют именно его); дополнительные вещества — в списке выбора выше.</p>
+        </details>
+        <details class="m"><summary>3. Предельные значения</summary>
+          <p>Приказ № ҚР ДСМ-70 (02.08.2022), приложение 1 — максимальная разовая ПДК. Посты дают часовые значения, поэтому сравнение приблизительное.
+          </p>
+        </details>
+        <details class="m"><summary>4. Качество данных</summary>
+          <p>Если одно и то же число не меняется 6 часов подряд, оно помечается как «застывшее» (⚠) и не участвует в анализе.</p>
+        </details>
+        <details class="m"><summary>5. Определение источников</summary>
+          Для города Қызылорда списка источников загрязнения пока нет. Роза ветров и «постоянно высокие посты» работают.</p>
+        </details>
+      </div>
+    </details>
+  </div>
+</main>
+
+<script>
+/* Шекті мәндер (ПДК), мкг/м³: ҚР ДСМ-70 бұйрығы, 1-қосымша (мг/м³ × 1000).
+   mr — ең жоғары бір реттік, ss — орташа тәуліктік, row — кестедегі жол нөмірі. */
+const LIMIT_DOC = {
+  title: 'Приказ Министра здравоохранения РК от 2 августа 2022 года № ҚР ДСМ-70, приложение 1 «Предельно допустимые концентрации загрязняющих веществ в атмосферном воздухе городских и сельских населённых пунктов» (в реестре НПА № 29011)',
+  url: 'https://adilet.zan.kz/rus/docs/V2200029011',
+};
+const LIMIT_TABLE = {
+  H2S:     { mr: 8,    ss: null, row: 518, name: 'Сероводород (Дигидросульфид)' },
+  NO2:     { mr: 200,  ss: 40,   row: 4,   name: 'Азота (IV) диоксид' },
+  NO:      { mr: 400,  ss: 60,   row: 6,   name: 'Азот (II) оксид' },
+  SO2:     { mr: 500,  ss: 50,   row: 516, name: 'Сера диоксид' },
+  CO:      { mr: 5000, ss: 3000, row: 584, name: 'Углерод оксид' },
+  O3:      { mr: 160,  ss: 30,   row: 435, name: 'Озон' },
+  NH3:     { mr: 200,  ss: 40,   row: 32,  name: 'Аммиак' },
+  PM10:    { mr: 300,  ss: 60,   row: 117, name: 'Взвешенные частицы РМ10' },
+  'PM2.5': { mr: 160,  ss: 35,   row: 118, name: 'Взвешенные частицы РМ2,5' },
+};
+const LIMITS = Object.fromEntries(Object.entries(LIMIT_TABLE).map(([k, v]) => [k, v.mr]));
+function limitInfo(p) {
+  const l = LIMIT_TABLE[p];
+  if (!l) return `Для ${p} предельное значение не введено.`;
+  return `${p}: максимальная разовая ПДК ${l.mr} мкг/м³` + (l.ss ? `, среднесуточная ПДК ${l.ss} мкг/м³` : '') +
+    `.
+Источник: ${LIMIT_DOC.title}, строка ${l.row} «${l.name}».` +
+    `
+Примечание: посты дают часовые значения, а разовая ПДК рассчитана на 20–30 минут — сравнение приблизительное.`;
+}
+const LEVELS = [
+  { max: 0.5, color: '#16a34a', label: 'до половины предельного значения' },
+  { max: 1,   color: '#eab308', label: 'близко к предельному значению' },
+  { max: 5,   color: '#dc2626', label: 'выше предельного значения' },
+  { max: Infinity, color: '#7f1d1d', label: '5 раз и выше' },
+];
+const NO_DATA = '#9ca3af';
+const DIRS = ['с севера', 'с северо-востока', 'с востока', 'с юго-востока', 'с юга', 'с юго-запада', 'с запада', 'с северо-запада'];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const loadCsv = url => new Promise((ok, err) => Papa.parse(url + '?t=' + Date.now(), { download: true, header: true, skipEmptyLines: true, complete: r => ok(r.data), error: err }));
+
+let stations = {}, hours = [], wind = {}, kgmTemps = {}, pollutant = 'SO2', idx = 0, chart, selected = null, timer = null;
+const map = L.map('map').setView([44.827, 65.5141], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+const layer = L.layerGroup().addTo(map);
+
+function colorFor(v) {
+  if (v == null) return NO_DATA;
+  const lim = LIMITS[pollutant];
+  if (!lim) return '#2563eb';
+  return LEVELS.find(l => v / lim <= l.max).color;
+}
+
+/* Бекет иесі (AirKz қосымшасындағы атаулар бойынша, Романның скриншоты 14.10.2026) */
+function ownerOf(name) {
+  if (/^СМКВ/.test(name)) return 'NCOC';
+  if (/^(Перетаска|Мирный|Mирный|Пропарка|Химпоселок)/.test(name)) return 'АНПЗ';
+  if (/^ТШО/.test(name)) return 'ТШО';
+  if (/^ПНЗ/.test(name)) return 'Казгидромет';
+  return '';
+}
+/* «Тұрып қалған» мән: бір сан STALE_RUN және одан көп сағат қатарынан өзгермесе (және ≥ STALE_MIN) — нақты өлшем емес деп санаймыз.
+   Себебі: ecodata картасы ескі мәнді де көрсете береді; AirKz қосымшасы мұндай мәнді көрсетпейді (Мирный H2S/SO2, 14.10 22:00). */
+// STALE_MIN = 6: ecodata бүтінге дөңгелектейді, 3–5 сияқты төмен мәндер шын өзгерсе де бірдей көрінеді (ТШО NO2: қосымшада 3.1/3.9)
+const STALE_RUN = 6, STALE_MIN = 6, ALIVE_HOURS = 12;
+// Романның ережесі: өлшемде қозғалыс болса — алып тастамаймыз. Тегіс кесінді тек оның алдындағы және кейінгі
+// ALIVE_HOURS сағат ішінде мән бірде-бір рет өзгермесе ғана «тұрып қалған» деп саналады.
+const hourMs = h => Date.parse(h.replace(' ', 'T') + ':00:00Z');
+function markStale(series) {
+  const hs = Object.keys(series).sort(), stale = new Set();
+  for (let i = 0; i < hs.length;) {
+    let j = i;
+    while (j + 1 < hs.length && series[hs[j + 1]] === series[hs[i]]) j++;
+    if (j - i + 1 >= STALE_RUN && series[hs[i]] >= STALE_MIN) {
+      const t0 = hourMs(hs[i]) - ALIVE_HOURS * 36e5, t1 = hourMs(hs[j]) + ALIVE_HOURS * 36e5;
+      const alive = hs.some(h => { const t = hourMs(h); return t >= t0 && t <= t1 && series[h] !== series[hs[i]]; });
+      if (!alive) for (let k = i; k <= j; k++) stale.add(hs[k]);
+    }
+    i = j + 1;
+  }
+  return stale;
+}
+// CO бірлігі күмәнді: кейбір ЛББ бекеттері (№12, 15, 17, 19) 0.1–4 береді, қалғандары 90–1100 — мг/м³ болуы мүмкін (ТЕКСЕРУ).
+// Мұндай CO талдауға кірмейді. Ереже: бекеттің CO медианасы < 10.
+const unitDoubt = (s, p) => { const v = Object.values(s.data.CO || {}); return p === 'CO' && v.length > 0 && median(v) < 10; };
+// таза мән (тұрып қалған немесе бірлігі күмәнді болса — null)
+const val = (s, p, h) => { const v = s.data[p]?.[h]; return v == null || s.stale[p]?.has(h) || unitDoubt(s, p) ? null : v; };
+
+async function init() {
+  const [rows, windRows, kgmRows] = await Promise.all([loadCsv('../data/kyzylorda/stations.csv'), loadCsv('../data/kyzylorda/wind.csv'), loadCsv('../data/kyzylorda/kgm.csv').catch(() => [])]);
+  // только почасовые замеры; ручные посты (одна дата в сутки) в почасовой шкале не участвуют
+  const hourSet = new Set();
+  for (const r of rows) {
+    if (!/\d{2}:\d{2}:\d{2}$/.test(r.measured_at)) continue;
+    // істен шыққан бекеттер: замер алынған уақыттан 2 тәуліктен ескі болса — өткізіп жібереміз
+    if (new Date(r.fetched_at_utc) - new Date(r.measured_at.replace(' ', 'T') + '+05:00') > 2 * 864e5) continue;
+    const key = r.station + '|' + r.lat + '|' + r.lng;
+    const st = stations[key] ??= { name: r.station, owner: ownerOf(r.station), address: r.address, lat: +r.lat, lng: +r.lng, data: {}, stale: {} };
+    const h = r.measured_at.slice(0, 13);
+    // қауіпсіздік: зат атауы HTML-ге қойылады — тек әріп, сан, нүкте, үтір, жақша (мыс. H2S, PM2.5) өткізіледі
+    if (!/^[A-Za-z0-9.,() _-]{1,20}$/.test(r.pollutant)) continue;
+    (st.data[r.pollutant] ??= {})[h] = +r.value;
+    hourSet.add(h);
+  }
+  for (const st of Object.values(stations)) for (const p in st.data) st.stale[p] = markStale(st.data[p]);
+  // Қаладан тыс бекеттердің атына ауыл (елді мекен) атын қосамыз: «ПНЗ №7 · Кульсары». Қала бекеттері мен ТШО өзгермейді.
+  const villageOf = address => {
+    const a = address || '';
+    const dam = a.match(/населенный пункт\s+([^,]+)/i); // «Атырау, населенный пункт Дамба, …»
+    if (dam) return dam[1].trim();
+    const first = a.split(',')[0].replace(/^(с|п|г)\.\s*/i, '').trim();
+    return ['Кызылорда', 'Қызылорда'].includes(first) ? '' : first;
+  };
+  for (const st of Object.values(stations)) {
+    const v = villageOf(st.address);
+    if (v && !st.name.includes(v)) st.name += ' · ' + v;
+  }
+  // аттас бекеттер (мысалы, «ПНЗ №1» — Жанбай және Мақат): атына елді мекенді қосамын
+  const byName = {};
+  for (const st of Object.values(stations)) (byName[st.name] ??= []).push(st);
+  for (const list of Object.values(byName)) if (list.length > 1)
+    for (const st of list) st.name += ' · ' + (st.address.replace(/^(с|п)\.\s*/, '').split(',')[0].trim() || `${st.lat.toFixed(2)}, ${st.lng.toFixed(2)}`);
+  for (const w of windRows) wind[w.time_local.replace('T', ' ').slice(0, 13)] = w;
+  // Қазгидромет бекеттерінің температурасы (tabigat): сағат → { бекет id → {lat, lng, temp} }; сол сағатта жоқ болса, Open-Meteo алынады
+  for (const r of kgmRows) {
+    if (r.param !== 'temp' || !isFinite(+r.value)) continue;
+    ((kgmTemps[r.measured_at.slice(0, 13)] ??= {})[r.station_id] = { lat: +r.lat, lng: +r.lng, temp: +r.value });
+  }
+  // шкала — барлық сағаттар қатарынан, бос сағаттар да
+  const sorted = [...hourSet].sort();
+  hours = [];
+  if (sorted.length) {
+    const hourKey = d => d.toISOString().slice(0, 13).replace('T', ' ');
+    for (let t = new Date(sorted[0] + ':00:00Z'), end = new Date(sorted.at(-1) + ':00:00Z'); t <= end; t = new Date(+t + 36e5)) hours.push(hourKey(t));
+  }
+  const pols = [...new Set(Object.values(stations).flatMap(s => Object.keys(s.data)))].sort((a, b) => (b === 'SO2') - (a === 'SO2') || a.localeCompare(b));
+  $('#pollutants').innerHTML = pols.map(p => `<button data-p="${p}" class="${p === pollutant ? 'on' : ''}">${p}</button>`).join('');
+  $('#pollutants').onclick = e => { const p = e.target.dataset.p; if (!p) return; pollutant = p;
+    document.querySelectorAll('#pollutants button').forEach(b => b.classList.toggle('on', b.dataset.p === p)); render(); renderChart(); };
+  $('#slider').max = Math.max(0, hours.length - 1);
+  idx = hours.length - 1;
+  $('#slider').value = idx;
+  // сағаттар тізімі: жаңасы жоғарыда, күн бойынша топталған
+  const byDay = {};
+  hours.forEach((h, i) => (byDay[h.slice(0, 10)] ??= []).push(i));
+  $('#hourSel').innerHTML = Object.keys(byDay).reverse().map(d => `<optgroup label="${d.slice(8, 10)}.${d.slice(5, 7)}.${d.slice(0, 4)}">` +
+    byDay[d].reverse().map(i => `<option value="${i}">${hours[i].slice(8, 10)}.${hours[i].slice(5, 7)} ${hours[i].slice(11)}:00</option>`).join('') + '</optgroup>').join('');
+  $('#info').innerHTML = `Посты: ${Object.keys(stations).length}. Часов: ${hours.length} (${hours[0] ?? '—'}:00 – ${hours.at(-1) ?? '—'}:00).<br>
+    Источник: <a href="http://ecodata.kz:3838/app_dem_visual/" target="_blank">карта Казгидромета</a>, ветер — Open-Meteo.
+    Сбор данных по городу Қызылорда начат 2026-10-21.`;
+  const pts = Object.values(stations).filter(s => s.lat > 44.677 && s.lat < 44.977 && s.lng > 65.2641 && s.lng < 65.7641);
+  if (pts.length) map.fitBounds(pts.map(s => [s.lat, s.lng]), { padding: [20, 20] });
+  render();
+}
+
+function render() {
+  const h = hours[idx];
+  $('#hourSel').value = idx;
+  layer.clearLayers();
+  const lim = LIMITS[pollutant];
+  const list = [];
+  for (const s of Object.values(stations)) {
+    const series = s.data[pollutant];
+    if (!series) continue;
+    const raw = series[h], v = val(s, pollutant, h), stuck = raw != null && v == null;
+    if (v != null) list.push({ s, v });
+    L.circleMarker([s.lat, s.lng], { bubblingMouseEvents: false, radius: v == null ? 6 : 9 + Math.min(12, lim ? v / lim * 4 : 0), color: stuck ? '#6b7280' : '#fff', weight: 2,
+        dashArray: stuck ? '3 2' : null, fillColor: colorFor(v), fillOpacity: v == null ? .5 : .9 })
+      .bindTooltip(stuck ? `⚠${raw}` : v == null ? esc(s.name) : String(v), { permanent: raw != null, direction: 'center', className: 'station-label' })
+      .bindPopup(`<b>${esc(s.name)}</b>${s.owner ? ` · ${s.owner}` : ''}<br>${esc(s.address)}<br>${pollutant}: <b>${raw ?? 'нет данных'}</b> мкг/м³` +
+        (unitDoubt(s, pollutant) ? `<br>⚠ Единица измерения CO сомнительна (возможно, мг/м³, другие посты — мкг/м³) — в анализ не входит.` : '') +
+        (stuck ? `<br>⚠ Это значение не менялось ${STALE_RUN}+ часов и ни разу не двигалось в пределах ±${ALIVE_HOURS} часов — датчик завис или значение устарело. В анализ не входит.`
+               : lim && v != null ? ` (${(v / lim).toFixed(1)} × ПДК)` : ''))
+      .on('click', () => { selected = s; renderChart(); })
+      .addTo(layer);
+  }
+  list.sort((a, b) => b.v - a.v);
+  $('#top').innerHTML = list.slice(0, 6).map(x => `<li>${esc(x.s.name)}${x.s.owner ? ` <span class="muted">(${x.s.owner})</span>` : ''} — <b>${x.v}</b></li>`).join('') || '<span class="muted">В этот час данных нет</span>';
+  [...$('#top').children].forEach((li, i) => li.onclick = () => { selected = list[i].s; map.setView([selected.lat, selected.lng], 14); renderChart(); });
+
+  const wf = windFor(h), w = wf?.w;
+  if (w) {
+    const deg = +w.wind_dir_deg;
+    // метеорологиялық бағыт — жел ҚАЙДАН соғады; бағдарша — ҚАЙДА соғады
+    $('#arrowG').setAttribute('transform', `rotate(${deg + 180})`);
+    $('#windText').textContent = `Ветер ${DIRS[Math.round(deg / 45) % 8]}, ${(+w.wind_speed_ms).toFixed(1)} м/с`;
+    $('#windSub').textContent = `${Math.round(deg)}°, порывы ${(+w.wind_gust_ms).toFixed(1)} м/с · Open-Meteo` + (wf.lag ? ` · ⏳ данные ${wf.lag} ч. назад (новые приходят ~в :30)` : '');
+  } else { $('#windText').textContent = 'Ветер: нет данных'; $('#windSub').textContent = ''; }
+  renderAttribution();
+
+  $('#legend').innerHTML = lim
+    ? `<b>${pollutant}, предельное значение ${lim} мкг/м³ <span class="info" tabindex="0" aria-label="Источник">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">открыть adilet.zan.kz</a><br><a href="../gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">подробнее о ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>в этот час данных нет</span>`
+    : `<b>${pollutant}</b><span class="muted">Предельное значение не введено — синим цветом</span>`;
+}
+
+function renderChart() {
+  if (!selected) return;
+  const series = selected.data[pollutant] || {};
+  $('#chartTitle').textContent = `${selected.name} — ${pollutant}, мкг/м³`;
+  const lim = LIMITS[pollutant];
+  chart?.destroy();
+  chart = new Chart($('#chart'), {
+    type: 'line',
+    data: { labels: hours.map(h => h.slice(8, 10) + '.' + h.slice(5, 7) + ' ' + h.slice(11) + ':00'),
+      datasets: [
+        { label: pollutant, data: hours.map(h => val(selected, pollutant, h)), borderColor: '#0f766e', spanGaps: true, pointRadius: 2 },
+        { label: '⚠ неизменное значение', data: hours.map(h => selected.stale[pollutant]?.has(h) ? series[h] : null), borderColor: '#9ca3af', backgroundColor: '#9ca3af', showLine: false, pointRadius: 3 },
+        ...(lim ? [{ label: 'предельное значение', data: hours.map(() => lim), borderColor: '#dc2626', borderDash: [6, 4], pointRadius: 0 }] : []),
+      ] },
+    options: { animation: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: !!lim } } },
+  });
+}
+
+$('#slider').oninput = e => { idx = +e.target.value; render(); };
+$('#hourSel').onchange = e => { if (timer) $('#play').click(); idx = +e.target.value; $('#slider').value = idx; render(); };
+$('#play').onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; $('#play').textContent = '▶'; return; }
+  $('#play').textContent = '⏸';
+  if (idx >= hours.length - 1) idx = 0;
+  timer = setInterval(() => { idx = (idx + 1) % hours.length; $('#slider').value = idx; render(); if (idx === hours.length - 1) $('#play').click(); }, 700);
+};
+
+/* ===== Көзді анықтау: модель (model.js) + бекеттердегі фоннан артық мән ===== */
+const MIN_EXCESS = 3; // мкг/м³ — бұдан аз артықшылық шу деп есептеледі (ecodata мәндерді бүтінге дейін дөңгелектейді, 2 — дөңгелектеу шуы)
+const MIN_EXPLAINED = 0.25; // ең жақсы көз артық мәннің кемінде 25%-ын түсіндірмесе — көз анықталмады деп жазамыз
+const STRONG_EXPLAINED = 0.5; // 25–50% — әлсіз сигнал: көздер тізімі көрсетіледі, бірақ картаға шлейф контуры салынбайды
+const plumeLayer = L.layerGroup().addTo(map);
+const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+// Ветер часа h; если его ещё нет (погода приходит из облака ~в :30, посты — в :10) — берём последний известный до 2 ч назад.
+function windFor(h) {
+  for (let lag = 0; lag <= 2; lag++) {
+    const t = new Date(Date.parse(h.replace(' ', 'T') + ':00:00Z') - lag * 36e5).toISOString().slice(0, 13).replace('T', ' ');
+    if (wind[t]) return { w: wind[t], lag };
+  }
+  return null;
+}
+const weatherOf = h => {
+  const w = windFor(h)?.w;
+  if (!w) return null;
+  const temp = w.temp_c === '' || w.temp_c == null ? undefined : +w.temp_c; // wind.csv-те температура жоқ ескі жолдар болуы мүмкін
+  return { dir: +w.wind_dir_deg, speed: +w.wind_speed_ms, rad: +w.radiation_wm2 || 0, cloud: +w.cloud_pct || 0,
+    temp, stationTemps: Object.values(kgmTemps[h] || {}) };
+};
+
+// Таңдалған затқа қатысты көздер: `pollutants` жоқ көз — барлық зат үшін, бар болса — тек сол заттар үшін (мыс. АНПЗ мұржалары — SO2/NO2/NO/CO)
+const forPollutant = () => sources.filter(s => !s.pollutants || s.pollutants.includes(pollutant));
+
+function renderAttribution() {
+  plumeLayer.clearLayers();
+  if (!hours.length) return;
+  const n = +$('#attrWindow').value;
+  const win = hours.slice(Math.max(0, idx - n + 1), idx + 1);
+  const weather = {}, obs = [];
+  for (const h of win) { const w = weatherOf(h); if (w) weather[h] = w; }
+  let maxEx = 0;
+  for (const s of Object.values(stations)) {
+    const series = s.data[pollutant];
+    if (!series) continue;
+    const clean = Object.keys(series).map(h => val(s, pollutant, h)).filter(v => v != null);
+    if (!clean.length) continue;
+    const bg = median(clean); // бекеттің фоны — барлық сағаттардың медианасы (тұрып қалған мәндерсіз)
+    for (const h of win) {
+      const v = val(s, pollutant, h);
+      if (v == null) continue;
+      const excess = Math.max(0, v - bg);
+      maxEx = Math.max(maxEx, excess);
+      obs.push({ hour: h, station: s, excess });
+    }
+  }
+  renderRose(win, obs, weather, maxEx);
+  renderChronic(win);
+  if (!sources.length) { $('#attr').innerHTML = '<span Список источников загрязнения для города Қызылорда пока нет — определение источника появится позже. Ниже — посты и ветер.</span>'; return; }
+  const w = weatherOf(hours[idx]);
+  const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
+  const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
+  if (maxEx < MIN_EXCESS) {
+    $('#attr').innerHTML = `<div class="muted">За этот период на постах ${pollutant} заметно не превышает фон (превышение ${maxEx.toFixed(1)} мкг/м³ < ${MIN_EXCESS}). Оснований для определения источника нет.</div>` + clsLine;
+    return;
+  }
+  const { ranking, rows } = AirModel.rankSources(forPollutant(), obs, weather);
+  const best = ranking[0];
+  if (!best || best.explained < MIN_EXPLAINED) {
+    $('#attr').innerHTML = `<div class="muted">На постах ${pollutant} немного выше фона (максимум +${maxEx.toFixed(1)} мкг/м³), но ни один источник из списка
+      его не объясняет (лучший — ${best ? (best.explained * 100).toFixed(0) : 0}%, нужно ≥ ${MIN_EXPLAINED * 100}%). Источник не определён:
+      это может быть случайное колебание, местный источник или источник, которого нет в списке.</div>` + clsLine;
+    return;
+  }
+  $('#attr').innerHTML = ranking.filter(r => r.share > 0.005).map(r => `
+      <div class="bar"><div>${KIND_ICON[r.source.kind] || '📍'} ${esc(r.source.name)} · ${r.source.height_m} м
+        <div class="track"><div class="fill" style="width:${(r.share * 100).toFixed(0)}%"></div></div></div>
+        <b>${(r.share * 100).toFixed(0)}%</b></div>`).join('')
+    + `<div class="muted" style="margin-top:6px">Лучший источник объясняет ${(best.explained * 100).toFixed(0)}% избыточного ${pollutant}.
+       Это вероятность, а не доказательство вины.</div>`
+    + (best.explained < STRONG_EXPLAINED ? `<div class="muted" style="margin-top:4px">⚠ Сигнал слабый (объяснено ${(best.explained * 100).toFixed(0)}% &lt; ${STRONG_EXPLAINED * 100}%): контур шлейфа на карту не нанесён.</div>` : '')
+    + travelLine(best.source, obs, w) + modelVsFact(best, rows) + clsLine;
+  if (best && best.share > 0 && best.explained >= STRONG_EXPLAINED && w && cls) {
+    L.polygon(AirModel.plumeOutline(best.source, w.dir, cls), { color: '#b45309', weight: 1, fillOpacity: 0.15, interactive: false }).addTo(plumeLayer);
+  }
+}
+$('#attrWindow').onchange = renderAttribution;
+
+/* «Модель vs факт»: ең жақсы көз болса, әр бекетте қанша артық мән болар еді және шын мәнінде қанша.
+   Кезең (1/3/6/12 сағ) бойынша бекеттің орташасы; мәндер мкг/м³ (фоннан артығы). Сәйкес: айырма ≤ max(1, 0,35·үлкені). */
+function modelVsFact(best, rows) {
+  const by = new Map();
+  rows.forEach((o, i) => {
+    const e = by.get(o.station) ?? { s: o.station, f: 0, m: 0, n: 0 };
+    e.f += o.excess; e.m += best.pred[i]; e.n++;
+    by.set(o.station, e);
+  });
+  const list = [...by.values()].map(e => ({ s: e.s, f: e.f / e.n, m: e.m / e.n }))
+    .filter(e => Math.max(e.f, e.m) >= 0.5)
+    .sort((a, b) => Math.max(b.f, b.m) - Math.max(a.f, a.m)).slice(0, 8);
+  if (!list.length) return '';
+  const verdict = e => Math.abs(e.f - e.m) <= Math.max(1, 0.35 * Math.max(e.f, e.m)) ? '✓ совпадает' : e.m > e.f ? 'модель завышает' : 'модель занижает';
+  const ok = list.filter(e => verdict(e) === '✓ совпадает').length;
+  return `<div style="margin-top:8px"><b>Модель и факт</b> <span class="muted">— ${esc(best.source.name)}, среднее за период по посту</span>
+    <table class="mvf"><tr><th>Пост</th><th>Факт</th><th>Модель</th><th>Соответствие</th></tr>
+    ${list.map(e => `<tr><td>${esc(e.s.name)}</td><td>${e.f.toFixed(1)}</td><td>${e.m.toFixed(1)}</td><td>${verdict(e)}</td></tr>`).join('')}</table>
+    <div class="muted">Совпадает на ${ok}/${list.length} постах. Значения — мкг/м³, превышение над фоном.</div></div>`;
+}
+
+/* Жету уақыты: көзден (тоған болса — ең жақын нүктесінен) бекетке дейінгі қашықтық / жел жылдамдығы.
+   Қарапайым баға: ауа желмен бірге түзу жүреді деп есептейміз. */
+function travelLine(src, obs, w) {
+  if (!w || !w.speed) return '';
+  const h = hours[idx];
+  const top = obs.filter(o => o.hour === h && o.excess > 0).sort((a, b) => b.excess - a.excess)[0];
+  if (!top) return '';
+  const st = top.station;
+  const km = Math.min(...sourcePoints(src).map(([a, o]) => Math.hypot((a - st.lat) * 110.54, (o - st.lng) * 111.32 * Math.cos(st.lat * Math.PI / 180))));
+  const min = km * 1000 / Math.max(0.5, w.speed) / 60;
+  const t = min < 90 ? `≈ ${Math.round(min)} мин` : `≈ ${(min / 60).toFixed(1)} ч`;
+  const dh = AirModel.riseAt(src, w, km * 1000); // ыстық құбыр түтінінің көтерілуі (Бриггс), м
+  const rise = dh > 0 ? `<br>🔥 Дым поднимется примерно на ${Math.round(dh)} м (труба ${src.stack.ts_c} °C, воздух ${(AirModel.localTemp(src, w.stationTemps, w.temp) ?? 0).toFixed(0)} °C) → эффективная высота ≈ ${Math.round(src.height_m + dh)} м.` : '';
+  return `<div class="muted" style="margin-top:4px">⏱ ${esc(src.name)} → ${esc(st.name)} (наибольшее превышение в ${h.slice(11)}:00): ${t} (${km.toFixed(1)} км, ветер ${w.speed.toFixed(1)} м/с).${rise}</div>`;
+}
+
+/* ===== Жел розасы + талдау сызықтары (бекеттен желге қарсы) ===== */
+const roseLayer = L.layerGroup().addTo(map);
+let LINE_KM = 12;             // сызық ұзындығы, км (жылжытқышпен өзгереді)
+try { LINE_KM = +localStorage.getItem('atyrau-air-linekm') || 12; } catch {}
+$('#lineKm').value = LINE_KM; $('#lineKmVal').textContent = LINE_KM + ' км';
+$('#lineKm').oninput = e => {
+  LINE_KM = +e.target.value; $('#lineKmVal').textContent = LINE_KM + ' км';
+  try { localStorage.setItem('atyrau-air-linekm', LINE_KM); } catch {}
+  renderAttribution();
+};
+const ROSE_DIRS = ['С', 'СВ', 'В', 'ЮВ', 'Ю', 'ЮЗ', 'З', 'СЗ']; // солтүстік, шығыс, оңтүстік, батыс
+try { $('#roseChk').checked = localStorage.getItem('atyrau-air-rose') !== '0'; } catch {}
+$('#roseChk').onchange = () => { try { localStorage.setItem('atyrau-air-rose', $('#roseChk').checked ? '1' : '0'); } catch {} renderAttribution(); };
+
+// бекеттен «жел келген жаққа» қарай нүкте
+function upwindPoint(st, fromDeg, km) {
+  const a = fromDeg * Math.PI / 180;
+  return [st.lat + km * 1000 * Math.cos(a) / 110540, st.lng + km * 1000 * Math.sin(a) / (111320 * Math.cos(st.lat * Math.PI / 180))];
+}
+
+// жел жебесі: сызық + ортасындағы ұшы бекетке қарап тұр (газ көзден бекетке қарай келді), үстінен өткенде — түсіндірме
+const hourText = h => h.slice(8, 10) + '.' + h.slice(5, 7) + ' ' + h.slice(11, 13) + ':00';
+function windArrow(at, fromDeg, km, style, tip) {
+  const end = upwindPoint(at, fromDeg, km), line = [[at.lat, at.lng], end];
+  const opt = { ...style, bubblingMouseEvents: false };
+  L.polyline(line, { ...opt, interactive: false }).addTo(roseLayer);
+  // жіңішке сызықты тышқанмен табу оңай болсын — үстінен көрінбейтін жуан сызық
+  L.polyline(line, { color: '#000', opacity: 0, weight: 14, bubblingMouseEvents: false }).bindTooltip(tip, { sticky: true }).addTo(roseLayer);
+  const s = Math.round(14 + 2 * style.weight); // ұшы өлшемі сызық қалыңдығына сай
+  const html = `<svg width="${s}" height="${s}" viewBox="-10 -10 20 20" style="transform:rotate(${fromDeg + 180}deg)">` +
+    `<path d="M0,-9 L7,7 L0,3 L-7,7 Z" fill="${style.color}" fill-opacity="${Math.max(0.85, style.opacity)}" stroke="#fff" stroke-width="1.2"/></svg>`;
+  // ұшы сызықтың ортасында: бекеттің белгісі оны жаппасын
+  L.marker(upwindPoint(at, fromDeg, km * 0.45), { icon: L.divIcon({ className: 'wind-arrow', html, iconSize: [s, s], iconAnchor: [s / 2, s / 2] }), bubblingMouseEvents: false, keyboard: false })
+    .bindTooltip(tip).addTo(roseLayer);
+}
+
+function renderRose(win, obs, weather, maxEx) {
+  roseLayer.clearLayers();
+  const on = $('#roseChk').checked;
+  $('#roseBox').hidden = !on;
+  if (!on) return;
+  // 1) жел розасы: 16 сектор — желдің жиілігі (сұр) және сол бағытпен келген артық H2S (қоңыр)
+  const freq = Array(16).fill(0), pol = Array(16).fill(0);
+  for (const h of win) {
+    const w = weather[h]; if (!w) continue;
+    const k = Math.round(w.dir / 22.5) % 16;
+    freq[k]++;
+    pol[k] += obs.filter(o => o.hour === h).reduce((a, o) => a + o.excess, 0);
+  }
+  const fMax = Math.max(...freq) || 1, pMax = Math.max(...pol) || 1;
+  const wedge = (k, r, color, op) => {
+    const a0 = (k * 22.5 - 10) * Math.PI / 180, a1 = (k * 22.5 + 10) * Math.PI / 180;
+    return `<path d="M0,0 L${(r * Math.sin(a0)).toFixed(1)},${(-r * Math.cos(a0)).toFixed(1)} A${r},${r} 0 0 1 ${(r * Math.sin(a1)).toFixed(1)},${(-r * Math.cos(a1)).toFixed(1)} Z" fill="${color}" fill-opacity="${op}"/>`;
+  };
+  let svg = [30, 60, 85].map(r => `<circle r="${r}" fill="none" stroke="#e3e6ea"/>`).join('');
+  svg += ROSE_DIRS.map((d, i) => { const a = i * 45 * Math.PI / 180; return `<text x="${(91 * Math.sin(a)).toFixed(0)}" y="${(-91 * Math.cos(a) + 4).toFixed(0)}" text-anchor="middle" font-size="12" fill="#6b7280">${d}</text>`; }).join('');
+  svg += freq.map((f, k) => f ? wedge(k, 85 * f / fMax, '#9ca3af', 0.55) : '').join('');
+  svg += pol.map((v, k) => v > 0 ? wedge(k, 85 * v / pMax, '#b45309', 0.7) : '').join('');
+  $('#rose').innerHTML = svg;
+  const nHours = Object.keys(weather).length;
+  const topK = pol.indexOf(Math.max(...pol));
+  $('#roseNote').innerHTML = `Период: ${nHours} ч. Серый — как часто ветер дул с каждой стороны; коричневый — с какой стороны ветер принёс превышение ${pollutant}.` +
+    (Math.max(...pol) > 0 ? ` Больше всего — с направления: <b>${['север', 'северо-северо-восток', 'северо-восток', 'востоко-северо-восток', 'восток', 'востоко-юго-восток', 'юго-восток', 'юго-юго-восток', 'юг', 'юго-юго-запад', 'юго-запад', 'западо-юго-запад', 'запад', 'западо-северо-запад', 'северо-запад', 'северо-северо-запад'][topK]}</b>.` : ' В этот период превышения нет.') +
+    `<br>На карте: от поста с превышением в сторону, откуда дул ветер, — стрелка ${LINE_KM} км (по одной на час): остриё смотрит на пост — ветер принёс газ оттуда, толщина соответствует величине превышения. Нажмите на стрелку (или наведите мышь) — час и ветер. Где линии сходятся — возможный источник.`;
+  renderComplaints(win, weather);
+  // 2) картадағы талдау сызықтары
+  if (maxEx <= 0) return;
+  for (const o of obs) {
+    const w = weather[o.hour];
+    if (!w || o.excess < 0.5) continue;
+    const t = o.excess / maxEx;
+    windArrow(o.station, w.dir, LINE_KM, { color: '#b45309', weight: 1 + 5 * t, opacity: 0.25 + 0.6 * t },
+      `<b>${esc(o.station.name)}</b> · ${hourText(o.hour)}<br>Ветер ${DIRS[Math.round(w.dir / 45) % 8]}, ${w.speed.toFixed(1)} м/с<br>Превышение ${esc(pollutant)}: ${o.excess.toFixed(1)} мкг/м³`);
+  }
+}
+
+/* ===== Тұрақты жоғары бекеттер: қаланың басқа бекеттерінің медианасынан үнемі жоғары =====
+   Модель (rankSources) бекеттің өз фонынан «секірісті» іздейді, сондықтан бекеттің жанындағы тұрақты көзді фон деп алып тастайды.
+   Бұл тексеру соны толықтырады: бекет кезеңнің ≥ 80% сағатында қала медианасынан CHRONIC_DIFF-тен артық жоғары ма. */
+const CITY_BOX = { lat0: 44.677, lat1: 44.977, lng0: 65.2641, lng1: 65.7641 };
+const inCity = s => s.lat > CITY_BOX.lat0 && s.lat < CITY_BOX.lat1 && s.lng > CITY_BOX.lng0 && s.lng < CITY_BOX.lng1;
+function renderChronic(win) {
+  const lim = LIMITS[pollutant];
+  const diffMin = lim ? Math.max(2, lim * 0.25) : 2;
+  const city = Object.values(stations).filter(s => inCity(s) && s.data[pollutant]);
+  const cityMed = {};
+  for (const h of win) {
+    const vs = city.map(s => val(s, pollutant, h)).filter(v => v != null);
+    if (vs.length >= 5) cityMed[h] = median(vs);
+  }
+  const hs = Object.keys(cityMed);
+  const res = [];
+  if (hs.length >= 2) for (const s of city) {
+    let n = 0, over = 0, sum = 0;
+    for (const h of hs) { const v = val(s, pollutant, h); if (v == null) continue; n++; const d = v - cityMed[h]; sum += d; if (d >= diffMin) over++; }
+    if (n >= 2 && over / n >= 0.8) {
+      const near = forPollutant().filter(x => x.lat != null)
+        .map(x => ({ x, d: Math.min(...sourcePoints(x).map(([a, o]) => Math.hypot((a - s.lat) * 110.54, (o - s.lng) * 111.32 * Math.cos(s.lat * Math.PI / 180)))) }))
+        .sort((a, b) => a.d - b.d)[0];
+      res.push({ s, over, n, avg: sum / n, near });
+    }
+  }
+  res.sort((a, b) => b.avg - a.avg);
+  $('#chronic').innerHTML = !hs.length ? '' : `<b style="font-size:14px">📈 Постоянно высокие посты</b>` + (res.length
+    ? res.map(r => `<div class="src-item">${esc(r.s.name)}${r.s.owner ? ` <span class="muted">(${r.s.owner})</span>` : ''} — выше медианы города в среднем на <b>+${r.avg.toFixed(1)}</b> мкг/м³ (${r.over}/${r.n} ч.)
+        ${r.near ? `<div class="meta">Ближайший источник: ${esc(r.near.x.name)} — ${r.near.d.toFixed(1)} км</div>` : ''}</div>`).join('')
+    : `<div class="muted">За период ни один пост не был стабильно выше городского уровня (порог: +${diffMin} мкг/м³, ≥ 80% часов).</div>`)
+    + `<div class="muted">Это проверка для поиска постоянного источника рядом с постом; значения «⚠» без изменений не учитываются.</div>`;
+}
+
+/* ===== Шағым нүктелері: иіс сезілген жер → жел келген жаққа сызық → жанынан өтетін көздер ===== */
+const CMP_KEY = 'atyrau-air-complaints-v1';
+const NEAR_KM = 1.5; // сызық көзден осыдан жақын өтсе — «үстінен өтеді»
+let complaints = [];
+try { complaints = JSON.parse(localStorage.getItem(CMP_KEY)) || []; } catch {}
+const saveComplaints = () => { try { localStorage.setItem(CMP_KEY, JSON.stringify(complaints)); } catch {} };
+
+// нүктеден AB кесіндісіне дейінгі қашықтық, км (жергілікті жазық проекция)
+function distToSegmentKm(p, a, b) {
+  const kx = 111.32 * Math.cos(p[0] * Math.PI / 180), ky = 110.54;
+  const ax = (a[1] - p[1]) * kx, ay = (a[0] - p[0]) * ky, bx = (b[1] - p[1]) * kx, by = (b[0] - p[0]) * ky;
+  const dx = bx - ax, dy = by - ay, len2 = dx * dx + dy * dy;
+  const t = len2 ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / len2)) : 0;
+  return Math.hypot(ax + t * dx, ay + t * dy);
+}
+// көздің нүктелері: тоған болса — оның торындағы барлық нүкте
+const sourcePoints = s => Array.isArray(s.area) && s.area.length ? AirModel.areaPoints(s.area) : [[s.lat, s.lng]];
+
+function renderComplaints(win, weather) {
+  const hoursW = win.filter(h => weather[h]);
+  $('#complaints').innerHTML = complaints.map((c, i) => {
+    L.marker([c.lat, c.lng], { icon: L.divIcon({ className: 'src-icon', html: '📍', iconSize: [24, 24], iconAnchor: [12, 22] }), bubblingMouseEvents: false })
+      .bindTooltip(`Точка жалобы ${i + 1}`).addTo(roseLayer);
+    const hits = {};
+    for (const h of hoursW) {
+      const end = upwindPoint(c, weather[h].dir, LINE_KM);
+      windArrow(c, weather[h].dir, LINE_KM, { color: '#7c3aed', weight: 3, opacity: 0.7, dashArray: '6 4' },
+        `<b>Точка жалобы ${i + 1}</b> · ${hourText(h)}<br>Ветер ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с`);
+      for (const s of forPollutant()) {
+        if (s.lat == null) continue;
+        const d = Math.min(...sourcePoints(s).map(pt => distToSegmentKm(pt, [c.lat, c.lng], end)));
+        const r = hits[s.id] ??= { s, n: 0, min: Infinity };
+        r.min = Math.min(r.min, d);
+        if (d <= NEAR_KM) r.n++;
+      }
+    }
+    const list = Object.values(hits).filter(r => r.min <= 3).sort((a, b) => b.n - a.n || a.min - b.min);
+    return `<div class="src-item">📍 <b>Точка ${i + 1}</b> <span class="meta">${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}</span>
+      <button data-cdel="${i}" style="float:right;padding:2px 8px">✕</button>
+      <div class="meta">${!hoursW.length ? 'За этот период данных о ветре нет.' : list.length
+        ? list.map(r => r.n ? `${KIND_ICON[r.s.kind] || '📍'} ${esc(r.s.name)} — линия проходит над источником (${r.n} ч. / ${hoursW.length})`
+                            : `${KIND_ICON[r.s.kind] || '📍'} ${esc(r.s.name)} — проходит в ${r.min.toFixed(1)} км`).join('<br>')
+        : `Линии не проходят ближе 3 км ни к одному источнику из списка.`}</div></div>`;
+  }).join('') + (complaints.length ? `<button id="cClear" style="margin-top:6px">Удалить все точки</button>` : '');
+}
+$('#complaints').addEventListener('click', e => {
+  if (e.target.dataset.cdel != null) { complaints.splice(+e.target.dataset.cdel, 1); saveComplaints(); renderAttribution(); }
+  if (e.target.id === 'cClear') { complaints = []; saveComplaints(); renderAttribution(); }
+});
+map.on('click', e => {
+  if (!$('#roseChk').checked || editing) return; // көздерді түзету кезінде басу — көзді қою үшін
+  complaints.push({ lat: +e.latlng.lat.toFixed(5), lng: +e.latlng.lng.toFixed(5) });
+  saveComplaints(); renderAttribution();
+});
+
+/* maphint-js */
+/* ===== Карта көмегі: «?» түймесі; бірінші кіргенде өзі ашылады, жапқаннан кейін қайта шықпайды ===== */
+(() => {
+  const KEY = 'atyrau-air-maphint';
+  const Help = L.Control.extend({ options: { position: 'topright' }, onAdd() {
+    const box = L.DomUtil.create('div', 'maphelp');
+    box.innerHTML = '<button type="button" class="mh-btn" aria-label="Как работает карта" aria-expanded="false">?</button>'
+      + '<div class="mh-card" hidden role="dialog" aria-label="Как работает карта"><button type="button" class="mh-x" aria-label="Закрыть">×</button>'
+      + '<b>Как работает карта</b><ul>'
+      + '<li><b style="display:inline">Нажмите на пост</b> — его измерения и график.</li>'
+      + '<li><b style="display:inline">Нажмите на карту</b> — отметит место, где почувствовали запах (📍); фиолетовая линия — откуда туда пришёл ветер.</li>'
+      + '<li><b style="display:inline">Коричневые линии</b> — направление от поста против ветра: источник может быть с этой стороны.</li>'
+      + '<li><b style="display:inline">Нижний ползунок</b> — смена часа; ▶ — анимация.</li></ul></div>';
+    L.DomEvent.disableClickPropagation(box); L.DomEvent.disableScrollPropagation(box);
+    const btn = box.querySelector('.mh-btn'), card = box.querySelector('.mh-card');
+    const show = on => { card.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (!on) { try { localStorage.setItem(KEY, '1'); } catch {} } };
+    btn.addEventListener('click', () => show(card.hidden));
+    box.querySelector('.mh-x').addEventListener('click', () => show(false));
+    let seen = false; try { seen = localStorage.getItem(KEY) === '1'; } catch {}
+    if (!seen) show(true);
+    return box;
+  } });
+  new Help().addTo(map);
+})();
+/* /maphint-js */
+
+/* ===== Ықтимал көздер: sources.enc.json (шифрланған) + осы құрылғыдағы түзетулер ===== */
+const CITY = 'kyzylorda'; // sources.enc.json ішінде әр көздің city өрісі бар
+const SRC_KEY = 'atyrau-air-sources-v1-' + CITY;
+const KINDS = { high: 'Высокий (труба, факел)', low: 'Низкий (резервуар, здание)', ground: 'Уровень земли (пруд, очистка)' };
+const KIND_ICON = { high: '🏭', low: '🛢️', ground: '💧' };
+let sources = [], defaultSources = [], editing = false, placingId = null;
+const srcLayer = L.layerGroup().addTo(map);
+
+function saveSources() { try { localStorage.setItem(SRC_KEY, JSON.stringify(sources)); } catch {} }
+
+/* Көздер шифрланған (sources.enc.json): AES-GCM, кілт құпиясөзден PBKDF2 арқылы. Құпиясөзсіз көздер мен мұржалар көрінбейді. */
+const PW_KEY = 'atyrau-air-pw';
+let encData = null, stacks = [], locked = true, publicSources = [];
+const stackLayer = L.layerGroup().addTo(map);
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function decryptSources(password) {
+  const e = encData;
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(e.salt), iterations: e.iter },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(e.iv) }, key, unb64(e.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+async function unlock(password, remember) {
+  const data = await decryptSources(password); // қате құпиясөз — мұнда қате лақтырады
+  defaultSources = data.sources.filter(s => (s.city || 'atyrau') === CITY); stacks = CITY === 'atyrau' ? (data.stacks || []) : []; locked = false;
+  try { if (remember) sessionStorage.setItem(PW_KEY, password); } catch {}
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(SRC_KEY)); } catch {}
+  sources = Array.isArray(saved) ? saved : structuredClone(defaultSources);
+  renderSources();
+}
+
+async function loadSources() {
+  [encData, publicSources] = await Promise.all([
+    fetch('../sources.enc.json?t=' + Date.now()).then(r => r.json()),
+    fetch('../sources.public.json?t=' + Date.now()).then(r => r.json()).catch(() => []),
+  ]);
+  publicSources = publicSources.filter(s => (s.city || 'atyrau') === CITY);
+  let pw = null;
+  try { pw = sessionStorage.getItem(PW_KEY); } catch {}
+  if (pw) { try { await unlock(pw, false); return; } catch {} }
+  renderSources();
+}
+
+function renderStacks() {
+  stackLayer.clearLayers();
+  for (const s of stacks)
+    L.circleMarker([s.lat, s.lng], { radius: s.flare ? 7 : 5, color: s.flare ? '#b91c1c' : '#ea580c', weight: 2, fillColor: '#fb923c', fillOpacity: 0.85 })
+      .bindTooltip(`${s.flare ? '🔥 ' : ''}${esc(s.name)} · ${s.h} м · SO2 ${s.so2} г/с` + (s.h2s ? ` · H2S ${s.h2s} г/с` : '') + ' (инвентаризация АНПЗ, 2026)')
+      .addTo(stackLayer);
+}
+
+function renderSources() {
+  srcLayer.clearLayers();
+  renderStacks();
+  renderAttribution();
+  $('#editBtn').hidden = locked;
+  if (locked) {
+    $('#srcTools').hidden = true;
+    // ашық режим: тек белгі мен атау, орны ≈500 м дәлдікпен (sources.public.json)
+    for (const s of publicSources)
+      L.marker([s.lat, s.lng], { interactive: true, opacity: 0.85,
+          icon: L.divIcon({ className: 'src-icon', html: KIND_ICON[s.kind] || '📍', iconSize: [26, 26] }) })
+        .bindTooltip(`${esc(s.name)} · положение примерное (±500 м)`).addTo(srcLayer);
+    $('#srcList').innerHTML = (publicSources.length ? publicSources.map(s => `<div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b></div>`).join('') +
+        '<div class="muted" style="margin-top:6px">На карте положение показано приблизительно (±500 м).</div>' : '') +
+      `<div class="muted" style="margin-top:8px">🔒 Точное положение, высота и «Определение источника» — по паролю.</div>
+      <form id="unlockForm" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <input type="password" id="pwInput" placeholder="Пароль" autocomplete="current-password" aria-label="Пароль" style="flex:1;min-width:150px;min-height:44px;padding:6px 8px;font:inherit;border:1px solid var(--line);border-radius:8px">
+        <button type="submit">🔓 Открыть</button>
+      </form><div class="muted" id="pwMsg"></div>`;
+    $('#unlockForm').onsubmit = async ev => {
+      ev.preventDefault();
+      $('#pwMsg').textContent = 'Проверка…';
+      try { await unlock($('#pwInput').value, true); } catch { $('#pwMsg').textContent = 'Неверный пароль.'; }
+    };
+    return;
+  }
+  for (const s of sources) {
+    if (s.lat == null) continue;
+    if (Array.isArray(s.area)) for (const ring of s.area)
+      L.polygon(ring, { color: '#0369a1', weight: 1, dashArray: '4 3', fillOpacity: 0.08, interactive: false }).addTo(srcLayer);
+    L.marker([s.lat, s.lng], { draggable: editing, zIndexOffset: 1000,
+        icon: L.divIcon({ className: 'src-icon', html: KIND_ICON[s.kind] || '📍', iconSize: [26, 26] }) })
+      .bindTooltip(`${esc(s.name)} · высота ${s.height_m} м` + (s.size_m ? ` · размер ${s.size_m} м` : ''))
+      .on('dragend', e => {
+        const p = e.target.getLatLng(), dLat = p.lat - s.lat, dLng = p.lng - s.lng;
+        s.lat = +p.lat.toFixed(5); s.lng = +p.lng.toFixed(5);
+        // пішіні бар көз (тоған) — пішінін де бірге жылжытамыз
+        if (Array.isArray(s.area)) s.area = s.area.map(r => r.map(([a, o]) => [+(a + dLat).toFixed(5), +(o + dLng).toFixed(5)]));
+        saveSources(); renderSources();
+      })
+      .addTo(srcLayer);
+  }
+  $('#srcTools').hidden = !editing;
+  $('#editBtn').textContent = editing ? '✔ Готово' : '✏️ Править';
+  $('#srcList').innerHTML = sources.map(s => editing ? `
+    <div class="src-item ${placingId === s.id ? 'placing' : ''}" data-id="${s.id}">
+      <input data-f="name" value="${esc(s.name)}" style="width:100%">
+      <div class="row">
+        <select data-f="kind">${Object.entries(KINDS).map(([k, v]) => `<option value="${k}" ${k === s.kind ? 'selected' : ''}>${v}</option>`).join('')}</select>
+        <label class="muted">высота <input data-f="height_m" type="number" min="0" step="1" value="${s.height_m}" style="width:70px"> м</label>
+        <label class="muted">размер <input data-f="size_m" type="number" min="0" step="100" value="${s.size_m || 0}" style="width:80px"> м</label>
+      </div>
+      <div class="row">
+        <button data-act="place">${s.lat == null ? '📍 Поставить на карту' : '📍 Поставить в другое место'}</button>
+        <button data-act="del">🗑️</button>
+        <span class="meta">${s.lat == null ? 'положение неизвестно' : s.lat + ', ' + s.lng}</span>
+      </div>
+      ${s.note ? `<div class="meta">${esc(s.note)}</div>` : ''}
+    </div>` : `
+    <div class="src-item">${KIND_ICON[s.kind] || '📍'} <b>${esc(s.name)}</b> · ${s.height_m} м${s.pollutants ? ` <span class="muted">(только ${s.pollutants.join(', ')})</span>` : ''}
+      ${s.lat == null ? '<div class="meta">положение неизвестно — поставьте на карту через «Править»</div>' : ''}</div>`).join('');
+}
+
+$('#editBtn').onclick = () => { editing = !editing; placingId = null; renderSources(); };
+$('#srcList').addEventListener('change', e => {
+  const item = e.target.closest('[data-id]'); const f = e.target.dataset.f;
+  if (!item || !f) return;
+  const s = sources.find(x => x.id === item.dataset.id);
+  s[f] = (f === 'height_m' || f === 'size_m') ? Math.max(0, +e.target.value || 0) : e.target.value;
+  saveSources(); renderSources();
+});
+$('#srcList').addEventListener('click', e => {
+  const act = e.target.dataset.act; const item = e.target.closest('[data-id]');
+  if (!act || !item) return;
+  const id = item.dataset.id;
+  if (act === 'del' && confirm('Удалить этот источник?')) { sources = sources.filter(x => x.id !== id); saveSources(); }
+  if (act === 'place') { placingId = id; $('#srcHint').textContent = 'Теперь нажмите нужное место на карте.'; }
+  renderSources();
+});
+map.on('click', e => {
+  if (!editing || !placingId) return;
+  const s = sources.find(x => x.id === placingId);
+  if (s) {
+    if (Array.isArray(s.area) && s.lat != null) { // тоғанды жаңа орынға — пішінімен бірге
+      const dLat = e.latlng.lat - s.lat, dLng = e.latlng.lng - s.lng;
+      s.area = s.area.map(r => r.map(([a, o]) => [+(a + dLat).toFixed(5), +(o + dLng).toFixed(5)]));
+    }
+    s.lat = +e.latlng.lat.toFixed(5); s.lng = +e.latlng.lng.toFixed(5); saveSources();
+  }
+  placingId = null; $('#srcHint').textContent = 'Перетащите метку на карте. Изменения сохраняются на этом устройстве.';
+  renderSources();
+});
+$('#srcAdd').onclick = () => {
+  const s = { id: 'src' + Date.now(), name: 'Новый источник', lat: null, lng: null, height_m: 0, kind: 'ground', note: '' };
+  sources.push(s); placingId = s.id; $('#srcHint').textContent = 'Теперь нажмите нужное место на карте.';
+  saveSources(); renderSources();
+};
+$('#srcExport').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(sources, null, 2)], { type: 'application/json' }));
+  a.download = '../sources.json'; a.click();
+};
+$('#srcReset').onclick = () => {
+  if (!confirm('Удалить все правки и вернуться к исходному списку?')) return;
+  sources = structuredClone(defaultSources); saveSources(); renderSources();
+};
+
+document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('click', () => { $('#method').open = true; }));
+init().catch(e => { $('#info').textContent = 'Данные не загружены: ' + e; });
+// Қызылорда: ластану көздерінің тізімі әлі жоқ — loadSources шақырылмайды
+</script>
+<footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
+<script>
+// Сайттың астындағы санауыш: GoatCounter жалпы қаралым саны; қате болса — жасырын қалады
+// алдымен өз доменіміздегі data/visits.json (GitHub Actions сағат сайын жаңартады), болмаса — тікелей GoatCounter
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+getJson('../data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт просмотрели ' + d.count + ' раз'; el.hidden = false; })
+  .catch(() => {});
+</script>
+<!-- Келушілер статистикасы: GoatCounter (cookie жоқ, жеке дерек жиналмайды) -->
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

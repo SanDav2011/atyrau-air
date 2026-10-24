@@ -104,6 +104,14 @@
   "Атырау — H₂S иісі қайдан келеді?": "Atyrau — where does the H₂S smell come from?",
   "Атыраудағы күкіртсутек иісінің ықтимал көздерін нақты бекеттер мен жел бойынша талдау.": "Analysis of possible sources of the hydrogen sulfide smell in Atyrau based on real stations and wind.",
   "<h1>Атырау</h1>": "<h1>Atyrau</h1>",
+  "<p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>": "<p>Where does the smell come from? Hydrogen sulfide (H2S) stations and wind — hour by hour</p>"
+ },
+ "city": {
+  "Атырау — H₂S иісі қайдан келеді? | Қазақстан ауасы": "Atyrau — where does the H₂S smell come from? | Kazakhstan Air",
+  "Атыраудағы күкіртсутек (H₂S) иісінің көзін анықтау. Бекеттер деректері, жел бағыты және Гаусс шлейфі моделі бойынша талдау.": "Finding the source of the hydrogen sulfide (H₂S) smell in Atyrau. Analysis based on station data, wind direction and a Gaussian plume model.",
+  "Атырау — H₂S иісі қайдан келеді?": "Atyrau — where does the H₂S smell come from?",
+  "Атыраудағы күкіртсутек иісінің ықтимал көздерін нақты бекеттер мен жел бойынша талдау.": "Analysis of possible sources of the hydrogen sulfide smell in Atyrau based on real stations and wind.",
+  "<h1>Атырау</h1>": "<h1>Atyrau</h1>",
   "<p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>": "<p>Where does the smell come from? Hydrogen sulfide (H2S) stations and wind — hour by hour</p>",
   "title=\"Ойнату\" aria-label=\"Сағаттарды ойнату\"": "title=\"Play\" aria-label=\"Play through the hours\"",
   "aria-label=\"Сағатты таңдау\"": "aria-label=\"Select the hour\"",
@@ -292,6 +300,17 @@
   "' рет қаралды'": "' times'",
   "мкг/м³": "µg/m³",
   "const SN = {};": "const SN = {\"АНПЗ — жер деңгейіндегі көздер (КУПС, УПС)\": \"Refinery — ground-level sources (KUPS, UPS)\", \"АНПЗ факелдері\": \"Refinery flares\", \"Атырау ЖЭО — №4 құбыр (180 м)\": \"Atyrau CHP — stack No. 4 (180 m)\", \"Атырау ЖЭО — №2, №3 құбырлар (120 м)\": \"Atyrau CHP — stacks No. 2, 3 (120 m)\", \"Атырау ЖЭО — №1, №5 құбырлар (60–64 м)\": \"Atyrau CHP — stacks No. 1, 5 (60–64 m)\", \"Мұнай базасы\": \"Oil depot\", \"Кәріздік тазарту қондырғысы (шығыс)\": \"Sewage treatment plant (east)\", \"Кәріздік тазарту қондырғысы (солтүстік-батыс)\": \"Sewage treatment plant (north-west)\", \"Тазарту қондырғысы (Қара Өзен өнеркәсіп аймағы)\": \"Treatment plant (Kara Ozen industrial zone)\", \"Сасық сай (Тухлая балка)\": \"Sasyk Sai (Tukhlaya Balka)\", \"«Квадрат» буландыру алаңы (оң жағалау)\": \"“Kvadrat” evaporation pond (right bank)\", \"Атырау ҚТҚ полигоны\": \"Atyrau municipal waste landfill\"};",
-  "<script src=\"model.js\"></script>": "<script src=\"model.js\"></script><script>Object.assign(AirModel.NAMES, {\"A\": \"very unstable (strong sun, calm)\", \"B\": \"unstable\", \"C\": \"slightly unstable\", \"D\": \"neutral (overcast or strong wind)\", \"E\": \"stable (night)\", \"F\": \"very stable (clear night, calm — inversion)\"});</script>"
+  "<script src=\"model.js\"></script>": "<script src=\"model.js\"></script><script>Object.assign(AirModel.NAMES, {\"A\": \"very unstable (strong sun, calm)\", \"B\": \"unstable\", \"C\": \"slightly unstable\", \"D\": \"neutral (overcast or strong wind)\", \"E\": \"stable (night)\", \"F\": \"very stable (clear night, calm — inversion)\"});</script>",
+  "🧭 Жел және тұрақты жоғары бекеттер ": "🧭 Wind and persistently high stations ",
+  "📘 Әдістеме және ескертулер": "📘 Methodology and notes",
+  "2. Басты мәселе": "2. Main issue",
+  "4. Деректер сапасы": "4. Data quality",
+  "Бір сан 6 сағат қатарынан өзгермесе — «тұрып қалған» деп белгіленеді (⚠) және талдауға кірмейді.": "If one value stays the same for 6 hours in a row, it is marked as “stuck” (⚠) and excluded from the analysis.",
+  "5. Көздерді анықтау": "5. Source identification",
+  "ДДҰ ұсынысы PM2,5 үшін әлдеқайда қатаң: тәулігіне 15 мкг/м³.": "The WHO guideline for PM2.5 is much stricter: 15 µg/m³ per day.",
+  "🔒 Нақты орны, биіктігі және «Көзді анықтау» — құпиясөзбен.": "🔒 Exact positions, heights and “Source identification” are available with a password.",
+  "Алматыда ауаның басты ластануы — қыста ұсақ шаң (PM2,5) мен азот диоксиді: жылу беру маусымы, көмір жағатын ЖЭО мен жеке үйлер, көлік,": "Almaty’s main air pollution is, in winter, fine dust (PM2.5) and nitrogen dioxide: the heating season, coal-fired CHP plants and private houses, traffic,",
+  "және тау етегіндегі тымық ауа (инверсия) түтінді қала үстінде ұстап қалады. Бекеттердің тек екеуі ғана H2S өлшейді.": "and the still air at the foot of the mountains (an inversion) traps the smoke over the city. Only two stations measure H2S.",
+  "Алматы үшін әзірге жоқ: ластану көздерінің (ЖЭО, өнеркәсіп, көмір жағатын аудандар) тізімі жиналуда. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.": "There is no list of pollution sources for Almaty yet (CHP plants, industry, districts that burn coal) — it is being compiled. The wind rose and “persistently high stations” work."
  }
 }

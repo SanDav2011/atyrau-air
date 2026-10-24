@@ -8,9 +8,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from city_rules import city_rules
 SITE = "https://sandav2011.github.io/atyrau-air/"
 LANGS = ["ru", "en"]
-BUILT = ["about", "index", "karta", "atyrau"]  # аударылған беттер; жаңасын осында қос
+CITY_PAGES = ["atyrau", "almaty", "astana", "aktobe", "aktau", "oral", "shymkent", "karaganda", "pavlodar", "oskemen", "semey", "kostanay", "taraz", "taldykorgan", "kyzylorda", "kokshetau", "turkistan", "zhezkazgan", "petropavl"]  # қала беттері: ортақ сөздік "city" (+ беттің өз сөздігі)
+BUILT = ["about", "index", "karta"] + CITY_PAGES  # аударылған беттер; жаңасын осында қос
 LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")
@@ -18,7 +21,7 @@ CYRILLIC = re.compile("[А-Яа-яЁё]")
 ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский", "['Атырау']", "|| 'Атырау'"]
 ALLOWED_RU = ["Сасық сай"]
 # код жолдары: атау кілттері (аударылмайды)
-IGNORE_LINE = re.compile(r"^\s*const (DN|SN) = |^\s*'[^']+': \{ href: '|row: \d+,\s+name:|test\(name\)|населенный пункт|\.replace\(/\^\(с|=== 'Атырау' \? ''|ownerOf")
+IGNORE_LINE = re.compile(r"^\s*const (DN|SN) = |^\s*'[^']+': \{ href: '|row: \d+,\s+name:|test\(name\)|населенный пункт|\.replace\(/\^\(с|=== 'Атырау' \? ''|ownerOf|includes\(first\)|first === '")
 
 # орыс нұсқасында қала атаулары қазақша қалады (Роман, 2026-10-24)
 CITIES_KK = ["Ақтөбе", "Ақтау", "Қарағанды", "Өскемен", "Қостанай", "Талдықорған", "Қызылорда", "Көкшетау", "Түркістан", "Жезқазған"]
@@ -76,7 +79,9 @@ def add_lang_blocks(html, page, cur):
 def build(page, lang):
     html = (ROOT / (page + ".html")).read_text(encoding="utf-8")
     tr = json.loads((ROOT / "tools" / "i18n" / (lang + ".json")).read_text(encoding="utf-8"))
-    d = {**tr.get("common", {}), **tr.get(page, {})}
+    d = {**tr.get("common", {}), **(tr.get("city", {}) if page in CITY_PAGES else {}), **tr.get(page, {})}
+    if page in CITY_PAGES and page != "atyrau":
+        d.update(city_rules(page, html, lang))  # қалаға тән жолдар (tools/city_rules.py)
     keys = sorted(d, key=len, reverse=True)
     used = set()
     rx = re.compile("|".join(re.escape(k) for k in keys)) if keys else None
