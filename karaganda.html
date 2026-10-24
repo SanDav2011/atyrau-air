@@ -123,6 +123,17 @@
   button:hover { background: rgba(11,111,196,.16); }
   button.on { background: var(--accent); }
   #visits { color: rgba(16,35,63,.6) !important; }
+  /* maphint */
+  .maphelp { position: relative; }
+  .mh-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(0,0,0,.2); background: #fff; color: #0b4f7a; font: 800 22px/1 Onest, system-ui, sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,40,90,.3); }
+  .mh-btn:hover { background: #f1f6fb; }
+  .mh-card { position: absolute; right: 0; top: 50px; width: min(300px, calc(100vw - 150px)); background: #fff; border-radius: 12px; padding: 12px 14px 12px 14px; box-shadow: 0 8px 30px rgba(0,40,90,.35); font-size: 13.5px; line-height: 1.45; color: #10233f; text-align: left; }
+  .mh-card[hidden] { display: none; }
+  .mh-card ul { margin: 6px 0 0; padding-left: 18px; }
+  .mh-card li { margin: 4px 0; }
+  .mh-x { position: absolute; top: 2px; right: 2px; width: 44px; height: 44px; border: 0; background: none; font-size: 24px; color: #5b6b82; cursor: pointer; }
+  .mh-card > b { display: block; padding-right: 36px; }
+  /* /maphint */
 </style>
 </head>
 <body>
@@ -742,6 +753,33 @@ map.on('click', e => {
   complaints.push({ lat: +e.latlng.lat.toFixed(5), lng: +e.latlng.lng.toFixed(5) });
   saveComplaints(); renderAttribution();
 });
+
+/* maphint-js */
+/* ===== Карта көмегі: «?» түймесі; бірінші кіргенде өзі ашылады, жапқаннан кейін қайта шықпайды ===== */
+(() => {
+  const KEY = 'atyrau-air-maphint';
+  const Help = L.Control.extend({ options: { position: 'topright' }, onAdd() {
+    const box = L.DomUtil.create('div', 'maphelp');
+    box.innerHTML = '<button type="button" class="mh-btn" aria-label="Карта қалай жұмыс істейді" aria-expanded="false">?</button>'
+      + '<div class="mh-card" hidden role="dialog" aria-label="Карта қалай жұмыс істейді"><button type="button" class="mh-x" aria-label="Жабу">×</button>'
+      + '<b>Карта қалай жұмыс істейді</b><ul>'
+      + '<li><b style="display:inline">Бекетті басыңыз</b> — өлшемдері мен графигі.</li>'
+      + '<li><b style="display:inline">Картаны басыңыз</b> — иіс сезілген жерді белгілейді (📍); күлгін сызық — сол жерге жел келген жақ.</li>'
+      + '<li><b style="display:inline">Қоңыр сызықтар</b> — бекеттен желге қарсы бағыт: көз осы жақта болуы мүмкін.</li>'
+      + '<li><b style="display:inline">Төменгі жүгіргі</b> — сағатты ауыстыру; ▶ — анимация.</li></ul></div>';
+    L.DomEvent.disableClickPropagation(box); L.DomEvent.disableScrollPropagation(box);
+    const btn = box.querySelector('.mh-btn'), card = box.querySelector('.mh-card');
+    const show = on => { card.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (!on) { try { localStorage.setItem(KEY, '1'); } catch {} } };
+    btn.addEventListener('click', () => show(card.hidden));
+    box.querySelector('.mh-x').addEventListener('click', () => show(false));
+    let seen = false; try { seen = localStorage.getItem(KEY) === '1'; } catch {}
+    if (!seen) show(true);
+    return box;
+  } });
+  new Help().addTo(map);
+})();
+/* /maphint-js */
 
 /* ===== Ықтимал көздер: sources.enc.json (шифрланған) + осы құрылғыдағы түзетулер ===== */
 const CITY = 'karaganda'; // sources.enc.json ішінде әр көздің city өрісі бар
