@@ -15,11 +15,21 @@ LABEL = {"kk": "KK", "ru": "RU", "en": "EN"}
 LOCALE = {"ru": "ru_RU", "en": "en_US"}
 KK_LETTERS = re.compile("[ӘәҒғҚқҢңӨөҰұҮүҺһІі]")
 CYRILLIC = re.compile("[А-Яа-яЁё]")
-ALLOWED_KK = ["ҚР ДСМ"]  # ресми белгілеу, аударылмайды
+ALLOWED_KK = ["ҚР ДСМ", "Қазақша", "Русский"]  # ресми белгілеу, аударылмайды
 
-LANG_CSS = ("/* lang */ header nav .lang { display: inline-flex; margin-left: 4px; } "
-            "header nav .lang a { padding: 12px 4px !important; font-size: 13px !important; opacity: .75; } "
-            "header nav .lang a.cur { opacity: 1; font-weight: 800; } /* /lang */")
+LANG_CSS = ("/* lang */ header nav details.lang { position: relative; margin-left: 4px; } "
+            "header nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; "
+            "display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } "
+            "header nav details.lang summary::-webkit-details-marker { display: none; } "
+            "header nav details.lang summary::after { content: '▾'; font-size: 12px; } "
+            "header nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; "
+            "box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } "
+            "header nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; "
+            "display: flex !important; align-items: center; text-decoration: none; } "
+            "header nav details.lang .menu a::after { display: none !important; } "
+            "header nav details.lang .menu a:hover { background: #e8f1fb; } "
+            "header nav details.lang .menu a.cur { font-weight: 800; } /* /lang */")
+NAME = {"kk": "Қазақша", "ru": "Русский", "en": "English"}
 
 
 def page_url(frm, to, page):
@@ -46,10 +56,12 @@ def add_lang_blocks(html, page, cur):
     hl += '<link rel="alternate" hreflang="x-default" href="%s">\n<!-- /hreflang -->\n' % (
         SITE + ("" if page == "index" else page + ".html"))
     html = re.sub(r'(<link rel="canonical"[^>]*>\n)', lambda m: m.group(1) + hl, html, count=1)
-    links = "".join('<a href="%s" hreflang="%s"%s>%s</a>' % (
-        page_url(cur, lg, page), lg, ' class="cur" aria-current="true"' if lg == cur else "", LABEL[lg])
+    menu = "".join('<a href="%s" hreflang="%s"%s>%s</a>' % (
+        page_url(cur, lg, page), lg, ' class="cur" aria-current="true"' if lg == cur else "", NAME[lg])
         for lg in ["kk"] + LANGS)
-    html = html.replace("</nav>", '  <!-- lang --><span class="lang">%s</span><!-- /lang -->\n  </nav>' % links, 1)
+    det = ('<details class="lang"><summary aria-label="Language">%s</summary><div class="menu">%s</div></details>'
+           '<script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script>') % (LABEL[cur], menu)
+    html = html.replace("</nav>", "  <!-- lang -->%s<!-- /lang -->\n  </nav>" % det, 1)
     html = html.replace("</style>", LANG_CSS + "\n</style>", 1)
     return html
 
@@ -108,6 +120,7 @@ def build(page, lang):
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     bad = False
     for page in BUILT:
         src = ROOT / (page + ".html")

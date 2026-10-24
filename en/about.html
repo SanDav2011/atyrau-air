@@ -69,7 +69,11 @@
   #visits { text-align: center; color: rgba(16,35,63,.6); font-size: 14px; }
 
 
-/* lang */ header nav .lang { display: inline-flex; margin-left: 4px; } header nav .lang a { padding: 12px 4px !important; font-size: 13px !important; opacity: .75; } header nav .lang a.cur { opacity: 1; font-weight: 800; } /* /lang */
+
+
+
+
+/* lang */ header nav details.lang { position: relative; margin-left: 4px; } header nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } header nav details.lang summary::-webkit-details-marker { display: none; } header nav details.lang summary::after { content: '▾'; font-size: 12px; } header nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } header nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } header nav details.lang .menu a::after { display: none !important; } header nav details.lang .menu a:hover { background: #e8f1fb; } header nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
 </style>
 </head>
 <body>
@@ -80,7 +84,7 @@
     <a href="../karta.html">Map</a>
     <a href="../gazdar.html">Gases</a>
     <a href="about.html" class="active" aria-current="page">About</a>
-    <!-- lang --><span class="lang"><a href="../about.html" hreflang="kk">KK</a><a href="../ru/about.html" hreflang="ru">RU</a><a href="../en/about.html" hreflang="en" class="cur" aria-current="true">EN</a></span><!-- /lang -->
+    <!-- lang --><details class="lang"><summary aria-label="Language">EN</summary><div class="menu"><a href="../about.html" hreflang="kk">Қазақша</a><a href="../ru/about.html" hreflang="ru">Русский</a><a href="../en/about.html" hreflang="en" class="cur" aria-current="true">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
   </nav>
   <div class="hero">
     <h1>About the project</h1>
