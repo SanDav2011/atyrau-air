@@ -136,8 +136,8 @@ def build(page, lang):
     return stale, left
 
 
-def main():
-    sys.stdout.reconfigure(encoding="utf-8")
+def run():
+    """Барлық ru/en беттерін жасайды, kk-беттерге ауыстырғыш пен hreflang қосады; аударылмаған жол болса True."""
     bad = False
     for page in BUILT:
         src = ROOT / (page + ".html")
@@ -150,7 +150,12 @@ def main():
             for ln in left:
                 bad = True
                 print("  АУДАРЫЛМАҒАН:", ln)
-    sys.exit(1 if bad else 0)
+    return bad
+
+
+def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.exit(1 if run() else 0)
 
 
 if __name__ == "__main__":

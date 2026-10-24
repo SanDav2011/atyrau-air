@@ -4,9 +4,10 @@
 make_city.py жаңа қала бетін almaty.html-ден жасайды (Алматының SEO блогымен) — содан кейін осыны қайта іске қос.
 OG суреттері: tools/og_images.py → img/og/<бет>.png.
 """
-import html, pathlib, re
+import html, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 SITE = 'https://sandav2011.github.io/atyrau-air/'
 AUTHOR = 'Санжар Давлетбаев'
 SCHOOL = 'Атырау қаласындағы Назарбаев Зияткерлік мектебі (НЗМ)'  # автор — Атырау НЗМ оқушысы
@@ -109,12 +110,25 @@ def main():
     freq = {'index.html': ('daily', '1.0'), 'atyrau.html': ('hourly', '0.9'), 'karta.html': ('daily', '0.8'),
             'gazdar.html': ('monthly', '0.7'), 'about.html': ('monthly', '0.5')}
     urls = sorted(pages, key=lambda n: (n not in freq, n))
-    xml = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    import make_lang  # ru/en нұсқалары: sitemap-қа тіл баламалары (hreflang) қосылады
+    def loc(n, lang):
+        base = SITE + ('' if lang == 'kk' else lang + '/')
+        return base if n == 'index.html' else base + n
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
     for n in urls:
         f, pr = freq.get(n, ('hourly', '0.8'))
-        xml.append(f'  <url><loc>{SITE if n == "index.html" else SITE + n}</loc><changefreq>{f}</changefreq><priority>{pr}</priority></url>')
+        built = n[:-5] in make_lang.BUILT
+        for lang in (['kk'] + make_lang.LANGS if built else ['kk']):
+            alt = ''
+            if built:
+                alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{loc(n, l)}"/>' for l in ['kk'] + make_lang.LANGS)
+                alt += f'<xhtml:link rel="alternate" hreflang="x-default" href="{loc(n, "kk")}"/>'
+            xml.append(f'  <url><loc>{loc(n, lang)}</loc>{alt}<changefreq>{f}</changefreq><priority>{pr}</priority></url>')
     xml.append('</urlset>')
     (ROOT / 'sitemap.xml').write_text('\n'.join(xml) + '\n', encoding='utf-8')
+    # seo.py kk-беттердің SEO блогын қайта жазады (hreflang жойылады) — ru/en және hreflang қайта жасалады
+    make_lang.run()
     print('беттер:', len(pages), '| sitemap.xml жазылды')
     return pages
 
