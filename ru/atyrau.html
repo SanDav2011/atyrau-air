@@ -135,6 +135,7 @@
   .mh-btn:hover { background: #f1f6fb; }
   .mh-card { position: absolute; right: 0; top: 50px; width: min(300px, calc(100vw - 150px)); background: #fff; border-radius: 12px; padding: 12px 14px 12px 14px; box-shadow: 0 8px 30px rgba(0,40,90,.35); font-size: 13.5px; line-height: 1.45; color: #10233f; text-align: left; }
   .mh-card[hidden] { display: none; }
+  .mh-card { overflow-y: auto; overscroll-behavior: contain; } /* биіктігі картадан аспайды (JS fit), артығы айналдырылады */
   .mh-card ul { margin: 6px 0 0; padding-left: 18px; }
   .mh-card li { margin: 4px 0; }
   .mh-x { position: absolute; top: 2px; right: 2px; width: 44px; height: 44px; border: 0; background: none; font-size: 24px; color: #5b6b82; cursor: pointer; }
@@ -805,6 +806,9 @@ map.on('click', e => {
       + '<li><b style="display:inline">Нижний ползунок</b> — смена часа; ▶ — анимация.</li></ul></div>';
     L.DomEvent.disableClickPropagation(box); L.DomEvent.disableScrollPropagation(box);
     const btn = box.querySelector('.mh-btn'), card = box.querySelector('.mh-card');
+    // карточка картаның биіктігінен аспауы керек (телефонда төменгі жағы кесіліп қалатын) — қалғаны айналдырылады
+    const fit = () => { card.style.maxHeight = Math.max(120, map.getSize().y - 50 - 30) + 'px'; };
+    map.on('resize', fit); fit();
     const show = on => { card.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false');
       if (!on) { try { localStorage.setItem(KEY, '1'); } catch {} } };
     btn.addEventListener('click', () => show(card.hidden));
