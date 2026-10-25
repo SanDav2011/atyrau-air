@@ -252,7 +252,7 @@
           <p>If one value stays the same for 6 hours in a row, it is marked as “stuck” (⚠) and excluded from the analysis.</p>
         </details>
         <details class="m"><summary>5. Source identification</summary>
-          There is no list of pollution sources for Oral yet. The wind rose and “persistently high stations” work.</p>
+          The list of sources for Oral is a draft based on OpenStreetMap and open data: positions are approximate, heights are assumptions, emission documents (NDV) have not been added yet. Exact positions and “Source identification” need a password. The result shows only a direction, not a specific culprit.</p>
         </details>
       </div>
     </details>
@@ -530,7 +530,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
-  if (!sources.length) { $('#attr').innerHTML = '<span The list of pollution sources for Oral is not available yet — source identification will be added later. Below — stations and wind.</span>'; return; }
+  if (!sources.length) { $('#attr').innerHTML = '<span Source identification for Oral is unlocked with a password — in the “Possible sources” section below. Below — stations and wind.</span>'; return; }
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Atmosphere (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
@@ -953,7 +953,7 @@ $('#srcReset').onclick = () => {
 
 document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('click', () => { $('#method').open = true; }));
 init().catch(e => { $('#info').textContent = 'Data failed to load: ' + e; });
-// Орал: ластану көздерінің тізімі әлі жоқ — loadSources шақырылмайды
+loadSources().catch(e => { $('#srcList').textContent = 'The list of sources failed to load: ' + e; });
 </script>
 <footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
 <script>

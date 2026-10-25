@@ -252,7 +252,7 @@
           <p>Бір сан 6 сағат қатарынан өзгермесе — «тұрып қалған» деп белгіленеді (⚠) және талдауға кірмейді.</p>
         </details>
         <details class="m"><summary>5. Көздерді анықтау</summary>
-          <p>Орал үшін әзірге жоқ: ластану көздерінің тізімі жиналмаған. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.</p>
+          <p>Орал үшін көздер тізімі — OpenStreetMap пен ашық мәліметтер бойынша жоба: орындары шамамен, биіктіктері болжам, шығарылым құжаттары (НДВ) әлі қосылған жоқ. Нақты орны мен «Көзді анықтау» — құпиясөзбен. Нәтиже — тек бағыт, нақты кінәлі емес.</p>
         </details>
       </div>
     </details>
@@ -530,7 +530,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
-  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">Орал үшін ластану көздерінің тізімі әзірге жоқ — көзді анықтау кейін қосылады. Төменде — бекеттер мен жел.</span>'; return; }
+  if (!sources.length) { $('#attr').innerHTML = '<span class="muted">Орал үшін көзді анықтау құпиясөзбен ашылады — төмендегі «Ықтимал көздер» бөлімінде. Төменде — бекеттер мен жел.</span>'; return; }
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
@@ -953,7 +953,7 @@ $('#srcReset').onclick = () => {
 
 document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('click', () => { $('#method').open = true; }));
 init().catch(e => { $('#info').textContent = 'Деректер жүктелмеді: ' + e; });
-// Орал: ластану көздерінің тізімі әлі жоқ — loadSources шақырылмайды
+loadSources().catch(e => { $('#srcList').textContent = 'Көздер тізімі жүктелмеді: ' + e; });
 </script>
 <footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
 <script>

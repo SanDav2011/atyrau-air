@@ -14,6 +14,7 @@ MIRRORS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.sys
 CITIES = {
     "shymkent": ("Шымкент", 42.3335, 69.6246),
     "pavlodar": ("Павлодар", 52.2785, 76.9531),
+    "oral": ("Орал", 51.23, 51.37),
 }
 DLAT, DLNG = 0.22, 0.34
 
@@ -22,7 +23,7 @@ FILTERS = [
     ("refinery", "МӨЗ / мұнай-химия", ['["industrial"~"refinery|oil|chemical"]', '["man_made"="petroleum_well"]']),
     ("power", "Электр станциясы / ЖЭО", ['["power"="plant"]']),
     ("wastewater", "Тазарту қондырғысы / тоған", ['["man_made"="wastewater_plant"]', '["water"="wastewater"]']),
-    ("landfill", "Қоқыс полигоны", ['["landuse"="landfill"]', '["amenity"="waste_disposal"]']),
+    ("landfill", "Қоқыс полигоны", ['["landuse"="landfill"]']),   # қоқыс жәшіктері (amenity=waste_disposal) алынбайды — Роман
     ("metal", "Металлургия / цемент / құрылыс материалдары", ['["industrial"~"metal|steel|cement|factory|concrete"]', '["man_made"="works"]']),
     ("fuel", "Мұнай базасы / қойма", ['["industrial"~"depot|oil_storage"]', '["man_made"="storage_tank"]']),
     ("quarry", "Карьер", ['["landuse"="quarry"]']),
@@ -91,6 +92,7 @@ def run(key):
         a = round(area_km2(ring), 3) if ring else 0
         if kind == "industrial" and a < 0.3: continue   # ұсақ өнеркәсіп аймақтары — шу
         if kind in ("metal", "fuel") and e["type"] == "node": continue
+        if kind == "landfill" and a < 0.02: continue   # ұсақ нүктелер/жәшіктер — шу, нақты полигон ≥0,02 км²
         uid = (e["type"], e["id"])
         if uid in seen: continue
         seen.add(uid)

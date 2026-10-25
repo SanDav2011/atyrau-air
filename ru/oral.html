@@ -252,7 +252,7 @@
           <p>Если одно и то же число не меняется 6 часов подряд, оно помечается как «застывшее» (⚠) и не участвует в анализе.</p>
         </details>
         <details class="m"><summary>5. Определение источников</summary>
-          Для города Орал списка источников загрязнения пока нет. Роза ветров и «постоянно высокие посты» работают.</p>
+          Список источников для города Орал — черновик по OpenStreetMap и открытым данным: положение примерное, высоты — предположение, документы на выбросы (НДВ) пока не добавлены. Точное положение и «Определение источника» — по паролю. Результат — лишь направление, а не конкретный виновник.</p>
         </details>
       </div>
     </details>
@@ -530,7 +530,7 @@ function renderAttribution() {
   }
   renderRose(win, obs, weather, maxEx);
   renderChronic(win);
-  if (!sources.length) { $('#attr').innerHTML = '<span Список источников загрязнения для города Орал пока нет — определение источника появится позже. Ниже — посты и ветер.</span>'; return; }
+  if (!sources.length) { $('#attr').innerHTML = '<span Определение источника для города Орал открывается по паролю — в разделе «Возможные источники» ниже. Ниже — посты и ветер.</span>'; return; }
   const w = weatherOf(hours[idx]);
   const cls = w && AirModel.stabilityClass(w.speed, w.rad, w.cloud);
   const clsLine = cls ? `<div class="muted">Атмосфера (${hours[idx].slice(11)}:00): ${cls} — ${AirModel.NAMES[cls]}</div>` : '';
@@ -953,7 +953,7 @@ $('#srcReset').onclick = () => {
 
 document.querySelectorAll('a[href="#method"]').forEach(a => a.addEventListener('click', () => { $('#method').open = true; }));
 init().catch(e => { $('#info').textContent = 'Данные не загружены: ' + e; });
-// Орал: ластану көздерінің тізімі әлі жоқ — loadSources шақырылмайды
+loadSources().catch(e => { $('#srcList').textContent = 'Список источников не загружен: ' + e; });
 </script>
 <footer id="visits" hidden style="text-align:center;color:var(--muted);font-size:14px;padding:4px 16px 24px"></footer>
 <script>

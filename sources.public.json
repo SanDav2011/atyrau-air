@@ -206,5 +206,445 @@
   "kind": "high",
   "lat": 52.0695,
   "lng": 76.8834
+ },
+ {
+  "id": "oral_tec",
+  "city": "oral",
+  "name": "Орал ЖЭО (ТЭЦ)",
+  "kind": "high",
+  "lat": 51.219,
+  "lng": 51.4272
+ },
+ {
+  "id": "oral_chimney1",
+  "city": "oral",
+  "name": "Мұржа №1 (OSM)",
+  "kind": "high",
+  "lat": 51.228,
+  "lng": 51.3612
+ },
+ {
+  "id": "oral_chimney2",
+  "city": "oral",
+  "name": "Мұржа №2 (OSM)",
+  "kind": "high",
+  "lat": 51.2055,
+  "lng": 51.3612
+ },
+ {
+  "id": "oral_chimney3",
+  "city": "oral",
+  "name": "Мұржа №3 (OSM)",
+  "kind": "high",
+  "lat": 51.2055,
+  "lng": 51.3612
+ },
+ {
+  "id": "oral_chimney4",
+  "city": "oral",
+  "name": "Мұржа №4 (OSM)",
+  "kind": "high",
+  "lat": 51.192,
+  "lng": 51.3744
+ },
+ {
+  "id": "oral_chimney5",
+  "city": "oral",
+  "name": "Мұржа №5 (OSM)",
+  "kind": "high",
+  "lat": 51.192,
+  "lng": 51.315
+ },
+ {
+  "id": "oral_chimney6",
+  "city": "oral",
+  "name": "Мұржа №6 (OSM)",
+  "kind": "high",
+  "lat": 51.183,
+  "lng": 51.3348
+ },
+ {
+  "id": "oral_chimney7",
+  "city": "oral",
+  "name": "Мұржа №7 (OSM)",
+  "kind": "high",
+  "lat": 51.201,
+  "lng": 51.3018
+ },
+ {
+  "id": "oral_chimney8",
+  "city": "oral",
+  "name": "Мұржа №8 (OSM)",
+  "kind": "high",
+  "lat": 51.1965,
+  "lng": 51.282
+ },
+ {
+  "id": "oral_chimney9",
+  "city": "oral",
+  "name": "Мұржа №9 (OSM)",
+  "kind": "high",
+  "lat": 51.183,
+  "lng": 51.3018
+ },
+ {
+  "id": "oral_chimney10",
+  "city": "oral",
+  "name": "Мұржа №10 (OSM)",
+  "kind": "high",
+  "lat": 51.183,
+  "lng": 51.2952
+ },
+ {
+  "id": "oral_chimney11",
+  "city": "oral",
+  "name": "Мұржа №11 (OSM)",
+  "kind": "high",
+  "lat": 51.1875,
+  "lng": 51.2886
+ },
+ {
+  "id": "oral_chimney12",
+  "city": "oral",
+  "name": "Мұржа №12 (OSM)",
+  "kind": "high",
+  "lat": 51.174,
+  "lng": 51.3084
+ },
+ {
+  "id": "oral_chimney13",
+  "city": "oral",
+  "name": "Мұржа №13 (OSM)",
+  "kind": "high",
+  "lat": 51.174,
+  "lng": 51.2952
+ },
+ {
+  "id": "oral_chimney14",
+  "city": "oral",
+  "name": "Мұржа №14 (OSM)",
+  "kind": "high",
+  "lat": 51.1695,
+  "lng": 51.3018
+ },
+ {
+  "id": "oral_chimney15",
+  "city": "oral",
+  "name": "Мұржа №15 (OSM)",
+  "kind": "high",
+  "lat": 51.273,
+  "lng": 51.4866
+ },
+ {
+  "id": "oral_chimney16",
+  "city": "oral",
+  "name": "Мұржа №16 (OSM)",
+  "kind": "high",
+  "lat": 51.273,
+  "lng": 51.4866
+ },
+ {
+  "id": "oral_chimney17",
+  "city": "oral",
+  "name": "Мұржа №17 (OSM)",
+  "kind": "high",
+  "lat": 51.273,
+  "lng": 51.4866
+ },
+ {
+  "id": "oral_chimney18",
+  "city": "oral",
+  "name": "Мұржа №18 (OSM)",
+  "kind": "high",
+  "lat": 51.147,
+  "lng": 51.3348
+ },
+ {
+  "id": "oral_chimney19",
+  "city": "oral",
+  "name": "Мұржа №19 (OSM)",
+  "kind": "high",
+  "lat": 51.129,
+  "lng": 51.282
+ },
+ {
+  "id": "oral_chimney20",
+  "city": "oral",
+  "name": "Мұржа №20 (OSM)",
+  "kind": "high",
+  "lat": 51.2685,
+  "lng": 51.0972
+ },
+ {
+  "id": "oral_power1",
+  "city": "oral",
+  "name": "Электр станциясы (OSM)",
+  "kind": "high",
+  "lat": 51.183,
+  "lng": 51.2952
+ },
+ {
+  "id": "oral_power2",
+  "city": "oral",
+  "name": "Уральская газотурбинная электростанция",
+  "kind": "high",
+  "lat": 51.273,
+  "lng": 51.48
+ },
+ {
+  "id": "oral_power3",
+  "city": "oral",
+  "name": "Электр станциясы (OSM)",
+  "kind": "high",
+  "lat": 51.192,
+  "lng": 51.2226
+ },
+ {
+  "id": "oral_power4",
+  "city": "oral",
+  "name": "ГТЭС-200 Уральск",
+  "kind": "high",
+  "lat": 51.2685,
+  "lng": 51.0972
+ },
+ {
+  "id": "oral_power5",
+  "city": "oral",
+  "name": "Электр станциясы (OSM)",
+  "kind": "high",
+  "lat": 51.0435,
+  "lng": 51.2358
+ },
+ {
+  "id": "oral_ind1",
+  "city": "oral",
+  "name": "Батыс Қазақстан машина жасау кәсіпорны",
+  "kind": "low",
+  "lat": 51.228,
+  "lng": 51.447
+ },
+ {
+  "id": "oral_ind2",
+  "city": "oral",
+  "name": "Азот Зауыты",
+  "kind": "low",
+  "lat": 51.1965,
+  "lng": 51.315
+ },
+ {
+  "id": "oral_ind3",
+  "city": "oral",
+  "name": "Орал мұнай құбыры басқармасы ZF KazTransOil",
+  "kind": "low",
+  "lat": 51.192,
+  "lng": 51.282
+ },
+ {
+  "id": "oral_ind4",
+  "city": "oral",
+  "name": "Желаево индустриалды аймағы",
+  "kind": "low",
+  "lat": 51.264,
+  "lng": 51.4668
+ },
+ {
+  "id": "oral_ind5",
+  "city": "oral",
+  "name": "Өнеркәсіп аймағы (OSM)",
+  "kind": "low",
+  "lat": 51.2685,
+  "lng": 51.1962
+ },
+ {
+  "id": "oral_ind6",
+  "city": "oral",
+  "name": "птицефабрика Агрофирма Акас",
+  "kind": "low",
+  "lat": 51.3225,
+  "lng": 51.4932
+ },
+ {
+  "id": "oral_ww1",
+  "city": "oral",
+  "name": "Тазарту құрылыстары (OSM)",
+  "kind": "ground",
+  "lat": 51.192,
+  "lng": 51.249
+ },
+ {
+  "id": "oral_ww2",
+  "city": "oral",
+  "name": "Тазарту құрылыстары (OSM)",
+  "kind": "ground",
+  "lat": 51.2235,
+  "lng": 51.4404
+ },
+ {
+  "id": "oral_ww3",
+  "city": "oral",
+  "name": "Тазарту құрылыстары (OSM)",
+  "kind": "ground",
+  "lat": 51.2145,
+  "lng": 51.3744
+ },
+ {
+  "id": "oral_lf1",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.2595,
+  "lng": 51.414
+ },
+ {
+  "id": "oral_lf2",
+  "city": "oral",
+  "name": "Қоқыс Полигон №2",
+  "kind": "ground",
+  "lat": 51.2055,
+  "lng": 51.216
+ },
+ {
+  "id": "oral_lf3",
+  "city": "oral",
+  "name": "Қоқыс Полигон №1",
+  "kind": "ground",
+  "lat": 51.192,
+  "lng": 51.216
+ },
+ {
+  "id": "oral_lf4",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.318,
+  "lng": 51.4998
+ },
+ {
+  "id": "oral_lf5",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.1155,
+  "lng": 51.447
+ },
+ {
+  "id": "oral_lf6",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.363,
+  "lng": 51.4536
+ },
+ {
+  "id": "oral_lf7",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.2235,
+  "lng": 51.6384
+ },
+ {
+  "id": "oral_lf8",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.3855,
+  "lng": 51.5262
+ },
+ {
+  "id": "oral_lf9",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.408,
+  "lng": 51.282
+ },
+ {
+  "id": "oral_lf10",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.0525,
+  "lng": 51.5526
+ },
+ {
+  "id": "oral_lf11",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.273,
+  "lng": 51.0378
+ },
+ {
+  "id": "oral_lf12",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.0165,
+  "lng": 51.3942
+ },
+ {
+  "id": "oral_lf13",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.1335,
+  "lng": 51.0312
+ },
+ {
+  "id": "oral_lf14",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.0345,
+  "lng": 51.5988
+ },
+ {
+  "id": "oral_lf15",
+  "city": "oral",
+  "name": "Қоқыс полигоны (OSM)",
+  "kind": "ground",
+  "lat": 51.012,
+  "lng": 51.1632
+ },
+ {
+  "id": "oral_q1",
+  "city": "oral",
+  "name": "Карьер (OSM)",
+  "kind": "ground",
+  "lat": 51.147,
+  "lng": 51.348
+ },
+ {
+  "id": "oral_q2",
+  "city": "oral",
+  "name": "Карьер (OSM)",
+  "kind": "ground",
+  "lat": 51.3225,
+  "lng": 51.3546
+ },
+ {
+  "id": "oral_q3",
+  "city": "oral",
+  "name": "Карьер (OSM)",
+  "kind": "ground",
+  "lat": 51.192,
+  "lng": 51.2358
+ },
+ {
+  "id": "oral_q4",
+  "city": "oral",
+  "name": "Карьер (OSM)",
+  "kind": "ground",
+  "lat": 51.1245,
+  "lng": 51.348
+ },
+ {
+  "id": "oral_q5",
+  "city": "oral",
+  "name": "Карьер (OSM)",
+  "kind": "ground",
+  "lat": 51.129,
+  "lng": 51.4734
  }
 ]

@@ -90,7 +90,7 @@ for _slug, _name, _ru, (_la, _lo), _pol in NEW:
 
 
 # көздер тізімі бар қалалар (private/sources.json ішінде city = slug) — беттері көздерді жүктейді
-HAS_SOURCES = {"shymkent", "pavlodar"}
+HAS_SOURCES = {"shymkent", "pavlodar", "oral"}
 
 
 def build(slug):
