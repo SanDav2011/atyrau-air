@@ -81,6 +81,35 @@
     "SO2"
    ],
    "temporalCoverage": "2026-10-21/.."
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Where does the data come from?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Air quality — Kazhydromet stations (ecodata.kz), every hour. Wind and meteorology — Open-Meteo."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Which substances do the stations measure?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Substances measured by the stations in this city: CO, H2S, SO2."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How can I tell if pollution exceeds the limit?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The site compares measurements with the maximum single-exposure limit (MPC) from order DSM-70 (02.08.2022) of Kazakhstan; stations give hourly values, so the comparison is approximate. The result is not an official measurement; for health questions, consult a specialist."
+     }
+    }
+   ]
   }
  ]
 }
@@ -184,6 +213,10 @@
   /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
   @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
   h2 { font-weight: 700; }
+  #answer, #faq { margin-bottom: 12px; }
+  #answer h2, #faq h2 { font-size: 18px; margin: 0 0 6px; }
+  #answer p, #faq p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+  #faq h3 { font-size: 15px; font-weight: 700; margin: 14px 0 4px; }
   button { background: rgba(11,111,196,.08); font-weight: 500; transition: background .2s; }
   button:hover { background: rgba(11,111,196,.16); }
   button.on { background: var(--accent); }
@@ -220,6 +253,10 @@
 </header>
 <main>
   <div>
+    <section class="card" id="answer">
+      <h2>What is the air quality in Petropavl now?</h2>
+      <p>This page shows air quality in Petropavl based on hourly measurements from Kazhydromet stations: the current level, the change over recent hours and the wind direction. Wind data helps estimate the likely direction of pollution but does not prove a specific source. Pick the hour with the slider and view it on the map.</p>
+    </section>
     <div id="map"></div>
     <div class="card time">
       <button id="play" title="Play" aria-label="Play through the hours">▶</button>
@@ -316,6 +353,15 @@
         </details>
       </div>
     </details>
+    <section class="card" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="qa"><h3>Where does the data come from?</h3>
+        <p>Air quality — Kazhydromet stations (ecodata.kz), every hour. Wind and meteorology — Open-Meteo.</p></div>
+      <div class="qa"><h3>Which substances do the stations measure?</h3>
+        <p>Substances measured by the stations in this city: CO, H2S, SO2.</p></div>
+      <div class="qa"><h3>How can I tell if pollution exceeds the limit?</h3>
+        <p>The site compares measurements with the maximum single-exposure limit (MPC) from order DSM-70 (02.08.2022) of Kazakhstan; stations give hourly values, so the comparison is approximate. The result is not an official measurement; for health questions, consult a specialist.</p></div>
+    </section>
   </div>
 </main>
 

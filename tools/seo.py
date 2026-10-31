@@ -145,6 +145,9 @@ def main():
         if not meta:
             print('өткізілді:', p.name); continue
         ld = None
+        if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html', 'atyrau.html'):
+            import geo_faq
+            t = geo_faq.apply(t, re.search(r'<h1>(.*?)</h1>', t).group(1), LOC[re.search(r'<h1>(.*?)</h1>', t).group(1)], city_data(p.stem)[1])
         if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html'):
             ld = city_ld(p.name, re.search(r'<h1>(.*?)</h1>', t).group(1), t)
         b = block(p.name, *meta, ld=ld)

@@ -108,4 +108,16 @@ def city_rules(slug, html, lang):
     if m:
         add(m.group(0), f"Определение источника для города {N} открывается по паролю — в разделе «Возможные источники» ниже. Ниже — посты и ветер.",
             f"Source identification for {E} is unlocked with a password — in the “Possible sources” section below. Below — stations and wind.")
+    # GEO/AEO: блок-жауап және FAQ (tools/geo_faq.py)
+    import geo_faq as g
+    m = re.search(r'<section class="card" id="answer">\s*<h2>(\S+) ауа сапасы қандай\?</h2>', html)
+    if m:
+        tr = lambda t: add(t[0], t[1], t[2])
+        tr(g.h2_answer(m.group(1), N, E))
+        tr(g.p_answer(N, E))
+        for t in (g.H2_FAQ, g.Q_SRC, g.A_SRC, g.Q_SUBS, g.Q_LIM, g.A_LIM):
+            tr(t)
+        ms = re.search(r"Бұл қаладағы бекеттер өлшейтін заттар: ([^<]+?)\.</p>", html)
+        if ms:
+            tr(g.a_subs(ms.group(1).split(", ")))
     return out
