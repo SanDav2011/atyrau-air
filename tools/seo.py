@@ -4,10 +4,11 @@
 make_city.py жаңа қала бетін almaty.html-ден жасайды (Алматының SEO блогымен) — содан кейін осыны қайта іске қос.
 OG суреттері: tools/og_images.py → img/og/<бет>.png.
 """
-import html, pathlib, re, sys
+import csv, html, json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / 'collector'))
 SITE = 'https://sandav2011.github.io/atyrau-air/'
 AUTHOR = 'Санжар Давлетбаев'
 SCHOOL = 'Атырау қаласындағы Назарбаев Зияткерлік мектебі (НЗМ)'  # автор — Атырау НЗМ оқушысы
@@ -46,7 +47,8 @@ JSON_LD = f'''<script type="application/ld+json">
 {{"@context": "https://schema.org", "@type": "WebSite", "name": "Қазақстан ауасы", "url": "{SITE}",
  "description": "Қазақстан қалаларындағы ауа сапасы картасы және талдау",
  "author": {{"@type": "Person", "name": "{AUTHOR}", "affiliation": {{"@type": "EducationalOrganization", "name": "{SCHOOL}"}}}},
- "keywords": "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, Атырау НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы", "inLanguage": "kk"}}
+ "keywords": "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, Атырау НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы", "inLanguage": ["kk", "ru", "en"],
+ "publisher": {{"@type": "Organization", "name": "Қазақстан ауасы", "url": "{SITE}"}}}}
 </script>'''
 
 
@@ -62,7 +64,45 @@ def city_meta(text):
             f'{city} — ауа сапасы', f'{LOC[city]} ауа сапасының нақты көрсеткіштері: бекеттер мен жел.')
 
 
-def block(page, title, desc, og_t, og_d):
+def city_data(slug):
+    """Қала бетінің дерек параметрлері: орталық нүкте (collect.CITIES), бекет файлындағы заттар мен алғашқы өлшем күні."""
+    import collect  # collector/collect.py: CITIES (тек stdlib импорттары)
+    c = collect.CITIES[slug]
+    d = c['dir'] / 'stations.csv'
+    subs, first = set(), ''
+    if d.exists():
+        with open(d, encoding='utf-8-sig', newline='') as f:
+            for r in csv.DictReader(f):
+                subs.add(r['pollutant'])
+                if not first or r['measured_at'] < first:
+                    first = r['measured_at']
+    subs.discard('PMtot')
+    return c['wind'], sorted(subs), first[:10]
+
+
+def city_ld(page, city):
+    """Қала бетіне құрылымдық дерек: BreadcrumbList + Place + Dataset (лицензия көрсетілмейді — деректер Қазгидромет пен Open-Meteo-ның)."""
+    slug = page[:-5]
+    (lat, lng), subs, first = city_data(slug)
+    url = SITE + page
+    place = {'@type': 'Place', 'name': city, 'geo': {'@type': 'GeoCoordinates', 'latitude': lat, 'longitude': lng},
+             'address': {'@type': 'PostalAddress', 'addressLocality': city, 'addressCountry': 'KZ'}}
+    ds = {'@type': 'Dataset', 'name': f'{city} — ауа сапасы деректері', 'url': url, 'inLanguage': 'kk',
+          'description': f'{city} қаласындағы Қазгидромет бекеттерінің сағаттық ауа сапасы өлшемдері және Open-Meteo жел деректері.',
+          'creator': {'@type': 'Person', 'name': AUTHOR},
+          'isBasedOn': ['http://ecodata.kz:3838/app_dem_visual/', 'https://open-meteo.com/'],
+          'spatialCoverage': place, 'variableMeasured': subs}
+    if first:
+        ds['temporalCoverage'] = first + '/..'
+    graph = [{'@type': 'BreadcrumbList', 'itemListElement': [
+                 {'@type': 'ListItem', 'position': 1, 'name': 'Қазақстан ауасы', 'item': SITE},
+                 {'@type': 'ListItem', 'position': 2, 'name': city, 'item': url}]},
+             ds]
+    body = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False, indent=1)
+    return '<script type="application/ld+json">\n' + body + '\n</script>'
+
+
+def block(page, title, desc, og_t, og_d, ld=None):
     url = SITE if page == 'index.html' else SITE + page
     img = f'{SITE}img/og/{page[:-5]}.png'
     e = lambda s: html.escape(s, quote=True)
@@ -87,6 +127,8 @@ def block(page, title, desc, og_t, og_d):
     ]
     if page in ('index.html', 'about.html'):  # сайт туралы құрылымдық дерек (автор, НЗМ)
         lines.append(JSON_LD)
+    if ld:
+        lines.append(ld)
     lines.append('<!-- /SEO -->')
     return '\n'.join(lines)
 
@@ -98,7 +140,10 @@ def main():
         meta = FIXED.get(p.name) or city_meta(t)
         if not meta:
             print('өткізілді:', p.name); continue
-        b = block(p.name, *meta)
+        ld = None
+        if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html'):
+            ld = city_ld(p.name, re.search(r'<h1>(.*?)</h1>', t).group(1))
+        b = block(p.name, *meta, ld=ld)
         if '<!-- SEO (tools/seo.py) -->' in t:
             t = re.sub(r'<!-- SEO \(tools/seo\.py\) -->.*?<!-- /SEO -->', lambda _: b, t, count=1, flags=re.S)
         else:

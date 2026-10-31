@@ -76,12 +76,46 @@ def add_lang_blocks(html, page, cur):
     return html
 
 
+LD_TEXT = {
+    "ru": ("{c} — данные о качестве воздуха", "Почасовые измерения постов Казгидромета ({c}) и данные о ветре Open-Meteo."),
+    "en": ("{c} — air quality data", "Hourly air quality measurements from Kazhydromet stations in {c} and Open-Meteo wind data."),
+}
+
+
+def localize_ld(ld_src, html, d, lang, page):
+    """Қала бетінің JSON-LD-ін ru/en тіліне келтіреді: атау, сипаттама, қала аты, url — осы тілдің бетіне."""
+    graph = json.loads(re.search(r"\{.*\}", ld_src, re.S).group(0))
+    city = re.search(r"<h1>(.*?)</h1>", html).group(1)
+    site = d.get("Қазақстан ауасы", "Қазақстан ауасы")
+    url = "%s%s/%s.html" % (SITE, lang, page)
+    for node in graph["@graph"]:
+        if node["@type"] == "BreadcrumbList":
+            a, b = node["itemListElement"]
+            a["name"], a["item"] = site, "%s%s/" % (SITE, lang)
+            b["name"], b["item"] = city, url
+        elif node["@type"] == "Dataset":
+            node["name"] = LD_TEXT[lang][0].format(c=city)
+            node["description"] = LD_TEXT[lang][1].format(c=city)
+            node["url"], node["inLanguage"] = url, lang
+            k = '"name": "%s"' % node["creator"]["name"]  # ключ словаря — фрагмент JSON-LD главной
+            node["creator"]["name"] = d.get(k, k)[len('"name": "'):-1]
+            node["spatialCoverage"]["name"] = city
+            node["spatialCoverage"]["address"]["addressLocality"] = city
+    body = json.dumps(graph, ensure_ascii=False, indent=1)
+    return '<script type="application/ld+json">\n' + body + '\n</script>'
+
+
 def build(page, lang):
     html = (ROOT / (page + ".html")).read_text(encoding="utf-8")
     tr = json.loads((ROOT / "tools" / "i18n" / (lang + ".json")).read_text(encoding="utf-8"))
     d = {**tr.get("common", {}), **(tr.get("city", {}) if page in CITY_PAGES else {}), **tr.get(page, {})}
     if page in CITY_PAGES and page != "atyrau":
         d.update(city_rules(page, html, lang))  # қалаға тән жолдар (tools/city_rules.py)
+    # JSON-LD (@graph қала беті): сөздікпен жартылай аударылмауы үшін алып қойып, соңында тілге қарай қайта жинаймыз
+    ld_m = re.search(r'<script type="application/ld\+json">\s*\{\s*"@context": "https://schema.org",\s*"@graph".*?</script>', html, re.S)
+    if ld_m:
+        ld_src = ld_m.group(0)
+        html = html.replace(ld_src, "@@LDGRAPH@@", 1)
     keys = sorted(d, key=len, reverse=True)
     used = set()
     rx = re.compile("|".join(re.escape(k) for k in keys)) if keys else None
@@ -94,6 +128,8 @@ def build(page, lang):
     # Бет ішіндегі кілттер: тек осы беттің сөздігіндегілер ескіргенін білдіреді
     stale = [k for k in tr.get(page, {}) if k not in used]
 
+    if ld_m:
+        html = html.replace("@@LDGRAPH@@", localize_ld(ld_src, html, d, lang, page), 1)
     html = html.replace('<html lang="kk">', '<html lang="%s">' % lang)
     html = html.replace(SITE + "img/og/", SITE + "img/og/%s/" % lang)  # ru/en OG-суреттері (tools/og_images.py)
     html = html.replace('content="kk_KZ"', 'content="%s"' % LOCALE[lang])
