@@ -80,7 +80,7 @@ def city_data(slug):
     return c['wind'], sorted(subs), first[:10]
 
 
-def city_ld(page, city):
+def city_ld(page, city, text=''):
     """Қала бетіне құрылымдық дерек: BreadcrumbList + Place + Dataset (лицензия көрсетілмейді — деректер Қазгидромет пен Open-Meteo-ның)."""
     slug = page[:-5]
     (lat, lng), subs, first = city_data(slug)
@@ -98,6 +98,10 @@ def city_ld(page, city):
                  {'@type': 'ListItem', 'position': 1, 'name': 'Қазақстан ауасы', 'item': SITE},
                  {'@type': 'ListItem', 'position': 2, 'name': city, 'item': url}]},
              ds]
+    import make_lang
+    faq = make_lang.faq_node(text)  # бетте көрінетін FAQ болса — FAQPage
+    if faq:
+        graph.append(faq)
     body = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False, indent=1)
     return '<script type="application/ld+json">\n' + body + '\n</script>'
 
@@ -142,7 +146,7 @@ def main():
             print('өткізілді:', p.name); continue
         ld = None
         if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html'):
-            ld = city_ld(p.name, re.search(r'<h1>(.*?)</h1>', t).group(1))
+            ld = city_ld(p.name, re.search(r'<h1>(.*?)</h1>', t).group(1), t)
         b = block(p.name, *meta, ld=ld)
         if '<!-- SEO (tools/seo.py) -->' in t:
             t = re.sub(r'<!-- SEO \(tools/seo\.py\) -->.*?<!-- /SEO -->', lambda _: b, t, count=1, flags=re.S)

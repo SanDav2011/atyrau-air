@@ -87,6 +87,43 @@
     "SO2"
    ],
    "temporalCoverage": "2025-12-19/.."
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Where does the H₂S smell in Atyrau come from?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The site does not prove a specific source. It shows where the wind was blowing from during hours when H₂S rose at the stations, and calculates the likely direction with a Gaussian plume model. The smell may be linked to industrial facilities in the wind direction, but this is an assumption."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Where does the data come from?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Air quality — Kazhydromet stations (ecodata.kz), every hour. Wind and meteorology — Open-Meteo."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is H₂S dangerous?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "At high concentrations hydrogen sulfide is toxic. The site compares measurements with the maximum single-exposure limit (MPC) from order DSM-70 (02.08.2022) of Kazakhstan; stations give hourly values, so the comparison is approximate. For health questions, consult a specialist."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How accurate is the model?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The model is simplified: it uses Pasquill–Gifford classes and Briggs formulas, and source heights are approximate. So the result cannot be treated as an official measurement."
+     }
+    }
+   ]
   }
  ]
 }
@@ -190,6 +227,10 @@
   /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
   @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
   h2 { font-weight: 700; }
+  #answer, #faq { margin-bottom: 12px; }
+  #answer h2, #faq h2 { font-size: 18px; margin: 0 0 6px; }
+  #answer p, #faq p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+  #faq h3 { font-size: 15px; font-weight: 700; margin: 14px 0 4px; }
   button { background: rgba(11,111,196,.08); font-weight: 500; transition: background .2s; }
   button:hover { background: rgba(11,111,196,.16); }
   button.on { background: var(--accent); }
@@ -226,6 +267,10 @@
 </header>
 <main>
   <div>
+    <section class="card" id="answer">
+      <h2>Where does the hydrogen sulfide (H₂S) smell in Atyrau come from?</h2>
+      <p>This page compares hourly measurements from Kazhydromet stations with the wind direction and shows the likely direction of the smell. The result is an estimate: it does not prove a specific source and is based on a Gaussian plume model and wind data. Pick the hour with the slider and view it on the map.</p>
+    </section>
     <div id="map"></div>
     <div class="card time">
       <button id="play" title="Play" aria-label="Play through the hours">▶</button>
@@ -350,6 +395,17 @@
         </details>
       </div>
     </details>
+    <section class="card" id="faq">
+      <h2>Frequently asked questions</h2>
+      <div class="qa"><h3>Where does the H₂S smell in Atyrau come from?</h3>
+        <p>The site does not prove a specific source. It shows where the wind was blowing from during hours when H₂S rose at the stations, and calculates the likely direction with a Gaussian plume model. The smell may be linked to industrial facilities in the wind direction, but this is an assumption.</p></div>
+      <div class="qa"><h3>Where does the data come from?</h3>
+        <p>Air quality — Kazhydromet stations (ecodata.kz), every hour. Wind and meteorology — Open-Meteo.</p></div>
+      <div class="qa"><h3>Is H₂S dangerous?</h3>
+        <p>At high concentrations hydrogen sulfide is toxic. The site compares measurements with the maximum single-exposure limit (MPC) from order DSM-70 (02.08.2022) of Kazakhstan; stations give hourly values, so the comparison is approximate. For health questions, consult a specialist.</p></div>
+      <div class="qa"><h3>How accurate is the model?</h3>
+        <p>The model is simplified: it uses Pasquill–Gifford classes and Briggs formulas, and source heights are approximate. So the result cannot be treated as an official measurement.</p></div>
+    </section>
   </div>
 </main>
 

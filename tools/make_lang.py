@@ -82,6 +82,18 @@ LD_TEXT = {
 }
 
 
+def faq_node(html):
+    """Беттегі көрінетін FAQ (<section id="faq">, h3 = сұрақ, p = жауап) -> schema.org FAQPage; жоқ болса None."""
+    m = re.search(r'<section class="card" id="faq">(.*?)</section>', html, re.S)
+    if not m:
+        return None
+    qa = re.findall(r'<h3>(.*?)</h3>\s*<p>(.*?)</p>', m.group(1), re.S)
+    if not qa:
+        return None
+    return {"@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q.strip(), "acceptedAnswer": {"@type": "Answer", "text": " ".join(a.split())}} for q, a in qa]}
+
+
 def localize_ld(ld_src, html, d, lang, page):
     """Қала бетінің JSON-LD-ін ru/en тіліне келтіреді: атау, сипаттама, қала аты, url — осы тілдің бетіне."""
     graph = json.loads(re.search(r"\{.*\}", ld_src, re.S).group(0))
@@ -101,6 +113,10 @@ def localize_ld(ld_src, html, d, lang, page):
             node["creator"]["name"] = d.get(k, k)[len('"name": "'):-1]
             node["spatialCoverage"]["name"] = city
             node["spatialCoverage"]["address"]["addressLocality"] = city
+    graph["@graph"] = [n for n in graph["@graph"] if n["@type"] != "FAQPage"]
+    faq = faq_node(html)  # html — аударылған бет: сұрақ-жауап сол тілде
+    if faq:
+        graph["@graph"].append(faq)
     body = json.dumps(graph, ensure_ascii=False, indent=1)
     return '<script type="application/ld+json">\n' + body + '\n</script>'
 
