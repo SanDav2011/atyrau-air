@@ -41,8 +41,8 @@
  "index": {
   "Таза ауа — Қазақстан ауасы | Ауа сапасы картасы": "Clean air — Kazakhstan Air | Air quality map",
   "Таза ауа — Қазақстан ауасы": "Clean air — Kazakhstan Air",
-  "Қазақстан қалаларында ауа сапасын бақылау: ластаушы заттар деңгейі, уақыт бойынша өзгерісі және жел бағытына қарай иіс көзінің ықтимал бағыты.": "Air quality monitoring in the cities of Kazakhstan: pollutant levels, how they change over time and the likely direction of an odour source based on the wind.",
-  "Қазақстан қалаларындағы ауа сапасы: нақты бекеттер, жел және Гаусс моделі.": "Air quality in the cities of Kazakhstan: real monitoring stations, wind and a Gaussian model.",
+  "Қазақстан қалаларында ауа сапасын бақылау: күкіртсутек (H₂S), PM2,5 және басқа заттар деңгейі, уақыт бойынша өзгерісі және жел бағытына қарай иіс көзінің ықтимал бағыты.": "Air quality monitoring in the cities of Kazakhstan: levels of hydrogen sulfide (H₂S), PM2.5 and other substances, how they change over time and the likely direction of an odour source based on the wind.",
+  "Қазақстан қалаларындағы ауа сапасы: күкіртсутек (H₂S), нақты бекеттер, жел және Гаусс моделі.": "Air quality in the cities of Kazakhstan: hydrogen sulfide (H₂S), real monitoring stations, wind and a Gaussian model.",
   "Басты бет — қайта бастау": "Home — start again",
   "Таза ауа — қалалар тізімін ашу": "Clean air — open the list of cities",
   ">Таза ауа</button>": ">Clean air</button>",
