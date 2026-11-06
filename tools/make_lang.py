@@ -154,8 +154,8 @@ def build(page, lang):
     html = re.sub(r'(<link rel="canonical" href=|<meta property="og:url" content=)"%s' % re.escape(SITE),
                   lambda m: '%s"%s%s/' % (m.group(1), SITE, lang), html)
     # ресурстар жолы: data/, img/, model.js т.б. — бір деңгей жоғары
-    html = re.sub(r"""(['"])(data/|img/|sources[\w.]*\.json|(?:model|scene|mol)\.js)""", r"\1../\2", html)
-    html = re.sub(r'(<script src=")((?:model|scene|mol)\.js)', r"\1../\2", html)
+    html = re.sub(r"""(['"])(data/|img/|sources[\w.]*\.json|(?:model|scene|mol|share)\.js)""", r"\1../\2", html)
+    html = re.sub(r'(<script src=")((?:model|scene|mol|share)\.js)', r"\1../\2", html)
     # JS ішіндегі бет сілтемелері (href: 'atyrau.html'): аударылмаған бет — қазақша түпнұсқаға
     html = re.sub(r"href: '(\w+)\.html'", lambda m: m.group(0) if m.group(1) in BUILT else "href: '../%s.html'" % m.group(1), html)
 

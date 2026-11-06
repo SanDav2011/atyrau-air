@@ -115,7 +115,8 @@
   "Атырау — H₂S иісі қайдан келеді?": "Atyrau — where does the H₂S smell come from?",
   "Атыраудағы күкіртсутек иісінің ықтимал көздерін нақты бекеттер мен жел бойынша талдау.": "Analysis of possible sources of the hydrogen sulfide smell in Atyrau based on real stations and wind.",
   "<h1>Атырау</h1>": "<h1>Atyrau</h1>",
-  "<p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>": "<p>Where does the smell come from? Hydrogen sulfide (H2S) stations and wind — hour by hour</p>"
+  "<p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>": "<p>Where does the smell come from? Hydrogen sulfide (H2S) stations and wind — hour by hour</p>",
+  "const SHARE_CITY = 'Атырау'": "const SHARE_CITY = 'Atyrau'"
  },
  "city": {
   "Атырау — H₂S иісі қайдан келеді? | Қазақстан ауасы": "Atyrau — where does the H₂S smell come from? | Kazakhstan Air",
@@ -322,7 +323,25 @@
   "🔒 Нақты орны, биіктігі және «Көзді анықтау» — құпиясөзбен.": "🔒 Exact positions, heights and “Source identification” are available with a password.",
   "Алматыда ауаның басты ластануы — қыста ұсақ шаң (PM2,5) мен азот диоксиді: жылу беру маусымы, көмір жағатын ЖЭО мен жеке үйлер, көлік,": "Almaty’s main air pollution is, in winter, fine dust (PM2.5) and nitrogen dioxide: the heating season, coal-fired CHP plants and private houses, traffic,",
   "және тау етегіндегі тымық ауа (инверсия) түтінді қала үстінде ұстап қалады. Бекеттердің тек екеуі ғана H2S өлшейді.": "and the still air at the foot of the mountains (an inversion) traps the smoke over the city. Only two stations measure H2S.",
-  "Алматы үшін әзірге жоқ: ластану көздерінің (ЖЭО, өнеркәсіп, көмір жағатын аудандар) тізімі жиналуда. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.": "There is no list of pollution sources for Almaty yet (CHP plants, industry, districts that burn coal) — it is being compiled. The wind rose and “persistently high stations” work."
+  "Алматы үшін әзірге жоқ: ластану көздерінің (ЖЭО, өнеркәсіп, көмір жағатын аудандар) тізімі жиналуда. Жел розасы мен «тұрақты жоғары бекеттер» жұмыс істейді.": "There is no list of pollution sources for Almaty yet (CHP plants, industry, districts that burn coal) — it is being compiled. The wind rose and “persistently high stations” work.",
+  "`Шағым нүктесі ${c.k + 1}`": "`Complaint point ${c.k + 1}`",
+  "`Бөлісілген нүкте ${c.k + 1}`": "`Shared point ${c.k + 1}`",
+  "'Нүкте ' + (c.k + 1)": "'Point ' + (c.k + 1)",
+  "aria-label=\"Нүктені өшіру\"": "aria-label=\"Delete point\"",
+  "Менікіне қосу": "Add to mine",
+  "Картамен бөлісу": "Share the map",
+  "🔗 Бөлісу": "🔗 Share",
+  "Сілтемені ашқан адам картаны дәл осылай көреді: зат, сағат, талдау кезеңі.": "Whoever opens the link sees the map exactly like this: substance, hour, analysis period.",
+  "Шағым нүктелерін қосу": "Include complaint points",
+  "⚠ Нүктеңіз сілтемеде көрінеді — оны алған адам сол жердің орнын көреді.": "⚠ Your point will be in the link — the recipient will see where it is.",
+  "aria-label=\"Сілтеме\"": "aria-label=\"Link\"",
+  "📤 Жіберу": "📤 Send",
+  "📋 Көшіру": "📋 Copy",
+  "`Сілтемедегі сағат (${hourText(link.hour)}) деректе жоқ — ең жақын сағат көрсетілді.`": "`The hour from the link (${hourText(link.hour)}) is not in the data — the nearest hour is shown.`",
+  "'✓ Сілтеме көшірілді'": "'✓ Link copied'",
+  "'Сілтемені белгілеп, өзіңіз көшіріңіз'": "'Select the link and copy it manually'",
+  "📍 Шағым нүктелерін қосу": "📍 Include complaint points",
+  "<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с": "<b>${label}</b> · ${hourText(h)}<br>Wind ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} m/s"
  },
  "gazdar": {
   "Газдар туралы — H₂S, SO₂, NO₂, PM2,5 | Қазақстан ауасы": "About gases — H₂S, SO₂, NO₂, PM2.5 | Kazakhstan Air",
