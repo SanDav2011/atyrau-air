@@ -126,6 +126,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="model.js"></script>
+<script src="share.js"></script>
 <style>
   :root { --bg: #f4f5f7; --card: #fff; --text: #1d2330; --muted: #6b7280; --line: #e3e6ea; --accent: #0f766e; }
   * { box-sizing: border-box; }
@@ -141,6 +142,8 @@
   .time { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
   .time input { flex: 1; }
   .time input { min-width: 0; }
+  /* тар экранда жүгіргі жеке жолға шығады (бөлісу батырмасы қосылғаннан кейін тым қысқа болды) */
+  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time input[type=range] { order: 3; flex-basis: 100%; } .time > select#hourSel { flex: 1; } }
   .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
   button { border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; background: var(--bg); color: var(--text); }
   button.on { background: var(--accent); color: #fff; }
@@ -265,6 +268,22 @@
       <button id="play" title="Ойнату" aria-label="Сағаттарды ойнату">▶</button>
       <input type="range" id="slider" min="0" max="0" value="0" aria-label="Сағатты таңдау">
       <select id="hourSel" aria-label="Сағатты тізімнен таңдау"></select>
+      <button id="shareBtn" title="Картамен бөлісу" aria-label="Картамен бөлісу" aria-expanded="false" aria-controls="sharePanel" style="white-space:nowrap">🔗 Бөлісу</button>
+    </div>
+    <div id="linkNote" hidden style="margin-top:6px;background:#fff8e6;color:#92400e;border-radius:10px;padding:6px 10px;font-size:14px"></div>
+    <div class="card" id="sharePanel" hidden style="margin-top:12px">
+      <h2 style="margin:0 0 4px">🔗 Картамен бөлісу</h2>
+      <div class="muted">Сілтемені ашқан адам картаны дәл осылай көреді: зат, сағат, талдау кезеңі.</div>
+      <div id="shareCmpRow" hidden><label style="display:flex;gap:6px;align-items:center;margin-top:8px;cursor:pointer">
+        <input type="checkbox" id="shareCmp"> <span>📍 Шағым нүктелерін қосу (<span id="shareCmpN">0</span>)</span>
+      </label></div>
+      <div id="shareCmpWarn" hidden style="margin-top:4px;color:#b45309;font-size:14px">⚠ Нүктеңіз сілтемеде көрінеді — оны алған адам сол жердің орнын көреді.</div>
+      <input id="shareUrl" readonly aria-label="Сілтеме" style="width:100%;margin-top:8px;font:inherit;font-size:13px;padding:6px;box-sizing:border-box">
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <button id="shareGo" hidden>📤 Жіберу</button>
+        <button id="shareCopy">📋 Көшіру</button>
+        <span class="muted" id="shareMsg" aria-live="polite"></span>
+      </div>
     </div>
     <div class="card" style="margin-top:12px">
       <h2>Зат</h2>
@@ -504,11 +523,21 @@ async function init() {
     for (let t = new Date(sorted[0] + ':00:00Z'), end = new Date(sorted.at(-1) + ':00:00Z'); t <= end; t = new Date(+t + 36e5)) hours.push(hourKey(t));
   }
   const pols = [...new Set(Object.values(stations).flatMap(s => Object.keys(s.data)))].sort((a, b) => (b === 'NO2') - (a === 'NO2') || a.localeCompare(b));
+  // бөлісілген сілтемеден ашу (#p=…&t=…&w=…&c=…): тек бетте бар зат пен сағат қабылданады
+  const link = AirShare.read(location.hash);
+  if (link.pollutant && pols.includes(link.pollutant)) pollutant = link.pollutant;
   $('#pollutants').innerHTML = pols.map(p => `<button data-p="${p}" class="${p === pollutant ? 'on' : ''}">${p}</button>`).join('');
   $('#pollutants').onclick = e => { const p = e.target.dataset.p; if (!p) return; pollutant = p;
     document.querySelectorAll('#pollutants button').forEach(b => b.classList.toggle('on', b.dataset.p === p)); render(); renderChart(); };
   $('#slider').max = Math.max(0, hours.length - 1);
   idx = hours.length - 1;
+  const near = AirShare.nearestHour(hours, link.hour);
+  if (near) {
+    idx = near.index;
+    if (!near.exact) { $('#linkNote').textContent = `Сілтемедегі сағат (${hourText(link.hour)}) деректе жоқ — ең жақын сағат көрсетілді.`; $('#linkNote').hidden = false; }
+  }
+  if (link.window) $('#attrWindow').value = link.window;
+  if (link.points) { sharedPts = link.points; $('#roseChk').checked = true; } // нүктелер сызықтармен бірге көрінеді (баптау сақталмайды)
   $('#slider').value = idx;
   // сағаттар тізімі: жаңасы жоғарыда, күн бойынша топталған
   const byDay = {};
@@ -526,6 +555,7 @@ async function init() {
 function render() {
   const h = hours[idx];
   $('#hourSel').value = idx;
+  updShare(); // бөлісу терезесі ашық болса — сілтеме жаңа сағатпен/затпен
   layer.clearLayers();
   const lim = LIMITS[pollutant];
   const list = [];
@@ -834,16 +864,19 @@ function distToSegmentKm(p, a, b) {
 // көздің нүктелері: тоған болса — оның торындағы барлық нүкте
 const sourcePoints = s => Array.isArray(s.area) && s.area.length ? AirModel.areaPoints(s.area) : [[s.lat, s.lng]];
 
+let sharedPts = []; // сілтемемен келген нүктелер — localStorage-қа жазылмайды, тек көрсетіледі
 function renderComplaints(win, weather) {
   const hoursW = win.filter(h => weather[h]);
-  $('#complaints').innerHTML = complaints.map((c, i) => {
-    L.marker([c.lat, c.lng], { icon: L.divIcon({ className: 'src-icon', html: '📍', iconSize: [24, 24], iconAnchor: [12, 22] }), bubblingMouseEvents: false })
-      .bindTooltip(`Шағым нүктесі ${i + 1}`).addTo(roseLayer);
+  const all = [...complaints.map((c, k) => ({ ...c, k, own: true })), ...sharedPts.map((c, k) => ({ ...c, k, own: false }))];
+  $('#complaints').innerHTML = all.map(c => {
+    const label = c.own ? `Шағым нүктесі ${c.k + 1}` : `Бөлісілген нүкте ${c.k + 1}`, pin = c.own ? '📍' : '📌';
+    L.marker([c.lat, c.lng], { icon: L.divIcon({ className: 'src-icon', html: pin, iconSize: [24, 24], iconAnchor: [12, 22] }), bubblingMouseEvents: false })
+      .bindTooltip(label).addTo(roseLayer);
     const hits = {};
     for (const h of hoursW) {
       const end = upwindPoint(c, weather[h].dir, LINE_KM);
       windArrow(c, weather[h].dir, LINE_KM, { color: '#7c3aed', weight: 3, opacity: 0.7, dashArray: '6 4' },
-        `<b>Шағым нүктесі ${i + 1}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с`);
+        `<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с`);
       for (const s of forPollutant()) {
         if (s.lat == null) continue;
         const d = Math.min(...sourcePoints(s).map(pt => distToSegmentKm(pt, [c.lat, c.lng], end)));
@@ -853,18 +886,64 @@ function renderComplaints(win, weather) {
       }
     }
     const list = Object.values(hits).filter(r => r.min <= 3).sort((a, b) => b.n - a.n || a.min - b.min);
-    return `<div class="src-item">📍 <b>Нүкте ${i + 1}</b> <span class="meta">${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}</span>
-      <button data-cdel="${i}" style="float:right;padding:2px 8px">✕</button>
+    return `<div class="src-item">${pin} <b>${c.own ? 'Нүкте ' + (c.k + 1) : label}</b> <span class="meta">${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}</span>
+      <button ${c.own ? 'data-cdel' : 'data-sdel'}="${c.k}" aria-label="Нүктені өшіру" style="float:right;padding:2px 8px">✕</button>
+      ${c.own ? '' : `<button data-sadd="${c.k}" style="float:right;padding:2px 8px;margin-right:4px">Менікіне қосу</button>`}
       <div class="meta">${!hoursW.length ? 'Бұл кезеңде жел дерегі жоқ.' : list.length
         ? list.map(r => r.n ? `${KIND_ICON[r.s.kind] || '📍'} ${esc(r.s.name)} — сызық үстінен өтеді (${r.n} сағ. / ${hoursW.length})`
                             : `${KIND_ICON[r.s.kind] || '📍'} ${esc(r.s.name)} — ${r.min.toFixed(1)} км жерден өтеді`).join('<br>')
         : `Сызықтар тізімдегі көздердің ешқайсысына 3 км-ден жақын өтпейді.`}</div></div>`;
-  }).join('') + (complaints.length ? `<button id="cClear" style="margin-top:6px">Барлық нүктені өшіру</button>` : '');
+  }).join('') + (all.length ? `<button id="cClear" style="margin-top:6px">Барлық нүктені өшіру</button>` : '');
+  updShare();
 }
 $('#complaints').addEventListener('click', e => {
-  if (e.target.dataset.cdel != null) { complaints.splice(+e.target.dataset.cdel, 1); saveComplaints(); renderAttribution(); }
-  if (e.target.id === 'cClear') { complaints = []; saveComplaints(); renderAttribution(); }
+  const d = e.target.dataset;
+  if (d.cdel != null) { complaints.splice(+d.cdel, 1); saveComplaints(); renderAttribution(); }
+  if (d.sdel != null) { sharedPts.splice(+d.sdel, 1); renderAttribution(); }
+  if (d.sadd != null) { complaints.push(...sharedPts.splice(+d.sadd, 1)); saveComplaints(); renderAttribution(); }
+  if (e.target.id === 'cClear') { complaints = []; sharedPts = []; saveComplaints(); renderAttribution(); }
 });
+
+/* ===== Картамен бөлісу (share.js): сілтеме картаның қазіргі күйімен; нүкте — тек тұрғын белгісін қойса ===== */
+const SHARE_CITY = $('h1').textContent.trim(); // қала аты беттің тақырыбынан
+const sharePts = () => [...complaints, ...sharedPts];
+function shareLink() {
+  const hash = AirShare.build({ pollutant, hour: hours[idx], window: +$('#attrWindow').value,
+    points: $('#shareCmp').checked ? sharePts() : [] });
+  return location.origin + location.pathname + hash;
+}
+function updShare() {
+  if ($('#sharePanel').hidden) return;
+  const n = Math.min(sharePts().length, AirShare.MAX_PTS);
+  $('#shareCmpRow').hidden = !n;
+  if (!n) $('#shareCmp').checked = false;
+  $('#shareCmpN').textContent = n;
+  $('#shareCmpWarn').hidden = !$('#shareCmp').checked;
+  $('#shareUrl').value = shareLink();
+}
+$('#shareBtn').onclick = () => {
+  const open = $('#sharePanel').hidden;
+  $('#sharePanel').hidden = !open;
+  $('#shareBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+  $('#shareMsg').textContent = '';
+  updShare();
+};
+$('#shareCmp').onchange = updShare;
+$('#attrWindow').addEventListener('change', updShare);
+$('#shareGo').hidden = !navigator.share;
+$('#shareGo').onclick = () => {
+  updShare();
+  const h = hours[idx];
+  navigator.share({ title: 'Қазақстан ауасы', text: `${SHARE_CITY} · ${pollutant} · ${h ? hourText(h) : ''} — Қазақстан ауасы`, url: $('#shareUrl').value })
+    .catch(() => {}); // адам терезені жапса — қате емес
+};
+$('#shareCopy').onclick = async () => {
+  updShare();
+  let ok = false;
+  try { await navigator.clipboard.writeText($('#shareUrl').value); ok = true; }
+  catch { $('#shareUrl').select(); try { ok = document.execCommand('copy'); } catch {} }
+  $('#shareMsg').textContent = ok ? '✓ Сілтеме көшірілді' : 'Сілтемені белгілеп, өзіңіз көшіріңіз';
+};
 map.on('click', e => {
   if (!$('#roseChk').checked || editing) return; // көздерді түзету кезінде басу — көзді қою үшін
   complaints.push({ lat: +e.latlng.lat.toFixed(5), lng: +e.latlng.lng.toFixed(5) });
