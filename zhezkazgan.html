@@ -145,8 +145,13 @@
   .time input { flex: 1; }
   .time input { min-width: 0; }
   /* тар экранда жүгіргі жеке жолға шығады (бөлісу батырмасы қосылғаннан кейін тым қысқа болды) */
-  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time input[type=range] { order: 3; flex-basis: 100%; } .time > select#hourSel { flex: 1; } }
+  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time input[type=range] { order: 3; flex-basis: 100%; } .time > input[type=date] { flex: 1; order: 1; } .time > select#hourSel { order: 1; } .time > #lastBtn, .time > #shareBtn { order: 2; } }
   .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
+  .time select#hourSel { min-width: 84px; }
+  .time input[type=date] { flex: none; min-height: 36px; font: inherit; font-variant-numeric: tabular-nums; }
+  .time .step { font-weight: 700; min-width: 36px; }
+  .time button:disabled { opacity: .4; cursor: default; }
+  #timeNote { margin-top: 6px; font-size: 14px; }
   button { border: 0; border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; background: var(--bg); color: var(--text); }
   button.on { background: var(--accent); color: #fff; }
   .wind { display: flex; gap: 12px; align-items: center; }
@@ -268,10 +273,15 @@
     <div id="map"></div>
     <div class="card time">
       <button id="play" title="Ойнату" aria-label="Сағаттарды ойнату">▶</button>
-      <input type="range" id="slider" min="0" max="0" value="0" aria-label="Сағатты таңдау">
-      <select id="hourSel" aria-label="Сағатты тізімнен таңдау"></select>
+      <button id="prevH" class="step" title="Алдыңғы сағат" aria-label="Алдыңғы сағат">‹</button>
+      <input type="date" id="dateSel" aria-label="Күнді таңдау">
+      <select id="hourSel" aria-label="Сағатты таңдау"></select>
+      <button id="nextH" class="step" title="Келесі сағат" aria-label="Келесі сағат">›</button>
+      <button id="lastBtn" title="Соңғы қолжетімді сағат" style="white-space:nowrap">Соңғы дерек</button>
+      <input type="range" id="slider" min="0" max="0" value="0" aria-label="Сағатты жүгірткімен таңдау">
       <button id="shareBtn" title="Картамен бөлісу" aria-label="Картамен бөлісу" aria-expanded="false" aria-controls="sharePanel" style="white-space:nowrap">🔗 Бөлісу</button>
     </div>
+    <div id="timeNote" class="muted" aria-live="polite"></div>
     <div id="linkNote" hidden style="margin-top:6px;background:#fff8e6;color:#92400e;border-radius:10px;padding:6px 10px;font-size:14px"></div>
     <div class="card" id="sharePanel" hidden style="margin-top:12px">
       <h2 style="margin:0 0 4px">🔗 Картамен бөлісу</h2>
@@ -430,7 +440,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const loadCsv = url => new Promise((ok, err) => Papa.parse(url + '?t=' + Date.now(), { download: true, header: true, skipEmptyLines: true, complete: r => ok(r.data), error: err }));
 
-let stations = {}, hours = [], wind = {}, kgmTemps = {}, pollutant = 'H2S', idx = 0, chart, selected = null, timer = null;
+let stations = {}, hours = [], wind = {}, kgmTemps = {}, pollutant = 'H2S', idx = 0, chart, selected = null, timer = null, hourDay = null;
 const map = L.map('map').setView([47.7992, 67.7158], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
 const layer = L.layerGroup().addTo(map);
@@ -541,11 +551,8 @@ async function init() {
   if (link.window) $('#attrWindow').value = link.window;
   if (link.points) { sharedPts = link.points; $('#roseChk').checked = true; } // нүктелер сызықтармен бірге көрінеді (баптау сақталмайды)
   $('#slider').value = idx;
-  // сағаттар тізімі: жаңасы жоғарыда, күн бойынша топталған
-  const byDay = {};
-  hours.forEach((h, i) => (byDay[h.slice(0, 10)] ??= []).push(i));
-  $('#hourSel').innerHTML = Object.keys(byDay).reverse().map(d => `<optgroup label="${d.slice(8, 10)}.${d.slice(5, 7)}.${d.slice(0, 4)}">` +
-    byDay[d].reverse().map(i => `<option value="${i}">${hours[i].slice(8, 10)}.${hours[i].slice(5, 7)} ${hours[i].slice(11)}:00</option>`).join('') + '</optgroup>').join('');
+  // күн таңдау: тек деректегі күндер; сағат тізімін render() таңдалған күнге толтырады
+  $('#dateSel').min = hours[0]?.slice(0, 10) ?? ''; $('#dateSel').max = hours.at(-1)?.slice(0, 10) ?? '';
   $('#info').innerHTML = `Бекеттер: ${Object.keys(stations).length}. Сағаттар: ${hours.length} (${hours[0] ?? '—'}:00 – ${hours.at(-1) ?? '—'}:00).<br>
     Дереккөз: <a href="http://ecodata.kz:3838/app_dem_visual/" target="_blank">Қазгидромет картасы</a>, жел — Open-Meteo.
     Жезқазған бойынша жинау 2026-10-21 басталды.`;
@@ -556,7 +563,16 @@ async function init() {
 
 function render() {
   const h = hours[idx];
+  if (h) {
+    const day = h.slice(0, 10);
+    if ($('#dateSel').value !== day) $('#dateSel').value = day;
+    if (hourDay !== day) { hourDay = day; $('#hourSel').innerHTML = hours.map((x, i) => x.slice(0, 10) === day ? `<option value="${i}">${x.slice(11, 13)}:00</option>` : '').join(''); }
+    const full = x => `${x.slice(8, 10)}.${x.slice(5, 7)}.${x.slice(0, 4)} ${x.slice(11, 13)}:00`;
+    $('#timeNote').textContent = `Таңдалған: ${full(h)} · UTC+5 · соңғы дерек: ${full(hours.at(-1))}`;
+  }
   $('#hourSel').value = idx;
+  const atEnd = idx >= hours.length - 1;
+  $('#prevH').disabled = idx <= 0; $('#nextH').disabled = atEnd; $('#lastBtn').disabled = atEnd;
   updShare(); // бөлісу терезесі ашық болса — сілтеме жаңа сағатпен/затпен
   layer.clearLayers();
   const lim = LIMITS[pollutant];
@@ -614,7 +630,24 @@ function renderChart() {
 }
 
 $('#slider').oninput = e => { idx = +e.target.value; render(); };
-$('#hourSel').onchange = e => { if (timer) $('#play').click(); idx = +e.target.value; $('#slider').value = idx; render(); };
+const goHour = i => { if (timer) $('#play').click(); idx = i; $('#slider').value = idx; $('#linkNote').hidden = true; render(); };
+$('#hourSel').onchange = e => goHour(+e.target.value);
+$('#prevH').onclick = () => goHour(Math.max(0, idx - 1));
+$('#nextH').onclick = () => goHour(Math.min(hours.length - 1, idx + 1));
+$('#lastBtn').onclick = () => goHour(hours.length - 1);
+$('#dateSel').onchange = e => {
+  const d = e.target.value; if (!d || !hours.length) return;
+  const hh = +hours[idx].slice(11, 13);
+  const day = hours.map((x, i) => [x, i]).filter(([x]) => x.slice(0, 10) === d);
+  if (day.length) { // сол сағат болса — сол, болмаса күннің ең жақын сағаты
+    goHour(day.reduce((b, [x, i]) => Math.abs(+x.slice(11, 13) - hh) < Math.abs(+hours[b].slice(11, 13) - hh) ? i : b, day[0][1])); return;
+  }
+  // бұл күні дерек жоқ — ең жақын күн
+  const t = Date.parse(d); let best = 0;
+  hours.forEach((x, i) => { if (Math.abs(Date.parse(x.slice(0, 10)) - t) < Math.abs(Date.parse(hours[best].slice(0, 10)) - t)) best = i; });
+  goHour(best);
+  $('#linkNote').textContent = 'Бұл күні дерек жоқ — ең жақын сағат көрсетілді.'; $('#linkNote').hidden = false;
+};
 $('#play').onclick = () => {
   if (timer) { clearInterval(timer); timer = null; $('#play').textContent = '▶'; return; }
   $('#play').textContent = '⏸';

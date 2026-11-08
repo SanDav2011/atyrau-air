@@ -119,6 +119,16 @@
   "const SHARE_CITY = 'Атырау'": "const SHARE_CITY = 'Atyrau'"
  },
  "city": {
+  "aria-label=\"Сағатты жүгірткімен таңдау\"": "aria-label=\"Choose hour with the slider\"",
+  "aria-label=\"Күнді таңдау\"": "aria-label=\"Choose date\"",
+  "title=\"Алдыңғы сағат\"": "title=\"Previous hour\"",
+  "aria-label=\"Алдыңғы сағат\"": "aria-label=\"Previous hour\"",
+  "title=\"Келесі сағат\"": "title=\"Next hour\"",
+  "aria-label=\"Келесі сағат\"": "aria-label=\"Next hour\"",
+  "title=\"Соңғы қолжетімді сағат\"": "title=\"Latest available hour\"",
+  ">Соңғы дерек</button>": ">Latest data</button>",
+  "`Таңдалған: ${full(h)} · UTC+5 · соңғы дерек: ${full(hours.at(-1))}`": "`Selected: ${full(h)} · UTC+5 · latest data: ${full(hours.at(-1))}`",
+  "'Бұл күні дерек жоқ — ең жақын сағат көрсетілді.'": "'No data for this date — the nearest hour is shown.'",
   "Атырау — H₂S иісі қайдан келеді? | Қазақстан ауасы": "Atyrau — where does the H₂S smell come from? | Kazakhstan Air",
   "Атыраудағы күкіртсутек (H₂S) иісінің көзін анықтау. Бекеттер деректері, жел бағыты және Гаусс шлейфі моделі бойынша талдау.": "Finding the source of the hydrogen sulfide (H₂S) smell in Atyrau. Analysis based on station data, wind direction and a Gaussian plume model.",
   "Атырау — H₂S иісі қайдан келеді?": "Atyrau — where does the H₂S smell come from?",
