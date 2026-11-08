@@ -154,13 +154,14 @@
   .time input { flex: 1; }
   .time input { min-width: 0; }
   /* тар экранда жүгіргі жеке жолға шығады (бөлісу батырмасы қосылғаннан кейін тым қысқа болды) */
-  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time .tl { order: 3; flex-basis: 100%; } .time > input[type=date] { flex: 1; order: 1; } .time > select#hourSel { order: 1; } .time > #lastBtn, .time > #shareBtn { order: 2; } }
+  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time .tl { order: 3; flex-basis: 100%; } .time > input[type=date] { flex: 1; order: 1; } .time > select#hourSel { order: 1; } .time > #lastBtn, .time > #shareBtn { order: 2; } #shareBtn { font-size: 0; } #shareBtn::before { content: '🔗'; font-size: 16px; } }
   .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
   .time select#hourSel { min-width: 84px; }
-  .tl { flex: 1 1 100%; order: 3; min-width: 0; position: relative; padding-bottom: 16px; } /* жүгіргі жеке жолда: 0–23 сағат және белгілер */
+  .tl { flex: 1 1 100%; order: 3; min-width: 0; position: relative; padding-bottom: 20px; } /* жүгіргі жеке жолда: 0–23 сағат және белгілер */
   .tl input { width: 100%; margin: 0; }
-  .tl .ticks span { position: absolute; bottom: 0; left: calc(8px + (100% - 16px) * var(--f)); transform: translateX(-50%); font-size: 11px; line-height: 1; opacity: .7; font-variant-numeric: tabular-nums; }
-  .tl .ticks span::before { content: ''; position: absolute; left: 50%; top: -6px; height: 4px; border-left: 1px solid currentColor; }
+  .tl .ticks button { position: absolute; bottom: -4px; left: calc(8px + (100% - 16px) * var(--f)); transform: translateX(-50%); min-width: 40px; min-height: 28px; padding: 8px 4px 2px; background: none; font-size: 12px; font-weight: 600; line-height: 1; opacity: .8; font-variant-numeric: tabular-nums; }
+  .tl .ticks button:hover, .tl .ticks button:focus-visible { opacity: 1; background: var(--bg); }
+  .tl .ticks button::before { content: ''; position: absolute; left: 50%; top: 2px; height: 4px; border-left: 1px solid currentColor; }
   .time input[type=date] { flex: none; min-height: 36px; font: inherit; font-variant-numeric: tabular-nums; }
   .time .step { font-weight: 700; min-width: 36px; }
   .time button:disabled { opacity: .4; cursor: default; }
@@ -293,7 +294,7 @@
       <button id="lastBtn" title="Последний доступный час" style="white-space:nowrap">Последние данные</button>
       <div class="tl">
         <input type="range" id="slider" min="0" max="23" value="0" aria-label="Выбор часа ползунком">
-        <div class="ticks" aria-hidden="true"><span style="--f:0">0</span><span style="--f:.2609">06</span><span style="--f:.5217">12</span><span style="--f:.7826">18</span></div>
+        <div class="ticks"><button type="button" style="--f:0" data-h="0" aria-label="00:00">0</button><button type="button" style="--f:.2609" data-h="6" aria-label="06:00">06</button><button type="button" style="--f:.5217" data-h="12" aria-label="12:00">12</button><button type="button" style="--f:.7826" data-h="18" aria-label="18:00">18</button></div>
       </div>
       <button id="shareBtn" title="Поделиться картой" aria-label="Поделиться картой" aria-expanded="false" aria-controls="sharePanel" style="white-space:nowrap">🔗 Поделиться</button>
     </div>
@@ -680,6 +681,7 @@ $('#slider').oninput = e => { // жүгіргі — таңдалған күнн�
   hours.forEach((x, i) => { if (x.slice(0, 10) === day && (x.slice(0, 10) !== hours[best].slice(0, 10) || Math.abs(+x.slice(11, 13) - v) < Math.abs(+hours[best].slice(11, 13) - v))) best = i; });
   idx = best; render();
 };
+document.querySelectorAll('.ticks button').forEach(b => b.onclick = () => { if (timer) $('#play').click(); $('#slider').value = b.dataset.h; $('#slider').dispatchEvent(new Event('input')); });
 const goHour = i => { if (timer) $('#play').click(); idx = i; $('#linkNote').hidden = true; render(); };
 $('#hourSel').onchange = e => goHour(+e.target.value);
 $('#prevH').onclick = () => goHour(Math.max(0, idx - 1));
