@@ -136,13 +136,17 @@
   @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); } } /* minmax: ішіндегі кең элемент бағанды экраннан шығармасын */
   .card { background: var(--card); border-radius: 10px; padding: 12px; }
   #map { height: 62vh; min-height: 360px; border-radius: 10px; }
-  .time { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+  .time { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
   .time input { flex: 1; }
   .time input { min-width: 0; }
   /* тар экранда жүгіргі жеке жолға шығады (бөлісу батырмасы қосылғаннан кейін тым қысқа болды) */
-  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time input[type=range] { order: 3; flex-basis: 100%; } .time > input[type=date] { flex: 1; order: 1; } .time > select#hourSel { order: 1; } .time > #lastBtn, .time > #shareBtn { order: 2; } }
+  @media (max-width: 480px) { .time { flex-wrap: wrap; } .time .tl { order: 3; flex-basis: 100%; } .time > input[type=date] { flex: 1; order: 1; } .time > select#hourSel { order: 1; } .time > #lastBtn, .time > #shareBtn { order: 2; } }
   .time select { flex: none; min-width: 125px; min-height: 36px; font: inherit; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
   .time select#hourSel { min-width: 84px; }
+  .tl { flex: 1 1 100%; order: 3; min-width: 0; position: relative; padding-bottom: 16px; } /* жүгіргі жеке жолда: 0–23 сағат және белгілер */
+  .tl input { width: 100%; margin: 0; }
+  .tl .ticks span { position: absolute; bottom: 0; left: calc(8px + (100% - 16px) * var(--f)); transform: translateX(-50%); font-size: 11px; line-height: 1; opacity: .7; font-variant-numeric: tabular-nums; }
+  .tl .ticks span::before { content: ''; position: absolute; left: 50%; top: -6px; height: 4px; border-left: 1px solid currentColor; }
   .time input[type=date] { flex: none; min-height: 36px; font: inherit; font-variant-numeric: tabular-nums; }
   .time .step { font-weight: 700; min-width: 36px; }
   .time button:disabled { opacity: .4; cursor: default; }
@@ -273,7 +277,10 @@
       <select id="hourSel" aria-label="Выбор часа"></select>
       <button id="nextH" class="step" title="Следующий час" aria-label="Следующий час">›</button>
       <button id="lastBtn" title="Последний доступный час" style="white-space:nowrap">Последние данные</button>
-      <input type="range" id="slider" min="0" max="0" value="0" aria-label="Выбор часа ползунком">
+      <div class="tl">
+        <input type="range" id="slider" min="0" max="23" value="0" aria-label="Выбор часа ползунком">
+        <div class="ticks" aria-hidden="true"><span style="--f:0">0</span><span style="--f:.2609">06</span><span style="--f:.5217">12</span><span style="--f:.7826">18</span></div>
+      </div>
       <button id="shareBtn" title="Поделиться картой" aria-label="Поделиться картой" aria-expanded="false" aria-controls="sharePanel" style="white-space:nowrap">🔗 Поделиться</button>
     </div>
     <div id="timeNote" class="muted" aria-live="polite"></div>
@@ -536,7 +543,6 @@ async function init() {
   $('#pollutants').innerHTML = pols.map(p => `<button data-p="${p}" class="${p === pollutant ? 'on' : ''}">${p}</button>`).join('');
   $('#pollutants').onclick = e => { const p = e.target.dataset.p; if (!p) return; pollutant = p;
     document.querySelectorAll('#pollutants button').forEach(b => b.classList.toggle('on', b.dataset.p === p)); render(); renderChart(); };
-  $('#slider').max = Math.max(0, hours.length - 1);
   idx = hours.length - 1;
   const near = AirShare.nearestHour(hours, link.hour);
   if (near) {
@@ -545,7 +551,6 @@ async function init() {
   }
   if (link.window) $('#attrWindow').value = link.window;
   if (link.points) { sharedPts = link.points; $('#roseChk').checked = true; } // нүктелер сызықтармен бірге көрінеді (баптау сақталмайды)
-  $('#slider').value = idx;
   // күн таңдау: тек деректегі күндер; сағат тізімін render() таңдалған күнге толтырады
   $('#dateSel').min = hours[0]?.slice(0, 10) ?? ''; $('#dateSel').max = hours.at(-1)?.slice(0, 10) ?? '';
   $('#info').innerHTML = `Посты: ${Object.keys(stations).length}. Часов: ${hours.length} (${hours[0] ?? '—'}:00 – ${hours.at(-1) ?? '—'}:00).<br>
@@ -566,6 +571,7 @@ function render() {
     $('#timeNote').textContent = `Выбрано: ${full(h)} · UTC+5 · последние данные: ${full(hours.at(-1))}`;
   }
   $('#hourSel').value = idx;
+  if (h) $('#slider').value = +h.slice(11, 13);
   const atEnd = idx >= hours.length - 1;
   $('#prevH').disabled = idx <= 0; $('#nextH').disabled = atEnd; $('#lastBtn').disabled = atEnd;
   updShare(); // бөлісу терезесі ашық болса — сілтеме жаңа сағатпен/затпен
@@ -624,8 +630,13 @@ function renderChart() {
   });
 }
 
-$('#slider').oninput = e => { idx = +e.target.value; render(); };
-const goHour = i => { if (timer) $('#play').click(); idx = i; $('#slider').value = idx; $('#linkNote').hidden = true; render(); };
+$('#slider').oninput = e => { // жүгіргі — таңдалған күннің 0–23 сағаты; дерек жоқ сағатта — күннің ең жақын сағаты
+  const v = +e.target.value, day = hours[idx].slice(0, 10);
+  let best = idx;
+  hours.forEach((x, i) => { if (x.slice(0, 10) === day && (x.slice(0, 10) !== hours[best].slice(0, 10) || Math.abs(+x.slice(11, 13) - v) < Math.abs(+hours[best].slice(11, 13) - v))) best = i; });
+  idx = best; render();
+};
+const goHour = i => { if (timer) $('#play').click(); idx = i; $('#linkNote').hidden = true; render(); };
 $('#hourSel').onchange = e => goHour(+e.target.value);
 $('#prevH').onclick = () => goHour(Math.max(0, idx - 1));
 $('#nextH').onclick = () => goHour(Math.min(hours.length - 1, idx + 1));
@@ -647,7 +658,7 @@ $('#play').onclick = () => {
   if (timer) { clearInterval(timer); timer = null; $('#play').textContent = '▶'; return; }
   $('#play').textContent = '⏸';
   if (idx >= hours.length - 1) idx = 0;
-  timer = setInterval(() => { idx = (idx + 1) % hours.length; $('#slider').value = idx; render(); if (idx === hours.length - 1) $('#play').click(); }, 700);
+  timer = setInterval(() => { idx = (idx + 1) % hours.length; render(); if (idx === hours.length - 1) $('#play').click(); }, 700);
 };
 
 /* ===== Көзді анықтау: модель (model.js) + бекеттердегі фоннан артық мән ===== */
