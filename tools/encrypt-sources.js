@@ -23,11 +23,11 @@ const ITER = 600000;
   fs.writeFileSync(path.join(root, 'sources.enc.json'), JSON.stringify(out) + '\n');
   console.log('sources.enc.json дайын:', payload.length, 'байт шифрланды');
 
-  // Ашық картаға — тек атауы, түрі және ШАМАМЕН орны (≈500 м торға дөңгелектенген). Мұржа топтары (pollutants пен stack бар) кірмейді.
+  // Ашық картаға — тек атауы, түрі және ШАМАМЕН орны (≈500 м торға дөңгелектенген). `private_only` белгісі бар көздер (АНПЗ мұржа топтары) кірмейді. ЖЭО (pollutants + stack) ашық картада қалады.
   const STEP_LAT = 0.0045, STEP_LNG = 0.0066; // ≈ 500 м (Атырау ендігінде)
   const snap = (v, step) => +(Math.round(v / step) * step).toFixed(4);
   const pub = JSON.parse(read('private/sources.json'))
-    .filter(s => s.lat != null && !(s.pollutants && s.stack))
+    .filter(s => s.lat != null && !s.private_only)
     .map(s => ({ id: s.id, city: s.city, name: s.name, kind: s.kind, lat: snap(s.lat, STEP_LAT), lng: snap(s.lng, STEP_LNG) }));
   fs.writeFileSync(path.join(root, 'sources.public.json'), JSON.stringify(pub, null, 1) + '\n');
   console.log('sources.public.json дайын:', pub.length, 'көз, орны шамамен');
