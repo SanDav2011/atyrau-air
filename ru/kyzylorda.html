@@ -178,7 +178,7 @@
                font: 14px/1.45 system-ui, sans-serif; font-style: normal; font-weight: 400; padding: 10px 12px; border-radius: 8px; white-space: pre-line; text-align: left; }
   .info .tip a { color: #7dd3fc; }
   .info:hover .tip, .info:focus .tip, .info:focus-within .tip { display: block; }
-  @media (max-width: 860px) { .info .tip { position: fixed; left: 16px; right: 16px; top: auto; bottom: 16px; width: auto; } }
+  @media (max-width: 860px) { .info .tip { width: min(300px, calc(100vw - 32px)); } } /* fixed тек backdrop-filter карточкасына байланып, экраннан тыс кететін; енді белгішенің астында + экран шетіне сыйғызылады */
   /* әдістеме: әр бөлім жеке ашылады */
   details.m { border-top: 1px solid rgba(0,0,0,.08); }
   details.m summary { cursor: pointer; font-weight: 600; padding: 9px 0; min-height: 24px; list-style-position: inside; }
@@ -225,6 +225,7 @@
   @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
   main { padding-top: 8px; }
   .card { border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .card:hover, .card:focus-within { position: relative; z-index: 5; } /* backdrop-filter әр карточканы бөлек қабат қылады: i-кеңес келесі карточканың астында қалмасын */
   #map { border-radius: 16px; box-shadow: 0 10px 34px rgba(0,40,90,.22); }
   /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
   @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
@@ -1200,6 +1201,22 @@ const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() :
 getJson('../data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
   .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт просмотрели ' + d.count + ' раз'; el.hidden = false; })
   .catch(() => {});
+</script>
+<script>
+// i-кеңес экран шетінен шықпасын (сол/оң шетке сыйғызу)
+(function () {
+  function fit(e) {
+    var i = e.target.closest && e.target.closest('.info'); if (!i) return;
+    var t = i.querySelector('.tip'); if (!t) return;
+    t.style.transform = '';
+    requestAnimationFrame(function () {
+      var r = t.getBoundingClientRect(), dx = 0, vw = document.documentElement.clientWidth;
+      if (r.left < 8) dx = 8 - r.left; else if (r.right > vw - 8) dx = vw - 8 - r.right;
+      if (dx) t.style.transform = 'translateX(' + dx + 'px)';
+    });
+  }
+  document.addEventListener('mouseover', fit); document.addEventListener('focusin', fit);
+})();
 </script>
 <!-- Келушілер статистикасы: GoatCounter (cookie жоқ, жеке дерек жиналмайды) -->
 <script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
