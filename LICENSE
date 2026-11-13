@@ -2,14 +2,15 @@ Copyright (c) 2026 "Qazaqstan auasy" project (Қазақстан ауасы). Al
 
 Site: https://sandav2011.github.io/atyrau-air/
 
-PERMITTED
-- Viewing the site and sharing links to it.
-- Copying and sharing the site's materials (texts, charts, maps) provided you
-  clearly credit the source: the project name "Qazaqstan auasy" and a link.
+LICENSES
+1. Site content (texts, charts, maps and other materials published on the site)
+   is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0):
+   https://creativecommons.org/licenses/by/4.0/
+   Credit: project name "Qazaqstan auasy" and a link to the site.
 
-NOT PERMITTED without prior written permission of the copyright holder
-- Copying without credit, or presenting the project's materials as your own.
-- Commercial use of the site's source code and model (model.js and related files).
+2. Source code and model (model.js and related files) are NOT covered by CC BY.
+   All rights reserved. Use requires prior written permission of the copyright
+   holder.
 
 Permission requests: Instagram @roman.d.m
 
