@@ -37462,3 +37462,27 @@ error: Please commit or stash them.
 2026-11-17 12:10:34 [turkistan] погода: часов в файле 877
 2026-11-17 12:10:35 [zhezkazgan] погода: часов в файле 877
 2026-11-17 12:10:35 [petropavl] погода: часов в файле 877
+2026-11-17 12:10:48 github: отправлено
+2026-11-17 13:10:04 посты: повтор после ошибки Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-17 13:10:06 ОШИБКА посты: Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-17 13:10:36 ОШИБКА казгидромет: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:11:06 ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:11:36 [almaty] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:12:06 [astana] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:12:36 [aktobe] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:13:06 [aktau] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:13:36 [oral] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:14:06 [zko-east] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:14:36 [shymkent] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:15:06 [karaganda] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:15:36 [pavlodar] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:16:06 [oskemen] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:16:36 [semey] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:17:06 [kostanay] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-17 13:17:37 [taraz] погода: часов в файле 878
+2026-11-17 13:17:38 [taldykorgan] погода: часов в файле 878
+2026-11-17 13:17:39 [kyzylorda] погода: часов в файле 878
+2026-11-17 13:17:39 [kokshetau] погода: часов в файле 878
+2026-11-17 13:17:40 [turkistan] погода: часов в файле 878
+2026-11-17 13:17:41 [zhezkazgan] погода: часов в файле 878
+2026-11-17 13:17:42 [petropavl] погода: часов в файле 878
