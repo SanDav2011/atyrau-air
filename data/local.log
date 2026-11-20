@@ -41194,3 +41194,87 @@ error: Please commit or stash them.
 2026-11-20 07:10:56 [turkistan] погода: часов в файле 944
 2026-11-20 07:10:56 [zhezkazgan] погода: часов в файле 944
 2026-11-20 07:10:57 [petropavl] погода: часов в файле 944
+2026-11-20 07:11:06 github: отправлено
+2026-11-20 08:39:27 посты: повтор после ошибки Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-20 08:39:28 ОШИБКА посты: Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-20 08:39:58 ОШИБКА казгидромет: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:40:28 ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:40:58 [almaty] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:41:28 [astana] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:41:58 [aktobe] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:42:28 [aktau] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:42:58 [oral] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:43:28 [zko-east] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:43:58 [shymkent] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:44:28 [karaganda] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:44:58 [pavlodar] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:45:28 [oskemen] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:45:58 [semey] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:46:28 [kostanay] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:46:59 [taraz] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:47:29 [taldykorgan] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:47:59 [kyzylorda] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:48:29 [kokshetau] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 08:48:59 [turkistan] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:10:03 посты: повтор после ошибки Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-20 09:10:04 ОШИБКА посты: Error('Page.goto: net::ERR_NAME_NOT_RESOLVED at http://ecodata.kz:3838/app_dem_visual/\nCall log:\n  - navigating to "http://ecodata.kz:3838/app_dem_visual/", waiting until "load"\n')
+2026-11-20 09:10:34 ОШИБКА казгидромет: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:11:04 ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:11:34 [almaty] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:12:04 [astana] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:12:34 [aktobe] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:13:04 [aktau] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:13:34 [oral] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:14:04 [zko-east] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:14:34 [shymkent] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:15:04 [karaganda] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:15:34 [pavlodar] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:16:04 [oskemen] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:16:34 [semey] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:17:04 [kostanay] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:17:34 [taraz] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:18:04 [taldykorgan] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:18:34 [kyzylorda] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:19:04 [kokshetau] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 09:19:34 [turkistan] ОШИБКА погода: URLError(gaierror(11001, 'getaddrinfo failed'))
+2026-11-20 10:10:15 посты: 30 точек, новых строк 117
+2026-11-20 10:10:15 [almaty] посты: 17 точек, новых строк 51
+2026-11-20 10:10:15 [astana] посты: 10 точек, новых строк 34
+2026-11-20 10:10:15 [aktobe] посты: 6 точек, новых строк 15
+2026-11-20 10:10:15 [aktau] посты: 4 точек, новых строк 6
+2026-11-20 10:10:15 [oral] посты: 4 точек, новых строк 12
+2026-11-20 10:10:15 [zko-east] посты: 2 точек, новых строк 7
+2026-11-20 10:10:15 [shymkent] посты: 6 точек, новых строк 5
+2026-11-20 10:10:15 [karaganda] посты: 7 точек, новых строк 13
+2026-11-20 10:10:15 [pavlodar] посты: 7 точек, новых строк 25
+2026-11-20 10:10:15 [oskemen] посты: 39 точек, новых строк 208
+2026-11-20 10:10:15 [semey] посты: 4 точек, новых строк 9
+2026-11-20 10:10:15 [kostanay] посты: 4 точек, новых строк 8
+2026-11-20 10:10:15 [taraz] посты: 5 точек, новых строк 3
+2026-11-20 10:10:15 [taldykorgan] посты: 2 точек, новых строк 7
+2026-11-20 10:10:15 [kyzylorda] посты: 3 точек, новых строк 9
+2026-11-20 10:10:15 [kokshetau] посты: 2 точек, новых строк 11
+2026-11-20 10:10:15 [turkistan] посты: 2 точек, новых строк 5
+2026-11-20 10:10:15 [zhezkazgan] посты: 12 точек, новых строк 43
+2026-11-20 10:10:15 [petropavl] посты: 2 точек, новых строк 5
+2026-11-20 10:10:46 ОШИБКА казгидромет: <HTTPError 502: 'Bad Gateway'>
+2026-11-20 10:10:46 погода: часов в файле 947
+2026-11-20 10:10:47 [almaty] погода: часов в файле 947
+2026-11-20 10:10:48 [astana] погода: часов в файле 947
+2026-11-20 10:10:48 [aktobe] погода: часов в файле 947
+2026-11-20 10:10:49 [aktau] погода: часов в файле 947
+2026-11-20 10:10:49 [oral] погода: часов в файле 947
+2026-11-20 10:10:50 [zko-east] погода: часов в файле 947
+2026-11-20 10:10:50 [shymkent] погода: часов в файле 947
+2026-11-20 10:10:51 [karaganda] погода: часов в файле 947
+2026-11-20 10:10:52 [pavlodar] погода: часов в файле 947
+2026-11-20 10:10:52 [oskemen] погода: часов в файле 947
+2026-11-20 10:10:53 [semey] погода: часов в файле 947
+2026-11-20 10:10:53 [kostanay] погода: часов в файле 947
+2026-11-20 10:10:54 [taraz] погода: часов в файле 947
+2026-11-20 10:10:54 [taldykorgan] погода: часов в файле 947
+2026-11-20 10:10:55 [kyzylorda] погода: часов в файле 947
+2026-11-20 10:10:56 [kokshetau] погода: часов в файле 947
+2026-11-20 10:10:56 [turkistan] погода: часов в файле 947
+2026-11-20 10:10:57 [zhezkazgan] погода: часов в файле 947
+2026-11-20 10:10:57 [petropavl] погода: часов в файле 947
