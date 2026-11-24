@@ -121,7 +121,10 @@
   "Атыраудағы күкіртсутек иісінің ықтимал көздерін нақты бекеттер мен жел бойынша талдау.": "Analysis of possible sources of the hydrogen sulfide smell in Atyrau based on real stations and wind.",
   "<h1>Атырау</h1>": "<h1>Atyrau</h1>",
   "<p>Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша</p>": "<p>Where does the smell come from? Hydrogen sulfide (H2S) stations and wind — hour by hour</p>",
-  "const SHARE_CITY = 'Атырау'": "const SHARE_CITY = 'Atyrau'"
+  "const SHARE_CITY = 'Атырау'": "const SHARE_CITY = 'Atyrau'",
+  "Бекет жағдайы": "Station status",
+  "Картадан бекетті таңдаңыз": "Select a station on the map",
+  "мән жоқ": "no value"
  },
  "city": {
   "aria-label=\"Сағатты жүгірткімен таңдау\"": "aria-label=\"Choose hour with the slider\"",
