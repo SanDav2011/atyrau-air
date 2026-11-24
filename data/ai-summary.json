@@ -1,0 +1,269 @@
+{
+ "about": "Қазақстан ауасы: жалпы мәлімет. Мәндер мен координаталар бұл файлда жоқ.",
+ "note": "Бұл ресми мониторинг емес; дерек көзі — Қазгидромет (ecodata.kz), жел — Open-Meteo.",
+ "snapshot_date": "2026-11-24",
+ "snapshot_note": "Қолмен жаңартылады (шамамен айына бір рет); нақты уақыттағы дерек емес.",
+ "cities": {
+  "atyrau": {
+   "stations_in_data": 28,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NH3",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2025-12-19"
+  },
+  "aktau": {
+   "stations_in_data": 4,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-08"
+  },
+  "aktobe": {
+   "stations_in_data": 6,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-08"
+  },
+  "almaty": {
+   "stations_in_data": 16,
+   "pollutants": [
+    "CO",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-08-18"
+  },
+  "astana": {
+   "stations_in_data": 10,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-08"
+  },
+  "karaganda": {
+   "stations_in_data": 7,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "kokshetau": {
+   "stations_in_data": 2,
+   "pollutants": [
+    "CO",
+    "NO",
+    "NO2",
+    "PM10",
+    "PM2.5",
+    "SO2"
+   ],
+   "data_from": "2026-10-21"
+  },
+  "kostanay": {
+   "stations_in_data": 4,
+   "pollutants": [
+    "CO",
+    "NO",
+    "NO2",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "kyzylorda": {
+   "stations_in_data": 3,
+   "pollutants": [
+    "CO",
+    "NO",
+    "NO2",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "oral": {
+   "stations_in_data": 4,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-08"
+  },
+  "oskemen": {
+   "stations_in_data": 39,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "pavlodar": {
+   "stations_in_data": 7,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "petropavl": {
+   "stations_in_data": 2,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "SO2"
+   ],
+   "data_from": "2026-10-21"
+  },
+  "semey": {
+   "stations_in_data": 4,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "SO2"
+   ],
+   "data_from": "2026-09-17"
+  },
+  "shymkent": {
+   "stations_in_data": 6,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NH3",
+    "NO",
+    "NO2",
+    "O3",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "taldykorgan": {
+   "stations_in_data": 2,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "SO2"
+   ],
+   "data_from": "2026-10-21"
+  },
+  "taraz": {
+   "stations_in_data": 5,
+   "pollutants": [
+    "CO",
+    "NO",
+    "NO2",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-10-20"
+  },
+  "turkistan": {
+   "stations_in_data": 2,
+   "pollutants": [
+    "CO",
+    "NO2",
+    "O3"
+   ],
+   "data_from": "2026-10-21"
+  },
+  "zhezkazgan": {
+   "stations_in_data": 13,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "O3",
+    "PM10",
+    "PM2.5",
+    "PMtot",
+    "SO2"
+   ],
+   "data_from": "2026-01-23"
+  },
+  "zko-east": {
+   "stations_in_data": 2,
+   "pollutants": [
+    "CO",
+    "H2S",
+    "NO",
+    "NO2",
+    "SO2"
+   ],
+   "data_from": "2026-10-21"
+  }
+ }
+}

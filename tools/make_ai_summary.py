@@ -1,8 +1,8 @@
-"""data/ai-summary.json — қысқа жалпы мәлімет (қала, соңғы өлшеу уақыты, пост саны, газдар).
+"""data/ai-summary.json — қысқа жалпы мәлімет (қала, пост саны, газдар).
 Тек өз есептеуіміз: Қазгидромет қатарлары, мәндер, координаталар, пост атаулары ЖОҚ.
 Іске қосу: python tools/make_ai_summary.py
 """
-import csv, json, sys
+import csv, json, sys, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -23,8 +23,7 @@ def one(path):
             first = t if first is None or t < first else first
             last = t if last is None or t > last else last
     return {"stations_in_data": len(posts), "pollutants": sorted(gases),
-            "data_from": first[:10] if first else None,
-            "last_measurement_local": last}
+            "data_from": first[:10] if first else None}
 
 
 def main():
@@ -40,6 +39,8 @@ def main():
     res = {
         "about": "Қазақстан ауасы: жалпы мәлімет. Мәндер мен координаталар бұл файлда жоқ.",
         "note": "Бұл ресми мониторинг емес; дерек көзі — Қазгидромет (ecodata.kz), жел — Open-Meteo.",
+        "snapshot_date": datetime.date.today().isoformat(),
+        "snapshot_note": "Қолмен жаңартылады (шамамен айына бір рет); нақты уақыттағы дерек емес.",
         "cities": cities,
     }
     OUT.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
