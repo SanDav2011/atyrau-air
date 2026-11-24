@@ -1,0 +1,2 @@
+[      64ms] [WARNING] goatcounter: not counting because of: localhost @ http://gc.zgo.at/count.js:80
+[    1235ms] [VERBOSE] [DOM] Password forms should have (optionally hidden) username fields for accessibility: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8766/atyrau.html?v=3:1

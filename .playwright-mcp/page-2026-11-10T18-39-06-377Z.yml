@@ -1,0 +1,122 @@
+- generic [active] [ref=f20e1]:
+  - banner [ref=f20e2]:
+    - navigation "Негізгі мәзір" [ref=f20e3]:
+      - link "Басты" [ref=f20e4] [cursor=pointer]:
+        - /url: ./
+      - link "Карта" [ref=f20e5] [cursor=pointer]:
+        - /url: karta.html
+      - link "Газдар туралы" [ref=f20e6] [cursor=pointer]:
+        - /url: gazdar.html
+      - link "Жоба" [ref=f20e7] [cursor=pointer]:
+        - /url: about.html
+      - group [ref=f20e8]:
+        - generic "Language" [ref=f20e9] [cursor=pointer]: KK ▾
+    - generic [ref=f20e10]:
+      - heading "Атырау" [level=1] [ref=f20e11]
+      - paragraph [ref=f20e12]: Иіс қайдан келеді? Күкіртсутек (H2S) бекеттері мен жел — сағат бойынша
+  - main [ref=f20e13]:
+    - generic [ref=f20e14]:
+      - generic [ref=f20e15]:
+        - heading "Атыраудағы күкіртсутек (H₂S) иісі қайдан келеді?" [level=2] [ref=f20e16]
+        - paragraph [ref=f20e17]: "Бұл бет Қазгидромет бекеттерінің сағаттық өлшемдерін желдің бағытымен салыстырып, иістің ықтимал бағытын көрсетеді. Нәтиже — болжам: ол нақты көзді дәлелдемейді, Гаусс шлейфі моделі мен жел деректеріне негізделген. Қажет сағатты слайдермен таңдап, картадан қарауға болады."
+      - generic [ref=f20e18]:
+        - generic:
+          - generic:
+            - button "🛢️" [ref=f20e19] [cursor=pointer]
+            - button "🏭" [ref=f20e20] [cursor=pointer]
+            - button "🏭" [ref=f20e21] [cursor=pointer]
+            - button "🏭" [ref=f20e22] [cursor=pointer]
+            - button "🏭" [ref=f20e23] [cursor=pointer]
+            - button "🛢️" [ref=f20e24] [cursor=pointer]
+            - button "💧" [ref=f20e25] [cursor=pointer]
+            - button "💧" [ref=f20e26] [cursor=pointer]
+            - button "💧" [ref=f20e27] [cursor=pointer]
+            - button "💧" [ref=f20e28] [cursor=pointer]
+            - button "💧" [ref=f20e29] [cursor=pointer]
+            - button "💧" [ref=f20e30] [cursor=pointer]
+        - generic:
+          - generic [ref=f20e31]:
+            - button "Zoom in" [ref=f20e32] [cursor=pointer]: +
+            - button "Zoom out" [ref=f20e33] [cursor=pointer]: −
+          - button "Карта қалай жұмыс істейді" [ref=f20e35] [cursor=pointer]: "?"
+          - generic [ref=f20e36]:
+            - link "Leaflet" [ref=f20e37] [cursor=pointer]:
+              - /url: https://leafletjs.com
+            - text: "| © OpenStreetMap"
+      - generic [ref=f20e42]:
+        - button "Сағаттарды ойнату" [ref=f20e43] [cursor=pointer]: ▶
+        - button "Алдыңғы сағат" [ref=f20e44] [cursor=pointer]: ‹
+        - textbox "Күнді таңдау" [ref=f20e45]
+        - combobox "Сағатты таңдау" [ref=f20e46] [cursor=pointer]
+        - button "Келесі сағат" [ref=f20e47] [cursor=pointer]: ›
+        - button "Соңғы дерек" [ref=f20e48] [cursor=pointer]
+        - generic [ref=f20e49]:
+          - slider "Сағатты жүгірткімен таңдау" [ref=f20e50]: "0"
+          - generic:
+            - button "00:00" [ref=f20e51] [cursor=pointer]: "0"
+            - button "06:00" [ref=f20e52] [cursor=pointer]: "06"
+            - button "12:00" [ref=f20e53] [cursor=pointer]: "12"
+            - button "18:00" [ref=f20e54] [cursor=pointer]: "18"
+        - button "Картамен бөлісу" [ref=f20e55] [cursor=pointer]: 🔗🔗 Бөлісу
+      - heading "Зат" [level=2] [ref=f20e57]
+      - heading "Бекетті таңдаңыз — уақыт бойынша график" [level=2] [ref=f20e59]
+    - generic [ref=f20e61]:
+      - generic [ref=f20e62]:
+        - img [ref=f20e63]:
+          - generic [ref=f20e65]: С
+        - generic [ref=f20e68]:
+          - text: "Жел: —"
+          - generic [ref=f20e69]: Open-Meteo, қала орталығы
+      - generic [ref=f20e70]:
+        - generic [ref=f20e71]:
+          - heading "🔎 Көзді анықтау Әдіс" [level=2] [ref=f20e72]:
+            - text: 🔎 Көзді анықтау
+            - generic "Әдіс" [ref=f20e73]: i
+          - combobox "Талдау кезеңі" [ref=f20e74]:
+            - option "таңдалған сағат"
+            - option "соңғы 3 сағат" [selected]
+            - option "соңғы 6 сағат"
+            - option "соңғы 12 сағат"
+        - generic [ref=f20e75] [cursor=pointer]:
+          - checkbox "🧭 Жел розасы және талдау сызықтары" [checked] [ref=f20e76]
+          - text: 🧭 Жел розасы және талдау сызықтары
+      - generic [ref=f20e77]:
+        - heading "Ең жоғары (таңдалған сағат)" [level=2] [ref=f20e78]
+        - list
+      - generic [ref=f20e79]:
+        - heading "Ықтимал көздер" [level=2] [ref=f20e81]
+        - generic [ref=f20e82]:
+          - generic [ref=f20e83]: 🛢️ АНПЗ — жер деңгейіндегі көздер (КУПС, УПС)
+          - generic [ref=f20e84]: 🏭 АНПЗ факелдері
+          - generic [ref=f20e85]: 🏭 Атырау ЖЭО — №4 құбыр (180 м)
+          - generic [ref=f20e86]: 🏭 Атырау ЖЭО — №2, №3 құбырлар (120 м)
+          - generic [ref=f20e87]: 🏭 Атырау ЖЭО — №1, №5 құбырлар (60–64 м)
+          - generic [ref=f20e88]: 🛢️ Мұнай базасы
+          - generic [ref=f20e89]: 💧 Кәріздік тазарту қондырғысы (шығыс)
+          - generic [ref=f20e90]: 💧 Кәріздік тазарту қондырғысы (солтүстік-батыс)
+          - generic [ref=f20e91]: 💧 Тазарту қондырғысы (Қара Өзен өнеркәсіп аймағы)
+          - generic [ref=f20e92]: 💧 Сасық сай (Тухлая балка)
+          - generic [ref=f20e93]: 💧 «Квадрат» буландыру алаңы (оң жағалау)
+          - generic [ref=f20e94]: 💧 Атырау ҚТҚ полигоны
+          - generic [ref=f20e95]: Картада орындары шамамен (±500 м) көрсетілген.
+          - generic [ref=f20e96]: 🔒 Нақты орны, биіктігі, АНПЗ мұржалары және «Көзді анықтау» — құпиясөзбен.
+          - generic [ref=f20e97]:
+            - textbox "Құпиясөз" [ref=f20e98]
+            - button "🔓 Ашу" [ref=f20e99] [cursor=pointer]
+      - group [ref=f20e101]:
+        - 'generic "📘 Әдістеме: қалай есептеледі" [ref=f20e102] [cursor=pointer]'
+      - generic [ref=f20e103]:
+        - heading "Жиі қойылатын сұрақтар" [level=2] [ref=f20e104]
+        - generic [ref=f20e105]:
+          - heading "Атыраудағы H₂S иісі қайдан келеді?" [level=3] [ref=f20e106]
+          - paragraph [ref=f20e107]: Сайт нақты көзді дәлелдемейді. Ол бекеттерде H₂S өскен сағатта жел қай жақтан соққанын көрсетеді және Гаусс шлейфі моделімен ықтимал бағытты есептейді. Иіс желдің бағытындағы өнеркәсіп нысандарымен байланысты болуы мүмкін, бірақ бұл — болжам.
+        - generic [ref=f20e108]:
+          - heading "Деректер қайдан алынады?" [level=3] [ref=f20e109]
+          - paragraph [ref=f20e110]: Ауа сапасы — Қазгидромет бекеттері (ecodata.kz), сағат сайын. Жел мен метеорология — Open-Meteo.
+        - generic [ref=f20e111]:
+          - heading "H₂S қауіпті ме?" [level=3] [ref=f20e112]
+          - paragraph [ref=f20e113]: Жоғары концентрацияда күкіртсутек улы. Сайт өлшемдерді ҚР ДСМ-70 бұйрығындағы (02.08.2022) ең жоғары бір реттік ПДК-мен салыстырады; бекеттер сағаттық мән береді, сондықтан салыстыру шамамен. Денсаулыққа қатысты шешімді мамандардан сұраңыз.
+        - generic [ref=f20e114]:
+          - heading "Модель қаншалықты нақты?" [level=3] [ref=f20e115]
+          - paragraph [ref=f20e116]: "Модель жеңілдетілген: Пасквилл–Гиффорд сыныптары мен Бриггс формулалары қолданылады, көздердің биіктігі жуықтап алынған. Сондықтан нәтижені ресми өлшем ретінде қолдануға болмайды."
+  - contentinfo [ref=f20e117]: 👁 Сайт 645 рет қаралды

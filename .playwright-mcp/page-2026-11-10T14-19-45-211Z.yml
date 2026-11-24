@@ -1,0 +1,453 @@
+- generic [ref=f17e2]:
+  - generic [ref=f17e3]: Қазақстан ауасы · Атырау қаласының әкімдігіне
+  - heading "Бекеттер бойынша шекті рұқсат етілген концентрациядан (ШРК) асу" [level=1] [ref=f17e4]
+  - paragraph [ref=f17e5]: Атырау қ. · 2026 ж. 1 қараша 00:00 – 10 қараша 18:00 (жергілікті уақыт, UTC+5) · мониторинг бекеттерінің сағаттық деректері және жел
+  - generic [ref=f17e6]:
+    - generic [ref=f17e7]:
+      - generic [ref=f17e8]: "13"
+      - text: кезеңде деректі бекет (негізгі)
+    - generic [ref=f17e9]:
+      - generic [ref=f17e10]: "4"
+      - text: ШРК-дан асқан бекет
+    - generic [ref=f17e11]:
+      - generic [ref=f17e12]: "28"
+      - text: асу болған бекет-зат-сағат
+    - generic [ref=f17e13]:
+      - generic [ref=f17e14]: ×2
+      - text: "максимум: H₂S, Восток ш/а, 01.11 22:00"
+  - generic [ref=f17e15]:
+    - generic [ref=f17e16]: Басты
+    - heading "Қысқа тұжырымдар" [level=2] [ref=f17e17]
+    - list [ref=f17e18]:
+      - listitem [ref=f17e19]: "Восток ш/а (СМКВ №109, NCOC (СМКВ)): H₂S ШРК-дан 10 сағат асты; максимум 16 мкг/м³ = ×2 ШРК (01.11 22:00, жел СШ (60°) · 1,4 м/с). Асу сағаттарында жел басым ОШ жақтан соқты (5/10 сағат), орташа жылдамдығы 2,4 м/с."
+      - listitem [ref=f17e20]: "Шагала ш/а (СМКВ №103, NCOC (СМКВ)): H₂S ШРК-дан 3 сағат асты; максимум 15 мкг/м³ = ×1,9 ШРК (01.11 21:00, жел Ш (77°) · 0,9 м/с). Асу сағаттарында жел басым ОШ жақтан соқты (2/3 сағат), орташа жылдамдығы 1,5 м/с."
+      - listitem [ref=f17e21]: "Центр (әкімдік ауданы) (СМКВ №112, NCOC (СМКВ)): H₂S ШРК-дан 2 сағат асты; максимум 15 мкг/м³ = ×1,9 ШРК (03.11 21:00, жел ОШ (124°) · 2,5 м/с). Асу сағаттарында жел басым ОШ жақтан соқты (2/2 сағат), орташа жылдамдығы 2,5 м/с."
+      - listitem [ref=f17e22]: "Самал ш/а (ПНЗ№17, Қазгидромет): NO₂ ШРК-дан 13 сағат асты; максимум 313 мкг/м³ = ×1,6 ШРК (05.11 11:00, жел О (180°) · 6,2 м/с). Асу сағаттарында жел басым О жақтан соқты (9/13 сағат), орташа жылдамдығы 4,3 м/с."
+    - paragraph [ref=f17e23]: "H₂S және жел: H₂S асуы болған 12 бірегей сағаттың басым бөлігінде жел ОШ (оңтүстік-шығыс) жақтан — 6/12 сағат (50%), ал бүкіл кезеңде бұл бағыт 26% ғана. Орташа жел жылдамдығы асу кезінде 2,2 м/с (бүкіл кезеңде 3,6 м/с); 5/12 сағатта жел 2 м/с-тан әлсіз."
+    - paragraph [ref=f17e24]: "NO₂ және жел (Самал): асу сағаттарында жел О (оңтүстік) жақтан — 9/13 сағат (69%), ал бүкіл кезеңде бұл бағыт 6% ғана; орташа жылдамдығы 4,3 м/с."
+    - paragraph [ref=f17e25]: Қалған 9 негізгі бекетте ШРК-дан асу болмады. Негізгі бекеттерде H₂S асуы тек қала орталығында (Восток, Шагала, әкімдік ауданы) NCOC бекеттерінде тіркелді; Қазгидромет бекеттерінде H₂S ШРК-дан аспады. АМӨЗ бекеттері — төменде бөлек, мәндері тексеруді қажет етеді.
+  - generic [ref=f17e26]:
+    - generic [ref=f17e27]: Қала аудандары бойынша
+    - heading "Қайда, қаншалықты және қай жақтан соққан желде асты" [level=2] [ref=f17e28]
+    - paragraph [ref=f17e29]: "Негізгі бекеттер: Қазгидромет (ПНЗ), NCOC (СМКВ), Auasense. Бір реттік ең жоғары ШРК-мен салыстыру (ҚР ДСМ-70 бұйрығы). «Неше есе» = максимум ÷ ШРК. Жел — қай жақтан соғатыны (ОШ — оңтүстік-шығыстан)."
+    - table [ref=f17e31]:
+      - rowgroup [ref=f17e32]:
+        - row [ref=f17e33]:
+          - columnheader "Аудан / орын" [ref=f17e34]
+          - columnheader "Бекет" [ref=f17e35]
+          - columnheader "Зат" [ref=f17e36]
+          - columnheader "ШРК-дан асқан сағат" [ref=f17e37]
+          - columnheader "Максимум, мкг/м³" [ref=f17e38]
+          - columnheader "Неше есе" [ref=f17e39]
+          - columnheader "Қашан" [ref=f17e40]
+          - columnheader "Жел (максимум сағатында)" [ref=f17e41]
+          - columnheader "Асу сағаттарындағы басым жел" [ref=f17e42]
+        - row [ref=f17e43]:
+          - cell "Восток ш/а" [ref=f17e44]
+          - cell "СМКВ №109 NCOC (СМКВ)" [ref=f17e45]: СМКВ №109NCOC (СМКВ)
+          - cell "H₂S (ШРК 8)" [ref=f17e46]
+          - cell "10 / 213" [ref=f17e47]
+          - cell "16" [ref=f17e48]
+          - cell "×2" [ref=f17e49]
+          - cell "01.11 22:00" [ref=f17e51]
+          - cell "СШ (60°) · 1,4 м/с" [ref=f17e52]
+          - 'cell "ОШ: 5/10 сағ (50%) · 2,4 м/с" [ref=f17e53]'
+        - row [ref=f17e54]:
+          - cell "Шагала ш/а" [ref=f17e55]
+          - cell "СМКВ №103 NCOC (СМКВ)" [ref=f17e56]: СМКВ №103NCOC (СМКВ)
+          - cell "H₂S (ШРК 8)" [ref=f17e57]
+          - cell "3 / 213" [ref=f17e58]
+          - cell "15" [ref=f17e59]
+          - cell "×1,9" [ref=f17e60]
+          - cell "01.11 21:00" [ref=f17e62]
+          - cell "Ш (77°) · 0,9 м/с" [ref=f17e63]
+          - 'cell "ОШ: 2/3 сағ (67%) · 1,5 м/с" [ref=f17e64]'
+        - row [ref=f17e65]:
+          - cell "Центр (әкімдік ауданы)" [ref=f17e66]
+          - cell "СМКВ №112 NCOC (СМКВ)" [ref=f17e67]: СМКВ №112NCOC (СМКВ)
+          - cell "H₂S (ШРК 8)" [ref=f17e68]
+          - cell "2 / 213" [ref=f17e69]
+          - cell "15" [ref=f17e70]
+          - cell "×1,9" [ref=f17e71]
+          - cell "03.11 21:00" [ref=f17e73]
+          - cell "ОШ (124°) · 2,5 м/с" [ref=f17e74]
+          - 'cell "ОШ: 2/2 сағ (100%) · 2,5 м/с" [ref=f17e75]'
+        - row [ref=f17e76]:
+          - cell "Самал ш/а" [ref=f17e77]
+          - cell "ПНЗ№17 Қазгидромет" [ref=f17e78]: ПНЗ№17Қазгидромет
+          - cell "NO₂ (ШРК 200)" [ref=f17e79]
+          - cell "13 / 196" [ref=f17e80]
+          - cell "313" [ref=f17e81]
+          - cell "×1,6" [ref=f17e82]
+          - cell "05.11 11:00" [ref=f17e84]
+          - cell "О (180°) · 6,2 м/с" [ref=f17e85]
+          - 'cell "О: 9/13 сағ (69%) · 4,3 м/с" [ref=f17e86]'
+    - paragraph [ref=f17e87]:
+      - generic [ref=f17e88]: Асу жоқ
+      - text: "Сырдарья көшесі (ПНЗ№8; макс. NO₂ 0,2 ШРК); Береке ш/а (өнеркәсіп аймағы) (ПНЗ№9; макс. H₂S 0,4 ШРК); Жулдыз ш/а (ПНЗ№6; макс. O₃ 0,6 ШРК); Жилгородок (СМКВ №111; макс. H₂S 0,6 ШРК); Авангард (СМКВ №113; макс. H₂S 0,9 ШРК); Акшагала ш/а (ПНЗ№12; макс. NO₂ 0,3 ШРК); Т. Бигельдинов көшесі (ПНЗ№15; макс. H₂S 0,3 ШРК); Сырдарья к. (№3 мектеп-интернат) (Auasense 1; макс. CO 0,5 ШРК); Курсай ш/а (Алтынсарин атындағы мектеп) (Auasense 2; макс. CO 0,8 ШРК). Кезеңде дерек жоқ: ТКА."
+  - generic [ref=f17e89]:
+    - generic [ref=f17e90]: Картада
+    - 'heading "Асу ең көп болған бекет: жел бағыты және асу" [level=2] [ref=f17e91]'
+    - paragraph [ref=f17e92]: "Қызыл белгі — таңдалған бекет. Әр көк көрсеткі — асу болған бір сағат: көрсеткі желдің қай жақтан келгенін көрсетеді (ұшы бекетке қарайды, ұзындығы 4 км — шартты). Асу болмаған бекетте (Жилгородок) — кезеңдегі ең жоғары мәнді 8 сағат, сары-қоңыр көрсеткілермен. Сағатты басыңыз — сол сағаттың мәні мен желі шығады."
+    - generic [ref=f17e93]:
+      - button "Восток ш/а · H₂S (10 сағ)" [ref=f17e94] [cursor=pointer]
+      - button "Шагала ш/а · H₂S (3 сағ)" [ref=f17e95] [cursor=pointer]
+      - button "Центр (әкімдік ауданы) · H₂S (2 сағ)" [ref=f17e96] [cursor=pointer]
+      - button "Самал ш/а · NO₂ (13 сағ)" [ref=f17e97] [cursor=pointer]
+      - button "Жилгородок · H₂S (асу жоқ)" [ref=f17e98] [cursor=pointer]
+    - generic [ref=f17e100]:
+      - generic:
+        - generic:
+          - img:
+            - generic:
+              - generic [ref=f17e101] [cursor=pointer]
+              - generic [ref=f17e102] [cursor=pointer]
+              - generic [ref=f17e103] [cursor=pointer]
+              - generic [ref=f17e104] [cursor=pointer]
+              - generic [ref=f17e105] [cursor=pointer]
+              - generic [ref=f17e106] [cursor=pointer]
+              - generic [ref=f17e107] [cursor=pointer]
+              - generic [ref=f17e108] [cursor=pointer]
+              - generic [ref=f17e109] [cursor=pointer]
+              - generic [ref=f17e110] [cursor=pointer]
+              - generic [ref=f17e111] [cursor=pointer]
+              - generic [ref=f17e112] [cursor=pointer]
+              - generic [ref=f17e113] [cursor=pointer]
+              - generic [ref=f17e114] [cursor=pointer]
+              - generic [ref=f17e115] [cursor=pointer]
+              - generic [ref=f17e116] [cursor=pointer]
+              - generic [ref=f17e117] [cursor=pointer]
+              - generic [ref=f17e118] [cursor=pointer]
+              - generic [ref=f17e119] [cursor=pointer]
+              - generic [ref=f17e120] [cursor=pointer]
+              - generic [ref=f17e121] [cursor=pointer]
+              - generic [ref=f17e122] [cursor=pointer]
+              - generic [ref=f17e123] [cursor=pointer]
+              - generic [ref=f17e124] [cursor=pointer]
+              - generic [ref=f17e125] [cursor=pointer]
+              - generic [ref=f17e126] [cursor=pointer]
+              - generic [ref=f17e127] [cursor=pointer]
+              - generic [ref=f17e128] [cursor=pointer]
+              - generic [ref=f17e129] [cursor=pointer]
+              - generic [ref=f17e130] [cursor=pointer]
+              - generic [ref=f17e131] [cursor=pointer]
+        - generic:
+          - tooltip "Восток ш/а · H₂S · 10 сағат"
+          - tooltip "Восток ш/а · H₂S · 10 сағат"
+      - generic:
+        - generic [ref=f17e132]:
+          - button "Zoom in" [ref=f17e133] [cursor=pointer]: +
+          - button "Zoom out" [ref=f17e134] [cursor=pointer]: −
+        - generic [ref=f17e135]:
+          - link "Leaflet" [ref=f17e136] [cursor=pointer]:
+            - /url: https://leafletjs.com
+          - text: "| © OpenStreetMap"
+    - generic [ref=f17e141]:
+      - button "01.11 00:00" [ref=f17e142] [cursor=pointer]
+      - button "01.11 22:00" [ref=f17e143] [cursor=pointer]
+      - button "02.11 01:00" [ref=f17e144] [cursor=pointer]
+      - button "02.11 02:00" [ref=f17e145] [cursor=pointer]
+      - button "02.11 11:00" [ref=f17e146] [cursor=pointer]
+      - button "03.11 10:00" [ref=f17e147] [cursor=pointer]
+      - button "03.11 20:00" [ref=f17e148] [cursor=pointer]
+      - button "03.11 21:00" [ref=f17e149] [cursor=pointer]
+      - button "04.11 00:00" [ref=f17e150] [cursor=pointer]
+      - button "04.11 09:00" [ref=f17e151] [cursor=pointer]
+    - generic [ref=f17e152]: "Восток ш/а (СМКВ №109, NCOC (СМКВ)): H₂S ШРК-дан 10 сағат асты, максимум 16 мкг/м³ (×2). Асу сағаттарында жел басым ОШ жақтан (5/10 сағат)."
+    - paragraph [ref=f17e153]: "Карта: © OpenStreetMap. Сұр нүктелер — қаладағы басқа негізгі бекеттер. Мәліметті көру үшін интернет қажет. Көрсеткі желдің бағытын ғана көрсетеді, ластану көзін анықтамайды."
+  - generic [ref=f17e154]:
+    - generic [ref=f17e155]: Жел және асу
+    - heading "Асу сағаттарындағы жел бағытының статистикасы" [level=2] [ref=f17e156]
+    - paragraph [ref=f17e157]: Толтырылған бағандар — асу болған сағаттардағы жел бағыттарының үлесі, үзік сызық — сол кезеңдегі барлық сағаттардағы (235 сағат) жел бағыттарының үлесі. Егер бағандар үзік сызықтан әлдеқайда ұзын болса, асу сол бағыттан соққан желмен жиі сәйкес келген.
+    - generic [ref=f17e158]:
+      - generic [ref=f17e159]:
+        - generic [ref=f17e160]: H₂S асуы · жел қай жақтан
+        - img "H₂S асуы · жел қай жақтан" [ref=f17e161]:
+          - generic [ref=f17e163]: 17%
+          - generic [ref=f17e165]: 33%
+          - generic [ref=f17e167]: 50%
+          - generic [ref=f17e168]: С
+          - generic [ref=f17e170]: СШ
+          - generic [ref=f17e172]: Ш
+          - generic [ref=f17e174]: ОШ
+          - generic [ref=f17e175]: О
+          - generic [ref=f17e176]: ОБ
+          - generic [ref=f17e177]: Б
+          - generic [ref=f17e178]: СБ
+        - paragraph [ref=f17e180]: 12 бірегей сағат
+      - generic [ref=f17e181]:
+        - generic [ref=f17e182]: NO₂ асуы (Самал) · жел қай жақтан
+        - img "NO₂ асуы (Самал) · жел қай жақтан" [ref=f17e183]:
+          - generic [ref=f17e185]: 23%
+          - generic [ref=f17e187]: 47%
+          - generic [ref=f17e189]: 70%
+          - generic [ref=f17e190]: С
+          - generic [ref=f17e191]: СШ
+          - generic [ref=f17e193]: Ш
+          - generic [ref=f17e195]: ОШ
+          - generic [ref=f17e197]: О
+          - generic [ref=f17e198]: ОБ
+          - generic [ref=f17e199]: Б
+          - generic [ref=f17e200]: СБ
+        - paragraph [ref=f17e202]: 13 бірегей сағат
+    - generic [ref=f17e203]:
+      - generic [ref=f17e204]: асу сағаттары, %
+      - generic [ref=f17e206]: кезеңдегі барлық сағаттар, %
+    - table [ref=f17e209]:
+      - rowgroup [ref=f17e210]:
+        - row [ref=f17e211]:
+          - columnheader "Топ" [ref=f17e212]
+          - columnheader "Бірегей сағат" [ref=f17e213]
+          - columnheader "Басым бағыт" [ref=f17e214]
+          - columnheader "Асу сағаттарындағы үлесі" [ref=f17e215]
+          - columnheader "Кезеңдегі үлесі" [ref=f17e216]
+          - columnheader "Орташа жылдамдық (асу)" [ref=f17e217]
+          - columnheader "Орташа жылдамдық (кезең)" [ref=f17e218]
+          - columnheader "< 2 м/с сағат" [ref=f17e219]
+        - row [ref=f17e220]:
+          - cell "H₂S асуы (негізгі бекеттер)" [ref=f17e221]
+          - cell "12" [ref=f17e222]
+          - cell "ОШ (оңтүстік-шығыс)" [ref=f17e223]
+          - cell "50%" [ref=f17e224]
+          - cell "26%" [ref=f17e225]
+          - cell "2,2 м/с" [ref=f17e226]
+          - cell "3,6 м/с" [ref=f17e227]
+          - cell "5/12 (кезеңде 15%)" [ref=f17e228]
+        - row [ref=f17e229]:
+          - cell "NO₂ асуы (Самал)" [ref=f17e230]
+          - cell "13" [ref=f17e231]
+          - cell "О (оңтүстік)" [ref=f17e232]
+          - cell "69%" [ref=f17e233]
+          - cell "6%" [ref=f17e234]
+          - cell "4,3 м/с" [ref=f17e235]
+          - cell "3,6 м/с" [ref=f17e236]
+          - cell "0/13 (кезеңде 15%)" [ref=f17e237]
+        - row [ref=f17e238]:
+          - cell "Восток ш/а · H₂S" [ref=f17e239]
+          - cell "10" [ref=f17e240]
+          - cell "ОШ (оңтүстік-шығыс)" [ref=f17e241]
+          - cell "50%" [ref=f17e242]
+          - cell "26%" [ref=f17e243]
+          - cell "2,4 м/с" [ref=f17e244]
+          - cell "3,6 м/с" [ref=f17e245]
+          - cell "3/10 (кезеңде 15%)" [ref=f17e246]
+        - row [ref=f17e247]:
+          - cell "Шагала ш/а · H₂S" [ref=f17e248]
+          - cell "3" [ref=f17e249]
+          - cell "ОШ (оңтүстік-шығыс)" [ref=f17e250]
+          - cell "67%" [ref=f17e251]
+          - cell "26%" [ref=f17e252]
+          - cell "1,5 м/с" [ref=f17e253]
+          - cell "3,6 м/с" [ref=f17e254]
+          - cell "2/3 (кезеңде 15%)" [ref=f17e255]
+        - row [ref=f17e256]:
+          - cell "Центр (әкімдік ауданы) · H₂S" [ref=f17e257]
+          - cell "2" [ref=f17e258]
+          - cell "ОШ (оңтүстік-шығыс)" [ref=f17e259]
+          - cell "100%" [ref=f17e260]
+          - cell "26%" [ref=f17e261]
+          - cell "2,5 м/с" [ref=f17e262]
+          - cell "3,6 м/с" [ref=f17e263]
+          - cell "0/2 (кезеңде 15%)" [ref=f17e264]
+        - row [ref=f17e265]:
+          - cell "Самал ш/а · NO₂" [ref=f17e266]
+          - cell "13" [ref=f17e267]
+          - cell "О (оңтүстік)" [ref=f17e268]
+          - cell "69%" [ref=f17e269]
+          - cell "6%" [ref=f17e270]
+          - cell "4,3 м/с" [ref=f17e271]
+          - cell "3,6 м/с" [ref=f17e272]
+          - cell "0/13 (кезеңде 15%)" [ref=f17e273]
+    - group [ref=f17e274]:
+      - generic "Асу сағаттарының толық тізімі (желмен бірге)" [ref=f17e275] [cursor=pointer]
+    - paragraph [ref=f17e276]: Жел деректері — Open-Meteo (қала орталығы, 10 м биіктік, сағаттық). Нақты бекет маңындағы жел өзгеше болуы мүмкін. Үлгі аз (асу сағаттары — ондаған ғана), сондықтан бұл статистика бағытты көрсетеді, дәлел емес.
+  - generic [ref=f17e277]:
+    - generic [ref=f17e278]:
+      - generic [ref=f17e279]: Күндер бойынша
+      - heading "Асу сағаттары күн сайын" [level=2] [ref=f17e280]
+      - img "Күндер бойынша асу сағаттары" [ref=f17e281]:
+        - generic [ref=f17e282]: "0"
+        - generic [ref=f17e283]: "5"
+        - generic [ref=f17e284]: "10"
+        - generic [ref=f17e287]: "01"
+        - generic [ref=f17e290]: "02"
+        - generic [ref=f17e293]: "03"
+        - generic [ref=f17e297]: "04"
+        - generic [ref=f17e299]: "05"
+        - generic [ref=f17e300]: "06"
+        - generic [ref=f17e301]: "07"
+        - generic [ref=f17e302]: "08"
+        - generic [ref=f17e303]: "09"
+        - generic [ref=f17e304]: "10"
+      - generic [ref=f17e305]:
+        - generic [ref=f17e306]: Восток ш/а
+        - generic [ref=f17e308]: Шагала ш/а
+        - generic [ref=f17e310]: Центр (әкімдік ауданы)
+        - generic [ref=f17e312]: Самал ш/а
+    - generic [ref=f17e314]:
+      - generic [ref=f17e315]: Тәулік уақыты бойынша
+      - heading "Қай уақытта жиі" [level=2] [ref=f17e316]
+      - img "Тәулік уақыты бойынша асу сағаттары" [ref=f17e317]:
+        - generic [ref=f17e318]: "0"
+        - generic [ref=f17e319]: "2"
+        - generic [ref=f17e320]: "4"
+        - generic [ref=f17e322]: "00"
+        - generic [ref=f17e324]: "01"
+        - generic [ref=f17e326]: "02"
+        - generic [ref=f17e328]: "03"
+        - generic [ref=f17e329]: "04"
+        - generic [ref=f17e331]: "05"
+        - generic [ref=f17e333]: "06"
+        - generic [ref=f17e335]: "07"
+        - generic [ref=f17e337]: "08"
+        - generic [ref=f17e339]: "09"
+        - generic [ref=f17e341]: "10"
+        - generic [ref=f17e343]: "11"
+        - generic [ref=f17e344]: "12"
+        - generic [ref=f17e345]: "13"
+        - generic [ref=f17e346]: "14"
+        - generic [ref=f17e347]: "15"
+        - generic [ref=f17e348]: "16"
+        - generic [ref=f17e349]: "17"
+        - generic [ref=f17e350]: "18"
+        - generic [ref=f17e351]: "19"
+        - generic [ref=f17e353]: "20"
+        - generic [ref=f17e355]: "21"
+        - generic [ref=f17e357]: "22"
+        - generic [ref=f17e359]: "23"
+      - paragraph [ref=f17e360]: Бүкіл кезеңдегі әр сағатта асу болған «бекет-зат-сағат» саны.
+  - generic [ref=f17e361]:
+    - generic [ref=f17e362]: Бекеттер картасы
+    - heading "Бекеттердің орналасуы және кезеңдегі максимумы" [level=2] [ref=f17e363]
+    - generic [ref=f17e364]:
+      - generic:
+        - generic:
+          - button "1" [ref=f17e365] [cursor=pointer]
+          - button "2" [ref=f17e367] [cursor=pointer]
+          - button "3" [ref=f17e369] [cursor=pointer]
+          - button "4" [ref=f17e371] [cursor=pointer]
+          - button "5" [ref=f17e373] [cursor=pointer]
+          - button "6" [ref=f17e375] [cursor=pointer]
+          - button "7" [ref=f17e377] [cursor=pointer]
+          - button "8" [ref=f17e379] [cursor=pointer]
+          - button "9" [ref=f17e381] [cursor=pointer]
+          - button "10" [ref=f17e383] [cursor=pointer]
+          - button "11" [ref=f17e385] [cursor=pointer]
+          - button "12" [ref=f17e387] [cursor=pointer]
+          - button "13" [ref=f17e389] [cursor=pointer]
+          - button "14" [ref=f17e391] [cursor=pointer]
+          - button "15" [ref=f17e393] [cursor=pointer]
+          - button "16" [ref=f17e395] [cursor=pointer]
+          - button "17" [ref=f17e397] [cursor=pointer]
+      - generic:
+        - generic [ref=f17e399]:
+          - button "Zoom in" [ref=f17e400] [cursor=pointer]: +
+          - button "Zoom out" [ref=f17e401] [cursor=pointer]: −
+        - generic [ref=f17e402]:
+          - link "Leaflet" [ref=f17e403] [cursor=pointer]:
+            - /url: https://leafletjs.com
+          - text: "| © OpenStreetMap"
+    - generic [ref=f17e408]:
+      - generic [ref=f17e409]: максимум 0,5 ШРК-ға дейін
+      - generic [ref=f17e411]: 0,5–1 ШРК
+      - generic [ref=f17e413]: ШРК-дан жоғары
+      - generic [ref=f17e415]: АМӨЗ (АНПЗ) бекеттері — мәндер расталмаған
+    - generic [ref=f17e417]:
+      - generic [ref=f17e418]: 1 Сырдарья көшесі (ПНЗ№8)
+      - generic [ref=f17e419]: 2 Береке ш/а (өнеркәсіп аймағы) (ПНЗ№9)
+      - generic [ref=f17e420]: 3 Жулдыз ш/а (ПНЗ№6)
+      - generic [ref=f17e421]: 4 Перетаска
+      - generic [ref=f17e422]: 5 Химпоселок
+      - generic [ref=f17e423]: 6 Мирный кенті (Mирный)
+      - generic [ref=f17e424]: 7 Пропарка
+      - generic [ref=f17e425]: 8 Шагала ш/а (СМКВ №103)
+      - generic [ref=f17e426]: 9 Восток ш/а (СМКВ №109)
+      - generic [ref=f17e427]: 10 Жилгородок (СМКВ №111)
+      - generic [ref=f17e428]: 11 Центр (әкімдік ауданы) (СМКВ №112)
+      - generic [ref=f17e429]: 12 Авангард (СМКВ №113)
+      - generic [ref=f17e430]: 13 Акшагала ш/а (ПНЗ№12)
+      - generic [ref=f17e431]: 14 Т. Бигельдинов көшесі (ПНЗ№15)
+      - generic [ref=f17e432]: 15 Самал ш/а (ПНЗ№17)
+      - generic [ref=f17e433]: 16 Сырдарья к. (№3 мектеп-интернат) (Auasense 1)
+      - generic [ref=f17e434]: 17 Курсай ш/а (Алтынсарин атындағы мектеп) (Auasense 2)
+    - paragraph [ref=f17e435]: Нөмір — бекеттің тізімдегі нөмірі. Картаны жақындатуға болады; белгіге меңзесеңіз мәліметі шығады (интернет жоқ болса — схема көрсетіледі).
+  - generic [ref=f17e436]:
+    - generic [ref=f17e437]: Тексеруді қажет етеді
+    - 'heading "АМӨЗ (АНПЗ) бекеттері: өте жоғары мәндер" [level=2] [ref=f17e438]'
+    - paragraph [ref=f17e439]: Химпоселок, Перетаска, Пропарка бекеттері ШРК-дан жүздеген және мыңдаған есе жоғары мәндер көрсетеді (мысалы, H₂S ондаған мың мкг/м³ дейін, SO₂ — жүздеген мыңға дейін). Бұл өлшем бірлігінің қатесі немесе датчиктің бұзылуы болуы мүмкін; расталған жоқ. Бұл бекеттер жоғарыдағы қорытынды сандарға кірмеген. Бекет иесінен және Қазгидрометтен нақтылау қажет.
+    - table [ref=f17e441]:
+      - rowgroup [ref=f17e442]:
+        - row [ref=f17e443]:
+          - columnheader "Бекет" [ref=f17e444]
+          - columnheader "Зат" [ref=f17e445]
+          - columnheader "ШРК-дан асқан сағат" [ref=f17e446]
+          - columnheader "оның ішінде >10× ШРК" [ref=f17e447]
+          - columnheader "Максимум, мкг/м³" [ref=f17e448]
+          - columnheader "×ШРК" [ref=f17e449]
+          - columnheader "Қашан" [ref=f17e450]
+        - row [ref=f17e451]:
+          - cell "Перетаска" [ref=f17e452]
+          - cell "H₂S" [ref=f17e453]
+          - cell "34 / 206" [ref=f17e454]
+          - cell "21" [ref=f17e455]
+          - cell "22 738" [ref=f17e456]
+          - cell "×2 842" [ref=f17e457]
+          - cell "02.11 11:00" [ref=f17e459]
+        - row [ref=f17e460]:
+          - cell "Перетаска" [ref=f17e461]
+          - cell "SO₂" [ref=f17e462]
+          - cell "25 / 206" [ref=f17e463]
+          - cell "25" [ref=f17e464]
+          - cell "152 374" [ref=f17e465]
+          - cell "×305" [ref=f17e466]
+          - cell "02.11 11:00" [ref=f17e468]
+        - row [ref=f17e469]:
+          - cell "Химпоселок" [ref=f17e470]
+          - cell "H₂S" [ref=f17e471]
+          - cell "40 / 206" [ref=f17e472]
+          - cell "26" [ref=f17e473]
+          - cell "29 181" [ref=f17e474]
+          - cell "×3 648" [ref=f17e475]
+          - cell "01.11 22:00" [ref=f17e477]
+        - row [ref=f17e478]:
+          - cell "Химпоселок" [ref=f17e479]
+          - cell "NO" [ref=f17e480]
+          - cell "27 / 206" [ref=f17e481]
+          - cell "9" [ref=f17e482]
+          - cell "122 046" [ref=f17e483]
+          - cell "×305" [ref=f17e484]
+          - cell "02.11 09:00" [ref=f17e486]
+        - row [ref=f17e487]:
+          - cell "Химпоселок" [ref=f17e488]
+          - cell "NO₂" [ref=f17e489]
+          - cell "27 / 206" [ref=f17e490]
+          - cell "27" [ref=f17e491]
+          - cell "78 301" [ref=f17e492]
+          - cell "×392" [ref=f17e493]
+          - cell "02.11 08:00" [ref=f17e495]
+        - row [ref=f17e496]:
+          - cell "Химпоселок" [ref=f17e497]
+          - cell "SO₂" [ref=f17e498]
+          - cell "26 / 206" [ref=f17e499]
+          - cell "1" [ref=f17e500]
+          - cell "7 325" [ref=f17e501]
+          - cell "×14,7" [ref=f17e502]
+          - cell "02.11 09:00" [ref=f17e504]
+        - row [ref=f17e505]:
+          - cell "Пропарка" [ref=f17e506]
+          - cell "H₂S" [ref=f17e507]
+          - cell "3 / 173" [ref=f17e508]
+          - cell "0" [ref=f17e509]
+          - cell "34" [ref=f17e510]
+          - cell "×4,3" [ref=f17e511]
+          - cell "02.11 23:00" [ref=f17e513]
+  - generic [ref=f17e514]:
+    - generic [ref=f17e515]: Әдіс және шектеулер
+    - heading "Қалай есептелді" [level=2] [ref=f17e516]
+    - list [ref=f17e517]:
+      - listitem [ref=f17e518]: "Дереккөз: «Қазақстан ауасы» сайты жинаған бекеттердің сағаттық мәндері (ecodata.kz, Қазгидромет). Тек қала шегіндегі (орталықтан 12 км-ге дейін) сағаттық бекеттер ескерілді. Қолмен өлшейтін бекеттер (тәулігіне бір өлшем) және облыс бекеттері (Теңіз, Құлсары, Мақат, Жанбай, Ганюшкино, Дамба) кірмеген."
+      - listitem [ref=f17e519]: "Шек: ҚР ДСМ-70 бұйрығы (02.08.2022), 1-қосымша бойынша ең жоғары бір реттік ШРК: H₂S 8, NO₂ 200, NO 400, SO₂ 500, CO 5000, O₃ 160, NH₃ 200, PM10 300, PM2.5 160 мкг/м³. Асу = мән шектен қатаң үлкен."
+      - listitem [ref=f17e520]: "Бекеттер сағаттық орташа мән береді, ал бір реттік ШРК 20–30 минутқа есептелген: салыстыру шамамен. Сағат ішіндегі қысқа шыңдар көрінбейді."
+      - listitem [ref=f17e521]: «Тұрып қалған» мәндер (бірдей сан қатарынан 6+ сағат, айналасында қозғалыссыз) және өлшем бірлігі күмәнді бекеттердегі CO алынып тасталды.
+      - listitem [ref=f17e522]: "Жел бағыты — Open-Meteo, қала орталығы: бір нүктедегі деректер. Асу сағаттарындағы жел бағыты мен кезеңдегі жалпы жел бағытының айырмасы — статистикалық белгі, себепті дәлелдемейді."
+      - listitem [ref=f17e523]: "Деректер қай кәсіпорынның кінәлі екенін көрсетпейді: бұл бекеттегі асудың фактісі ғана. Иіс көзі бөлек анықталады (модель — бағытты көрсетеді, дәлел емес)."

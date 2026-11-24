@@ -1,0 +1,4 @@
+[   15939ms] TypeError: Cannot read properties of undefined (reading 'ratio')
+    at http://localhost:8766/memory-bank/analysis/dashboard-akimat-atyrau-2026-11-01_10-kk.html?x=SO2:274:324
+[   15973ms] TypeError: Cannot read properties of undefined (reading 'ratio')
+    at http://localhost:8766/memory-bank/analysis/dashboard-akimat-atyrau-2026-11-01_10-kk.html?x=NO:274:324

@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "atyrau-air", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8766"], "port": 8766 },
+    { "name": "naryad-dopusk", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8771", "--directory", "C:/Users/User/Documents/AI-Workspace/projects/naryad-dopusk"], "port": 8771 },
+    { "name": "kishi-motorika", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8770", "--directory", "C:/Users/User/Documents/AI-Workspace/projects/kishi-motorika/web"], "port": 8770 },
+    { "name": "vibe-reference", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "C:/Users/User/Documents/AI-Workspace/projects/vibe-coding-course/reference-project", "run", "dev", "--", "--port", "8772", "--strictPort"], "port": 8772 },
+    { "name": "deck-preview", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "8773", "--bind", "127.0.0.1", "--directory", "C:/Users/User/AppData/Local/Temp/claude/24a9b58c004b258e/cc8a777b-7594-4f6b-a077-4ce57a214f04/scratchpad/preview-l1"], "port": 8773 }
+  ]
+}

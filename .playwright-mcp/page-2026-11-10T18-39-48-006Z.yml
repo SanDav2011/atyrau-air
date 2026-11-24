@@ -1,0 +1,203 @@
+- generic [active] [ref=f22e1]:
+  - banner [ref=f22e2]:
+    - navigation "Главное меню" [ref=f22e3]:
+      - link "Воздух Казахстана" [ref=f22e4] [cursor=pointer]:
+        - /url: ./
+      - link "Главная" [ref=f22e5] [cursor=pointer]:
+        - /url: ./
+      - link "Карта" [ref=f22e6] [cursor=pointer]:
+        - /url: karta.html
+      - link "О газах" [ref=f22e7] [cursor=pointer]:
+        - /url: gazdar.html
+      - link "О проекте" [ref=f22e8] [cursor=pointer]:
+        - /url: about.html
+      - group [ref=f22e9]:
+        - generic "Language" [ref=f22e10] [cursor=pointer]: RU ▾
+    - generic [ref=f22e11]:
+      - heading "Алматы" [level=1] [ref=f22e12]
+      - paragraph [ref=f22e13]: "Зимний смог: мелкая пыль (PM2,5), NO2, CO и SO2 — посты и ветер, по часам"
+  - main [ref=f22e14]:
+    - generic [ref=f22e15]:
+      - generic [ref=f22e16]:
+        - heading "Какое сейчас качество воздуха в городе Алматы?" [level=2] [ref=f22e17]
+        - paragraph [ref=f22e18]: "Эта страница показывает качество воздуха в городе Алматы по почасовым измерениям постов Казгидромета: текущий уровень, изменение за последние часы и направление ветра. Данные о ветре помогают оценить вероятное направление загрязнения, но не доказывают конкретный источник. Нужный час можно выбрать ползунком и посмотреть на карте."
+      - generic [ref=f22e19]:
+        - generic:
+          - generic:
+            - img:
+              - generic:
+                - generic [ref=f22e20] [cursor=pointer]
+                - generic [ref=f22e21] [cursor=pointer]
+                - generic [ref=f22e22] [cursor=pointer]
+                - generic [ref=f22e23] [cursor=pointer]
+                - generic [ref=f22e24] [cursor=pointer]
+                - generic [ref=f22e25] [cursor=pointer]
+                - generic [ref=f22e26] [cursor=pointer]
+                - generic [ref=f22e27] [cursor=pointer]
+                - generic [ref=f22e28] [cursor=pointer]
+                - generic [ref=f22e29] [cursor=pointer]
+                - generic [ref=f22e30] [cursor=pointer]
+                - generic [ref=f22e31] [cursor=pointer]
+                - generic [ref=f22e32] [cursor=pointer]
+                - generic [ref=f22e33] [cursor=pointer]
+                - generic [ref=f22e34] [cursor=pointer]
+                - generic [ref=f22e35] [cursor=pointer]
+                - generic [ref=f22e36] [cursor=pointer]
+          - generic:
+            - generic [ref=f22e37] [cursor=pointer]
+            - generic [ref=f22e40] [cursor=pointer]
+            - generic [ref=f22e43] [cursor=pointer]
+            - generic [ref=f22e46] [cursor=pointer]
+            - generic [ref=f22e49] [cursor=pointer]
+            - generic [ref=f22e52] [cursor=pointer]
+            - generic [ref=f22e55] [cursor=pointer]
+            - generic [ref=f22e58] [cursor=pointer]
+            - generic [ref=f22e61] [cursor=pointer]
+            - generic [ref=f22e64] [cursor=pointer]
+          - generic:
+            - tooltip "1"
+            - tooltip "2"
+            - tooltip "0"
+            - tooltip "0"
+            - tooltip "117"
+            - tooltip "16"
+            - tooltip "11"
+        - generic:
+          - generic [ref=f22e67]:
+            - button "Zoom in" [ref=f22e68] [cursor=pointer]: +
+            - button "Zoom out" [ref=f22e69] [cursor=pointer]: −
+          - button "Как работает карта" [ref=f22e71] [cursor=pointer]: "?"
+          - generic [ref=f22e72]:
+            - link "Leaflet" [ref=f22e73] [cursor=pointer]:
+              - /url: https://leafletjs.com
+            - text: "| © OpenStreetMap"
+      - generic [ref=f22e78]:
+        - button "Воспроизвести часы" [ref=f22e79] [cursor=pointer]: ▶
+        - button "Предыдущий час" [ref=f22e80] [cursor=pointer]: ‹
+        - textbox "Выбор даты" [ref=f22e81]: 2026-11-10
+        - combobox "Выбор часа" [ref=f22e82] [cursor=pointer]:
+          - option "00:00"
+          - option "01:00"
+          - option "02:00"
+          - option "03:00"
+          - option "04:00"
+          - option "05:00"
+          - option "06:00"
+          - option "07:00"
+          - option "08:00"
+          - option "09:00"
+          - option "10:00"
+          - option "11:00"
+          - option "12:00"
+          - option "13:00"
+          - option "14:00"
+          - option "15:00"
+          - option "16:00"
+          - option "17:00"
+          - option "18:00"
+          - option "19:00"
+          - option "20:00"
+          - option "21:00"
+          - option "22:00"
+          - option "23:00" [selected]
+        - button "Следующий час" [disabled] [ref=f22e83]: ›
+        - button "Последние данные" [disabled] [ref=f22e84]
+        - generic [ref=f22e85]:
+          - slider "Выбор часа ползунком" [ref=f22e86]: "23"
+          - generic:
+            - button "00:00" [ref=f22e87] [cursor=pointer]: "0"
+            - button "06:00" [ref=f22e88] [cursor=pointer]: "06"
+            - button "12:00" [ref=f22e89] [cursor=pointer]: "12"
+            - button "18:00" [ref=f22e90] [cursor=pointer]: "18"
+        - button "Поделиться картой" [ref=f22e91] [cursor=pointer]: 🔗 Поделиться
+      - generic [ref=f22e92]: "Выбрано: 10.11.2026 23:00 · UTC+5 · последние данные: 10.11.2026 23:00"
+      - generic [ref=f22e93]:
+        - heading "Вещество" [level=2] [ref=f22e94]
+        - generic [ref=f22e95]:
+          - button "PM2.5" [ref=f22e96] [cursor=pointer]
+          - button "CO" [ref=f22e97] [cursor=pointer]
+          - button "NO" [ref=f22e98] [cursor=pointer]
+          - button "NO2" [ref=f22e99] [cursor=pointer]
+          - button "O3" [ref=f22e100] [cursor=pointer]
+          - button "PM10" [ref=f22e101] [cursor=pointer]
+          - button "SO2" [ref=f22e102] [cursor=pointer]
+        - generic [ref=f22e103]:
+          - generic [ref=f22e104]:
+            - text: PM2.5, предельное значение 160 мкг/м³
+            - generic "Источник" [ref=f22e105]: i
+          - generic [ref=f22e106]: до половины предельного значения
+          - generic [ref=f22e108]: близко к предельному значению
+          - generic [ref=f22e110]: выше предельного значения
+          - generic [ref=f22e112]: 5 раз и выше
+          - generic [ref=f22e114]: в этот час данных нет
+      - heading "Выберите пост — график по времени" [level=2] [ref=f22e117]
+    - generic [ref=f22e119]:
+      - generic [ref=f22e120]:
+        - img [ref=f22e121]:
+          - generic [ref=f22e123]: С
+        - generic [ref=f22e127]:
+          - text: Ветер с востока, 1.0 м/с
+          - generic [ref=f22e128]: 102°, порывы 1.8 м/с · Open-Meteo
+      - generic [ref=f22e129]:
+        - generic [ref=f22e130]:
+          - heading "🧭 Ветер и постоянно высокие посты Метод" [level=2] [ref=f22e131]:
+            - text: 🧭 Ветер и постоянно высокие посты
+            - generic "Метод" [ref=f22e132]: i
+          - combobox "Период анализа" [ref=f22e133]:
+            - option "выбранный час"
+            - option "последние 3 часа" [selected]
+            - option "последние 6 часов"
+            - option "последние 12 часов"
+        - generic [ref=f22e134]:
+          - text: 📈 Постоянно высокие посты
+          - generic [ref=f22e135]: "За период ни один пост не был стабильно выше городского уровня (порог: +40 мкг/м³, ≥ 80% часов)."
+          - generic [ref=f22e136]: Это проверка для поиска постоянного источника рядом с постом; значения «⚠» без изменений не учитываются.
+        - generic [ref=f22e137] [cursor=pointer]:
+          - checkbox "🧭 Роза ветров и линии анализа" [checked] [ref=f22e138]
+          - text: 🧭 Роза ветров и линии анализа
+        - generic [ref=f22e139]:
+          - img [ref=f22e140]:
+            - generic [ref=f22e144]: С
+            - generic [ref=f22e145]: СВ
+            - generic [ref=f22e146]: В
+            - generic [ref=f22e147]: ЮВ
+            - generic [ref=f22e148]: Ю
+            - generic [ref=f22e149]: ЮЗ
+            - generic [ref=f22e150]: З
+            - generic [ref=f22e151]: СЗ
+          - generic [ref=f22e158]: "Период: 3 ч. Серый — как часто ветер дул с каждой стороны; коричневый — с какой стороны ветер принёс превышение PM2.5. Больше всего — с направления: юго-юго-восток.На карте: от поста с превышением в сторону, откуда дул ветер, — стрелка 12 км (по одной на час): остриё смотрит на пост — ветер принёс газ оттуда, толщина соответствует величине превышения. Нажмите на стрелку (или наведите мышь) — час и ветер. Где линии сходятся — возможный источник."
+          - generic [ref=f22e159]:
+            - text: Длина линии
+            - slider "Длина линии 12 км" [ref=f22e160]: "12"
+            - generic [ref=f22e161]: 12 км
+          - generic [ref=f22e162]:
+            - text: 📍 Точки жалоб
+            - generic [ref=f22e163]: Нажмите на карту — место, где почувствовали запах. Для каждого часа выбранного периода рисуется линия в ту сторону, откуда дул ветер (фиолетовая).
+      - generic [ref=f22e164]:
+        - heading "Самые высокие (выбранный час)" [level=2] [ref=f22e165]
+        - list [ref=f22e166]:
+          - listitem [ref=f22e167] [cursor=pointer]: ПНЗ№6 (Казгидромет) — 117
+          - listitem [ref=f22e168] [cursor=pointer]: ПНЗ№28 (Казгидромет) — 16
+          - listitem [ref=f22e169] [cursor=pointer]: ПНЗ №31 (Казгидромет) — 11
+          - listitem [ref=f22e170] [cursor=pointer]: ПНЗ №30 (Казгидромет) — 2
+          - listitem [ref=f22e171] [cursor=pointer]: ПНЗ №29 (Казгидромет) — 1
+          - listitem [ref=f22e172] [cursor=pointer]: ПНЗ №1 (Казгидромет) — 0
+      - generic [ref=f22e173]:
+        - text: "Посты: 11. Часов: 515 (2026-10-20 13:00 – 2026-11-10 23:00). Источник:"
+        - link "карта Казгидромета" [ref=f22e174] [cursor=pointer]:
+          - /url: http://ecodata.kz:3838/app_dem_visual/
+        - text: ", ветер — Open-Meteo. Сбор данных по городу Алматы начат 2026-10-20."
+      - group [ref=f22e175]:
+        - generic "📘 Методика и примечания" [ref=f22e176] [cursor=pointer]
+      - generic [ref=f22e177]:
+        - heading "Частые вопросы" [level=2] [ref=f22e178]
+        - generic [ref=f22e179]:
+          - heading "Откуда берутся данные?" [level=3] [ref=f22e180]
+          - paragraph [ref=f22e181]: Качество воздуха — посты Казгидромета (ecodata.kz), каждый час. Ветер и метеорология — Open-Meteo.
+        - generic [ref=f22e182]:
+          - heading "Какие вещества измеряют посты?" [level=3] [ref=f22e183]
+          - paragraph [ref=f22e184]: "Вещества, которые измеряют посты этого города: CO, NO, NO2, O3, PM10, PM2.5, SO2."
+        - generic [ref=f22e185]:
+          - heading "Как понять, что загрязнение превысило предельную норму?" [level=3] [ref=f22e186]
+          - paragraph [ref=f22e187]: Сайт сравнивает измерения с максимальной разовой ПДК из приказа МЗ РК ДСМ-70 (02.08.2022); посты дают почасовые значения, поэтому сравнение приблизительное. Результат — не официальное измерение; по вопросам здоровья обращайтесь к специалистам.
+  - contentinfo [ref=f22e188]: 👁 Сайт просмотрели 645 раз
