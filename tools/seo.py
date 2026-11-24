@@ -41,6 +41,10 @@ FIXED = {  # бет → (title, description, og:title, og:description)
                    '«Қазақстан ауасы» — ашық жоба. Автор: Санжар Давлетбаев, Атырау НЗМ оқушысы. Дереккөздер: Қазгидромет, Open-Meteo.',
                    'Жоба туралы — Қазақстан ауасы',
                    'Ашық ақпараттық жоба: мақсаты, авторлары, дереккөздері.'),
+    'ai.html': ('ЖИ және әзірлеушілер үшін — Қазақстан ауасы',
+                'Қазақстан ауасы сайтын дұрыс түсіну және дәйектеу: дереккөздер, шектеулер, жалпы мәлімет JSON. Ресми мониторинг емес.',
+                'ЖИ және әзірлеушілер үшін — Қазақстан ауасы',
+                'Дереккөздер, шектеулер және дұрыс дәйектеу ережелері.'),
 }
 
 JSON_LD = f'''<script type="application/ld+json">
@@ -145,10 +149,10 @@ def main():
         if not meta:
             print('өткізілді:', p.name); continue
         ld = None
-        if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html', 'atyrau.html'):
+        if p.name not in ('index.html', 'about.html', 'ai.html', 'karta.html', 'gazdar.html', 'atyrau.html'):
             import geo_faq
             t = geo_faq.apply(t, re.search(r'<h1>(.*?)</h1>', t).group(1), LOC[re.search(r'<h1>(.*?)</h1>', t).group(1)], city_data(p.stem)[1])
-        if p.name not in ('index.html', 'about.html', 'karta.html', 'gazdar.html'):
+        if p.name not in ('index.html', 'about.html', 'ai.html', 'karta.html', 'gazdar.html'):
             ld = city_ld(p.name, re.search(r'<h1>(.*?)</h1>', t).group(1), t)
         b = block(p.name, *meta, ld=ld)
         if '<!-- SEO (tools/seo.py) -->' in t:
@@ -160,7 +164,7 @@ def main():
         pages.append(p.name)
     # sitemap.xml: басты бет, Атырау және карта жиі жаңарады; анықтама беттері — сирек
     freq = {'index.html': ('daily', '1.0'), 'atyrau.html': ('hourly', '0.9'), 'karta.html': ('daily', '0.8'),
-            'gazdar.html': ('monthly', '0.7'), 'about.html': ('monthly', '0.5')}
+            'gazdar.html': ('monthly', '0.7'), 'about.html': ('monthly', '0.5'), 'ai.html': ('monthly', '0.4')}
     urls = sorted(pages, key=lambda n: (n not in freq, n))
     import make_lang  # ru/en нұсқалары: sitemap-қа тіл баламалары (hreflang) қосылады
     def loc(n, lang):

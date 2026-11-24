@@ -1,0 +1,16 @@
+# Қазақстан ауасы
+
+> Қазақстан қалаларындағы ауа сапасының ашық сайты: Қазгидромет бекеттерінің сағаттық өлшемдері мен жел бағыты бір картада. Ресми мониторинг емес. Иіс көзі туралы тек «ықтимал» деп жазыңыз.
+
+## Негізгі беттер
+- [ЖИ және әзірлеушілер үшін](https://sandav2011.github.io/atyrau-air/ai.html): дереккөздер, шектеулер, дұрыс дәйектеу ережелері
+- [Жоба туралы](https://sandav2011.github.io/atyrau-air/about.html): мақсаты, авторлары, лицензия
+- [Атырау](https://sandav2011.github.io/atyrau-air/atyrau.html): H₂S және жел бойынша талдау
+- [Газдар туралы](https://sandav2011.github.io/atyrau-air/gazdar.html): шекті мәндер
+
+## Деректер
+- [Жалпы мәлімет JSON](https://sandav2011.github.io/atyrau-air/data/ai-summary.json): қала, станциялар саны, газдар; қолмен жаңартылады, нақты уақытта емес
+
+## Optional
+- [Russian](https://sandav2011.github.io/atyrau-air/ru/ai.html)
+- [English](https://sandav2011.github.io/atyrau-air/en/ai.html)

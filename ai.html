@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SEO (tools/seo.py) -->
+<title>ЖИ және әзірлеушілер үшін — Қазақстан ауасы</title>
+<meta name="description" content="Қазақстан ауасы сайтын дұрыс түсіну және дәйектеу: дереккөздер, шектеулер, жалпы мәлімет JSON. Ресми мониторинг емес.">
+<link rel="canonical" href="https://sandav2011.github.io/atyrau-air/ai.html">
+<!-- hreflang -->
+<link rel="alternate" hreflang="kk" href="https://sandav2011.github.io/atyrau-air/ai.html">
+<link rel="alternate" hreflang="ru" href="https://sandav2011.github.io/atyrau-air/ru/ai.html">
+<link rel="alternate" hreflang="en" href="https://sandav2011.github.io/atyrau-air/en/ai.html">
+<link rel="alternate" hreflang="x-default" href="https://sandav2011.github.io/atyrau-air/ai.html">
+<!-- /hreflang -->
+<meta name="theme-color" content="#0b4f7a">
+<meta name="author" content="Санжар Давлетбаев, Атырау НЗМ оқушысы">
+<meta name="robots" content="index, follow">
+<meta property="og:site_name" content="Қазақстан ауасы">
+<meta property="og:locale" content="kk_KZ">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ЖИ және әзірлеушілер үшін — Қазақстан ауасы">
+<meta property="og:description" content="Дереккөздер, шектеулер және дұрыс дәйектеу ережелері.">
+<meta property="og:url" content="https://sandav2011.github.io/atyrau-air/ai.html">
+<meta property="og:image" content="https://sandav2011.github.io/atyrau-air/img/og/ai.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /SEO -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --card: rgba(255,255,255,.92); --text: #10233f; --muted: #5b6b82; --accent: #0b6fc4; }
+  * { box-sizing: border-box; }
+  html { background: #0b46b5; }
+  body { margin: 0; font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text); min-height: 100vh;
+         background: linear-gradient(180deg, #0b46b5 0, #3d86d8 260px, #8fd6ee 620px, #c9f0f4 100%) fixed; font-size: 15px; line-height: 1.6; }
+  header { color: #fff; padding: 0 clamp(16px, 4vw, 48px) 8px; }
+  header nav { display: flex; align-items: center; gap: 8px; padding: 14px 0; }
+  header nav .brand { font-weight: 800; font-size: 18px; margin-right: auto; color: #fff; text-decoration: none; text-shadow: 0 1px 8px rgba(0,40,90,.35); }
+  header nav a:not(.brand) { color: rgba(255,255,255,.8); text-decoration: none; font-weight: 500; font-size: 15px; padding: 12px 10px; min-height: 44px;
+                             display: inline-flex; align-items: center; position: relative; white-space: nowrap; }
+  header nav a:not(.brand)::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor;
+                                    transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+  header nav a:not(.brand):hover, header nav a.active { color: #fff; }
+  header nav a:not(.brand):hover::after, header nav a.active::after { transform: scaleX(1); }
+  header .hero { max-width: 860px; margin: 6px auto 4px; }
+  header h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 16px rgba(0,40,90,.3); }
+  header p { opacity: .9; margin: 4px 0 0; }
+  @media (max-width: 800px) { header nav .brand { font-size: 16px; } header nav a:not(.brand) { font-size: 14px; padding: 12px 7px; } }
+  @media (max-width: 560px) { header nav .brand { display: none; } header nav { justify-content: center; gap: 0; } }
+  main { max-width: 860px; margin: 0 auto; padding: 8px 16px 32px; display: grid; gap: 14px; }
+  .card { background: var(--card); border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 8px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: none; padding-right: 12px; }
+  .contact a:hover { text-decoration: underline; }
+  #visits { text-align: center; color: rgba(16,35,63,.6); font-size: 14px; }
+/* lang */ nav details.lang { position: relative; margin-left: 4px; } nav details.lang summary { list-style: none; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; user-select: none; } nav details.lang summary::-webkit-details-marker { display: none; } nav details.lang summary::after { content: '▾'; font-size: 12px; } nav details.lang .menu { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 130px; background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,40,90,.3); padding: 6px; display: grid; } nav details.lang .menu a { color: #10233f !important; padding: 0 12px !important; font-size: 15px !important; min-height: 44px; border-radius: 8px; display: flex !important; align-items: center; text-decoration: none; } nav details.lang .menu a::after { display: none !important; } nav details.lang .menu a:hover { background: #e8f1fb; } @media (max-width: 420px) { nav details.lang { margin-left: 0; } nav details.lang summary { padding: 0 3px; } } nav details.lang .menu a.cur { font-weight: 800; } /* /lang */
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Негізгі мәзір">
+    <a class="brand" href="./">Қазақстан ауасы</a>
+    <a href="./">Басты</a>
+    <a href="karta.html">Карта</a>
+    <a href="gazdar.html">Газдар туралы</a>
+    <a href="about.html">Жоба</a>
+    <!-- lang --><details class="lang"><summary aria-label="Language">KK</summary><div class="menu"><a href="ai.html" hreflang="kk" class="cur" aria-current="true">Қазақша</a><a href="ru/ai.html" hreflang="ru">Русский</a><a href="en/ai.html" hreflang="en">English</a></div></details><script>document.addEventListener("click",function(e){document.querySelectorAll("details.lang[open]").forEach(function(d){if(!d.contains(e.target))d.open=false})})</script><!-- /lang -->
+  </nav>
+  <div class="hero">
+    <h1>ЖИ және әзірлеушілер үшін</h1>
+    <p>Сайтты дұрыс түсіну және дұрыс дәйектеу үшін қысқа анықтама</p>
+  </div>
+</header>
+<main>
+  <section class="card">
+    <h2>Қысқаша</h2>
+    <p>«Қазақстан ауасы» — Қазақстан қалаларындағы ауа сапасын көрсететін ашық сайт. Ол Қазгидромет бекеттерінің сағаттық өлшемдерін және желдің бағытын бір картаға жинайды.</p>
+    <p>Атырау үшін сайт жел бағытына қарай иістің ықтимал келу бағытын да көрсетеді. Бұл — модель бағасы, нақты көздің дәлелі емес.</p>
+  </section>
+
+  <section class="card">
+    <h2>Дереккөздер</h2>
+    <ul>
+      <li><b>Қазгидромет</b> — бекеттердің сағаттық өлшемдері (ecodata.kz)</li>
+      <li><b>Open-Meteo</b> — жел бағыты мен жылдамдығы (қала орталығындағы бір нүкте)</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Сайтқа қалай дұрыс сілтеме жасау керек</h2>
+    <ul>
+      <li>Дереккөзді көрсетіңіз: «Қазақстан ауасы» (sandav2011.github.io/atyrau-air), Қазгидромет және Open-Meteo деректері бойынша.</li>
+      <li>Иіс көзі туралы тек «ықтимал» деп жазыңыз. Сайт нақты кәсіпорынды кінәлі деп көрсетпейді.</li>
+      <li>Сайт — ресми мониторинг емес және оны алмастырмайды.</li>
+      <li>Көрсеткіштерді шекті мәндермен салыстыру — шамамен: сағаттық мән максимал бір реттік шекті мәнмен салыстырылады.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Шектеулер</h2>
+    <ul>
+      <li>Жел — қаланың бір нүктесінен алынады, қала бойынша айырмашылық ескерілмейді.</li>
+      <li>Ықтимал бағыт моделі нақты оқиғаларда әлі тексерілмеген.</li>
+      <li>Бекеттердің дерегі кейде кешігеді немесе жоқ болады.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Жалпы мәлімет (JSON)</h2>
+    <p><a href="data/ai-summary.json">data/ai-summary.json</a> — әр қала бойынша: деректегі станциялар саны, өлшенетін газдар, дерек басталған күн.</p>
+    <ul>
+      <li>Бұл нақты уақыттағы дерек емес: файл қолмен жаңартылады (шамамен айына бір рет), жаңарған күні файлда көрсетілген.</li>
+      <li>«Станциялар саны» — деректер файлындағы станциялар. Атырау үшін ол қала ғана емес, облыс бойынша.</li>
+      <li>Файлда өлшем мәндері, бекет координаталары мен атаулары жоқ.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Нені бермейміз</h2>
+    <p>Қазгидромет өлшемдерінің көшірмесін немесе ашық API бермейміз: олардың лицензиясы бізде жоқ. Қажет болса, деректерді көзінен алыңыз.</p>
+  </section>
+
+  <section class="card contact">
+    <h2>Байланыс</h2>
+    <a href="https://instagram.com/roman.d.m" target="_blank" rel="noopener">📷 Instagram: @roman.d.m</a>
+  </section>
+
+  <p class="lic" style="text-align:center;color:var(--muted,#5b6b82);font-size:13px;padding:8px 16px 4px;margin:0">© 2026 Қазақстан ауасы · Материалдар CC BY 4.0 бойынша, көшіргенде дереккөзді көрсетіңіз · <a href="about.html#license">Лицензия және деректер</a> · <a href="ai.html">ЖИ және әзірлеушілер үшін</a></p>
+<div id="visits" hidden></div>
+</main>
+<script>
+// Келушілер саны: алдымен өз доменіміздегі data/visits.json, болмаса — GoatCounter
+const getJson = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+getJson('data/visits.json?t=' + Date.now()).catch(() => getJson('https://atyrau-air.goatcounter.com/counter/TOTAL.json'))
+  .then(d => { const el = document.getElementById('visits'); el.textContent = '👁 Сайт ' + d.count + ' рет қаралды'; el.hidden = false; })
+  .catch(() => {});
+</script>
+<script data-goatcounter="https://atyrau-air.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
