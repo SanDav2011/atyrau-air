@@ -194,6 +194,24 @@
   .bar { display: grid; grid-template-columns: 1fr 44px; gap: 6px; align-items: center; font-size: 13px; margin: 4px 0; }
   .bar .track { background: var(--bg); border-radius: 4px; height: 8px; margin-top: 3px; }
   .bar .fill { background: #b45309; height: 8px; border-radius: 4px; }
+  /* Station status: үйшік (тек transform/opacity) */
+  .house-card svg { width: 100%; height: auto; max-height: 240px; display: block; }
+  .house-card .drift { animation: hDrift 9s ease-in-out infinite alternate; }
+  .house-card .bob { animation: hBob 3.2s ease-in-out infinite; }
+  @keyframes hDrift { from { transform: translateX(-46px); } to { transform: translateX(46px); } }
+  @keyframes hBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .house-card .hbody, .house-card .glow { transition: fill .7s ease; }
+  .house-card .glow { opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .house-card.warn .glow { animation: hPulse 2.2s ease-in-out infinite; }
+  .house-card.crit .glow { animation-duration: .9s; }
+  @keyframes hPulse { 0%, 100% { opacity: .1; transform: scale(1); } 50% { opacity: .45; transform: scale(1.14); } }
+  .house-card .htxt { transition: opacity .35s ease; }
+  .house-card .htxt.fade { opacity: 0; }
+  .house-card .hcap { text-align: center; font-size: 14px; margin-top: 4px; }
+  .house-card .hdots { display: flex; gap: 6px; justify-content: center; margin-top: 6px; min-height: 8px; }
+  .house-card .hdots i { width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1; transition: background .3s; }
+  .house-card .hdots i.on { background: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .house-card .drift, .house-card .bob, .house-card .glow { animation: none !important; } .house-card .htxt { transition: none; } }
   /* Саусақпен басуға ыңғайлы өлшем — кемінде 44×44 px */
   button, select { min-height: 44px; }
   button { min-width: 44px; }
@@ -308,6 +326,31 @@
       <h2>Substance</h2>
       <div id="pollutants" style="display:flex;gap:6px;flex-wrap:wrap"></div>
       <div class="legend" id="legend" style="margin-top:10px"></div>
+    </div>
+    <div class="card house-card" id="houseCard" style="margin-top:12px">
+      <h2>Station status</h2>
+      <svg id="houseSvg" viewBox="0 0 320 210" role="img" aria-label="">
+        <line x1="20" y1="196" x2="300" y2="196" stroke="#94a3b8" stroke-width="2"/>
+        <g aria-hidden="true">
+          <line x1="160" y1="150" x2="160" y2="118" stroke="#475569" stroke-width="3"/>
+          <circle cx="160" cy="115" r="4" fill="#475569"/>
+          <rect x="124" y="144" width="72" height="8" rx="2" fill="#1e293b"/>
+          <rect x="128" y="150" width="64" height="46" rx="3" fill="#64748b"/>
+          <rect x="138" y="162" width="22" height="14" rx="2" fill="#bae6fd"/>
+          <rect x="170" y="164" width="14" height="32" rx="2" fill="#334155"/>
+        </g>
+        <g class="drift"><g class="bob">
+          <path class="glow" d="M160 112 C142 94 118 76 118 54 A42 42 0 0 1 202 54 C202 76 178 94 160 112 Z" fill="#9ca3af"/>
+          <path class="hbody" d="M160 112 C142 94 118 76 118 54 A42 42 0 0 1 202 54 C202 76 178 94 160 112 Z" fill="#9ca3af" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+          <g class="htxt" text-anchor="middle" fill="#fff" style="font-family:inherit">
+            <text id="hGas" x="160" y="40" font-size="17" font-weight="800"></text>
+            <text id="hVal" x="160" y="64" font-size="26" font-weight="800"></text>
+            <text id="hUnit" x="160" y="80" font-size="11"></text>
+          </g>
+        </g></g>
+      </svg>
+      <div class="hcap" id="houseCap"></div>
+      <div class="hdots" id="houseDots"></div>
     </div>
     <div class="card" style="margin-top:12px">
       <h2 id="chartTitle">Select a station — chart over time</h2>
@@ -494,6 +537,61 @@ const unitDoubt = (s, p) => { const v = Object.values(s.data.CO || {}); return p
 // таза мән (тұрып қалған немесе бірлігі күмәнді болса — null)
 const val = (s, p, h) => { const v = s.data[p]?.[h]; return v == null || s.stale[p]?.has(h) || unitDoubt(s, p) ? null : v; };
 
+/* Station status (үйшік): таңдалған бекеттің таңдалған сағатында шекті мәннен асқан БАРЛЫҚ газдар (төмендегі зат таңдауына қарамай);
+   бірнешеу болса — көрсеткіштер кезек-кезек ауысады. Асу болмаса — таңдалған зат. Түс — LEVELS (шекті мәнге қатынасы). */
+const levelOf = (v, p) => {
+  const lim = LIMITS[p];
+  if (v == null) return { color: NO_DATA, label: '', r: 0 };
+  if (!lim) return { color: '#2563eb', label: '', r: 0 };
+  const l = LEVELS.find(x => v / lim <= x.max);
+  return { color: l.color, label: l.label, r: v / lim };
+};
+let houseItems = [], houseI = 0, houseTimer = null, houseKey = null;
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function drawHouse(i, soft) {
+  const it = houseItems[i] || { p: '', v: null }, lv = levelOf(it.v, it.p), s = selected;
+  const set = () => {
+    $('#hGas').textContent = ({ H2S: 'H₂S', NO2: 'NO₂', SO2: 'SO₂', NH3: 'NH₃', O3: 'O₃' })[it.p] || it.p;
+    $('#hVal').textContent = it.v == null ? '—' : String(it.v);
+    $('#hVal').setAttribute('font-size', String(it.v ?? '').length >= 6 ? 17 : String(it.v ?? '').length >= 5 ? 21 : 26);
+    $('#hUnit').textContent = it.v == null ? '' : 'µg/m³';
+    const light = lv.color === '#eab308';
+    $('#houseSvg .htxt').setAttribute('fill', light ? '#10233f' : '#fff');
+    document.querySelectorAll('#houseSvg .hbody, #houseSvg .glow').forEach(e => e.style.fill = lv.color);
+    const card = $('#houseCard');
+    card.classList.toggle('warn', lv.r > 1);
+    card.classList.toggle('crit', lv.r > 5);
+    const name = s ? s.name : '';
+    $('#houseCap').textContent = !s ? 'Select a station on the map' : it.v == null ? `${name} · no value` : `${name} · ${lv.label}`;
+    $('#houseSvg').setAttribute('aria-label', s && it.v != null ? `${name}: ${it.p} ${it.v} µg/m³, ${lv.label}` : $('#houseCap').textContent);
+    $('#houseDots').innerHTML = houseItems.length > 1 ? houseItems.map((_, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('') : '';
+  };
+  const t = $('#houseSvg .htxt');
+  if (!soft || reduceMotion()) { set(); return; }
+  t.classList.add('fade');
+  setTimeout(() => { set(); t.classList.remove('fade'); }, 350);
+}
+function renderHouse() {
+  if (!$('#houseCard')) return;
+  const h = hours[idx], s = selected;
+  let items = [];
+  if (s && h) {
+    for (const p of Object.keys(s.data)) {
+      const lim = LIMITS[p], v = val(s, p, h);
+      if (lim && v != null && v > lim) items.push({ p, v, r: v / lim });
+    }
+    items.sort((a, b) => b.r - a.r);
+    if (!items.length) items = [{ p: pollutant, v: val(s, pollutant, h) }];
+  } else items = [{ p: '', v: null }];
+  const key = (s ? s.name : '') + '|' + items.map(x => x.p + ':' + x.v).join(',');
+  if (key === houseKey) return; // өзгеріс жоқ — айналым үзілмейді
+  const first = houseKey === null;
+  houseKey = key; houseItems = items; houseI = 0;
+  clearInterval(houseTimer); houseTimer = null;
+  drawHouse(0, !first);
+  if (items.length > 1) houseTimer = setInterval(() => { houseI = (houseI + 1) % houseItems.length; drawHouse(houseI, true); }, 3500);
+}
+
 async function init() {
   const [rows, windRows, kgmRows] = await Promise.all([loadCsv('../data/semey/stations.csv'), loadCsv('../data/semey/wind.csv'), loadCsv('../data/semey/kgm.csv').catch(() => [])]);
   // только почасовые замеры; ручные посты (одна дата в сутки) в почасовой шкале не участвуют
@@ -611,6 +709,7 @@ function render() {
     $('#windSub').textContent = `${Math.round(deg)}°, gusts ${(+w.wind_gust_ms).toFixed(1)} m/s · Open-Meteo` + (wf.lag ? ` · ⏳ data from ${wf.lag} h ago (new data arrives at ~:30)` : '');
   } else { $('#windText').textContent = 'Wind: no data'; $('#windSub').textContent = ''; }
   renderAttribution();
+  renderHouse();
 
   $('#legend').innerHTML = lim
     ? `<b>${pollutant}, limit ${lim} µg/m³ <span class="info" tabindex="0" aria-label="Source">i<span class="tip">${esc(limitInfo(pollutant))}<br><a href="../${LIMIT_DOC.url}" target="_blank" rel="noopener">open adilet.zan.kz</a><br><a href="gazdar.html#${pollutant.startsWith('PM') ? 'PM' : pollutant}">more about ${pollutant} →</a></span></span></b>` + LEVELS.map(l => `<span><i style="background:${l.color}"></i>${l.label}</span>`).join('') + `<span><i style="background:${NO_DATA}"></i>no data for this hour</span>`
@@ -618,6 +717,7 @@ function render() {
 }
 
 function renderChart() {
+  renderHouse();
   if (!selected) return;
   const series = selected.data[pollutant] || {};
   $('#chartTitle').textContent = `${selected.name} — ${pollutant}, µg/m³`;

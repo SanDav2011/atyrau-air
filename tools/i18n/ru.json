@@ -328,7 +328,10 @@
   "'✓ Сілтеме көшірілді'": "'✓ Ссылка скопирована'",
   "'Сілтемені белгілеп, өзіңіз көшіріңіз'": "'Выделите ссылку и скопируйте вручную'",
   "📍 Шағым нүктелерін қосу": "📍 Добавить точки жалоб",
-  "<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с": "<b>${label}</b> · ${hourText(h)}<br>Ветер ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с"
+  "<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с": "<b>${label}</b> · ${hourText(h)}<br>Ветер ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с",
+  "Бекет жағдайы": "Состояние поста",
+  "Картадан бекетті таңдаңыз": "Выберите пост на карте",
+  "мән жоқ": "нет значения"
  },
  "gazdar": {
   "Газдар туралы — H₂S, SO₂, NO₂, PM2,5 | Қазақстан ауасы": "О газах — H₂S, SO₂, NO₂, PM2,5 | Воздух Казахстана",

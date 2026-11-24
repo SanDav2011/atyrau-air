@@ -356,7 +356,10 @@
   "'✓ Сілтеме көшірілді'": "'✓ Link copied'",
   "'Сілтемені белгілеп, өзіңіз көшіріңіз'": "'Select the link and copy it manually'",
   "📍 Шағым нүктелерін қосу": "📍 Include complaint points",
-  "<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с": "<b>${label}</b> · ${hourText(h)}<br>Wind ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} m/s"
+  "<b>${label}</b> · ${hourText(h)}<br>Жел ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} м/с": "<b>${label}</b> · ${hourText(h)}<br>Wind ${DIRS[Math.round(weather[h].dir / 45) % 8]}, ${weather[h].speed.toFixed(1)} m/s",
+  "Бекет жағдайы": "Station status",
+  "Картадан бекетті таңдаңыз": "Select a station on the map",
+  "мән жоқ": "no value"
  },
  "gazdar": {
   "Газдар туралы — H₂S, SO₂, NO₂, PM2,5 | Қазақстан ауасы": "About gases — H₂S, SO₂, NO₂, PM2.5 | Kazakhstan Air",
