@@ -11,6 +11,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / 'collector'))
 SITE = 'https://sandav2011.github.io/atyrau-air/'
 AUTHOR = 'Санжар Давлетбаев'
+AUTHOR2 = 'Роман Давлетбаев'  # ЖК «SanainWest», құқық иесі
 SCHOOL = 'Атырау қаласындағы Назарбаев Зияткерлік мектебі (НЗМ)'  # автор — Атырау НЗМ оқушысы
 
 # Қала аты → «-дағы/-дегі» тұлғасы (сипаттама үшін)
@@ -50,7 +51,7 @@ FIXED = {  # бет → (title, description, og:title, og:description)
 JSON_LD = f'''<script type="application/ld+json">
 {{"@context": "https://schema.org", "@type": "WebSite", "name": "Қазақстан ауасы", "url": "{SITE}",
  "description": "Қазақстан қалаларындағы ауа сапасы картасы және талдау",
- "author": {{"@type": "Person", "name": "{AUTHOR}", "affiliation": {{"@type": "EducationalOrganization", "name": "{SCHOOL}"}}}},
+ "author": [{{"@type": "Person", "name": "{AUTHOR}", "affiliation": {{"@type": "EducationalOrganization", "name": "{SCHOOL}"}}}}, {{"@type": "Person", "name": "{AUTHOR2}"}}],
  "keywords": "ауа сапасы, Қазақстан, H2S, PM2.5, Қазгидромет, Атырау НЗМ, Назарбаев Зияткерлік мектебі, оқушы жобасы", "inLanguage": ["kk", "ru", "en"],
  "publisher": {{"@type": "Organization", "name": "Қазақстан ауасы", "url": "{SITE}"}}}}
 </script>'''
@@ -93,7 +94,7 @@ def city_ld(page, city, text=''):
              'address': {'@type': 'PostalAddress', 'addressLocality': city, 'addressCountry': 'KZ'}}
     ds = {'@type': 'Dataset', 'name': f'{city} — ауа сапасы деректері', 'url': url, 'inLanguage': 'kk',
           'description': f'{city} қаласындағы Қазгидромет бекеттерінің сағаттық ауа сапасы өлшемдері және Open-Meteo жел деректері.',
-          'creator': {'@type': 'Person', 'name': AUTHOR},
+          'creator': [{'@type': 'Person', 'name': AUTHOR}, {'@type': 'Person', 'name': AUTHOR2}],
           'isBasedOn': ['http://ecodata.kz:3838/app_dem_visual/', 'https://open-meteo.com/'],
           'spatialCoverage': place, 'variableMeasured': subs}
     if first:
@@ -120,7 +121,7 @@ def block(page, title, desc, og_t, og_d, ld=None):
         f'<meta name="description" content="{e(desc)}">',
         f'<link rel="canonical" href="{url}">',
         '<meta name="theme-color" content="#0b4f7a">',
-        f'<meta name="author" content="{AUTHOR}, Атырау НЗМ оқушысы">',
+        f'<meta name="author" content="{AUTHOR}, {AUTHOR2}">',
         '<meta name="robots" content="index, follow">',
         '<meta property="og:site_name" content="Қазақстан ауасы">',
         '<meta property="og:locale" content="kk_KZ">',

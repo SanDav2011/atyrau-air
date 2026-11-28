@@ -109,8 +109,9 @@ def localize_ld(ld_src, html, d, lang, page):
             node["name"] = LD_TEXT[lang][0].format(c=city)
             node["description"] = LD_TEXT[lang][1].format(c=city)
             node["url"], node["inLanguage"] = url, lang
-            k = '"name": "%s"' % node["creator"]["name"]  # ключ словаря — фрагмент JSON-LD главной
-            node["creator"]["name"] = d.get(k, k)[len('"name": "'):-1]
+            for cr in node["creator"]:  # ауторлар тізімі; кілт словаря — фрагмент JSON-LD главной
+                k = '"name": "%s"' % cr["name"]
+                cr["name"] = d.get(k, k)[len('"name": "'):-1]
             node["spatialCoverage"]["name"] = city
             node["spatialCoverage"]["address"]["addressLocality"] = city
     graph["@graph"] = [n for n in graph["@graph"] if n["@type"] != "FAQPage"]
