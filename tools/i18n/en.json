@@ -21,6 +21,8 @@
   "'Анимацияны тоқтату'": "'Pause animation'"
  },
  "about": {
+  "Авторлары: Давлетбаев Роман Маратович және Давлетбаев Санжар. Құқық иелері: ЖК «SanainWest» (Давлетбаев Роман Маратович) және Давлетбаев Санжар.": "Authors: Roman Maratovich Davletbayev and Sanzhar Davletbayev. Rights holders: sole proprietor SanainWest (Roman Maratovich Davletbayev) and Sanzhar Davletbayev.",
+  "Роман Давлетбаев — жобаның авторы, ЖК «SanainWest», байланыс тұлғасы": "Roman Davletbayev — project author, sole proprietor SanainWest, contact person",
   "Жоба туралы — Қазақстан ауасы": "About the project — Kazakhstan Air",
   "«Қазақстан ауасы» — ашық жоба. Автор: Санжар Давлетбаев, Атырау НЗМ оқушысы. Дереккөздер: Қазгидромет, Open-Meteo.": "“Kazakhstan Air” is an open project. Author: Sanzhar Davletbayev, student at NIS Atyrau. Data sources: Kazhydromet, Open-Meteo.",
   "Ашық ақпараттық жоба: мақсаты, авторлары, дереккөздері.": "An open information project: its purpose, authors and data sources.",
@@ -31,7 +33,6 @@
   "Қала картасында әр бекеттің өлшемдері, жел және шекті мәндермен салыстыру бар. Газдар туралы бетте әр заттың не екенін, қалай өлшенетінін және денсаулыққа әсерін түсіндіреміз.": "The city map shows each station’s readings, the wind and a comparison with limit values. The page about gases explains what each substance is, how it is measured and how it affects health.",
   "Авторлар": "Authors",
   "Санжар Давлетбаев — жобаның авторы, Атырау НЗМ-нің 10-сынып оқушысы": "Sanzhar Davletbayev — author of the project, 10th-grade student at NIS Atyrau",
-  "Роман Давлетбаев — байланыс тұлғасы": "Roman Davletbayev — contact person",
   "Деректер қайдан алынады": "Where the data comes from",
   "<b>Қазгидромет</b> — бекеттердің өлшемдері (ecodata.kz, tabigat.gov.kz)": "<b>Kazhydromet</b> — station measurements (ecodata.kz, tabigat.gov.kz)",
   "<b>Open-Meteo</b> — жел, температура, бұлттылық": "<b>Open-Meteo</b> — wind, temperature, cloud cover",
