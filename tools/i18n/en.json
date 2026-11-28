@@ -16,7 +16,9 @@
   "Үшінші тарап деректері (Қазгидромет, Open-Meteo, OpenStreetMap, Esri карта тайлдары) бұл лицензияға кірмейді және өз иелерінің шарттарымен қолданылады. Сайттағы ақпарат «қалай бар солай» беріледі.": "Third-party data (Kazhydromet, Open-Meteo, OpenStreetMap, Esri map tiles) is not covered by this license and remains subject to its owners' terms. Information on the site is provided \"as is\".",
   "© 2026 Қазақстан ауасы. Сайттың мәтіндері, графиктері мен карталары Creative Commons CC BY 4.0 лицензиясымен беріледі: дереккөзді көрсетіп (жоба атауы мен сілтеме) көшіруге, таратуға және өңдеуге болады.": "© 2026 Kazakhstan Air. The site's texts, charts and maps are licensed under Creative Commons CC BY 4.0: you may copy, share and adapt them with credit to the source (project name and a link).",
   "Сайттың бастапқы коды мен моделі (model.js және оған қатысты файлдар) CC BY лицензиясына кірмейді: барлық құқық сақталған, оларды пайдалануға жазбаша рұқсат керек. Рұқсат сұрау: Instagram @roman.d.m.": "The site's source code and model (model.js and related files) are not covered by CC BY: all rights reserved, written permission is required to use them. To request permission: Instagram @roman.d.m.",
-  "© 2026 Қазақстан ауасы · Материалдар CC BY 4.0 бойынша, көшіргенде дереккөзді көрсетіңіз · <a href=\"about.html#license\">Лицензия және деректер</a> · <a href=\"ai.html\">ЖИ және әзірлеушілер үшін</a>": "© 2026 Kazakhstan Air · Materials under CC BY 4.0, please credit the source · <a href=\"about.html#license\">License and data</a> · <a href=\"ai.html\">For AI and developers</a>"
+  "© 2026 Қазақстан ауасы · Материалдар CC BY 4.0 бойынша, көшіргенде дереккөзді көрсетіңіз · <a href=\"about.html#license\">Лицензия және деректер</a> · <a href=\"ai.html\">ЖИ және әзірлеушілер үшін</a>": "© 2026 Kazakhstan Air · Materials under CC BY 4.0, please credit the source · <a href=\"about.html#license\">License and data</a> · <a href=\"ai.html\">For AI and developers</a>",
+  "'Анимацияны қосу'": "'Turn animation on'",
+  "'Анимацияны тоқтату'": "'Pause animation'"
  },
  "about": {
   "Жоба туралы — Қазақстан ауасы": "About the project — Kazakhstan Air",

@@ -235,6 +235,12 @@
   main { padding-top: 8px; }
   .card { border-radius: 16px; padding: 14px; box-shadow: 0 8px 30px rgba(0,40,90,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .card:hover, .card:focus-within { position: relative; z-index: 5; } /* backdrop-filter әр карточканы бөлек қабат қылады: i-кеңес келесі карточканың астында қалмасын */
+  .leaflet-container { isolation: isolate; } /* Leaflet ішкі z-index (400–1000) карточканың i-кеңесінің үстіне шықпасын */
+  .drop-icon:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; border-radius: 12px; }
+  .anim-paused .drop-icon svg, .anim-paused .drop-icon .glow { animation: none !important; }
+  .anim-paused .drop-icon .htxt { transition: none; }
+  .anim-btn { width: 34px; height: 34px; border: 2px solid rgba(0,0,0,.25); border-radius: 4px; background: #fff; color: #10233f; font-size: 16px; line-height: 1; cursor: pointer; padding: 0; }
+  .anim-btn:hover { background: #f4f4f4; } .anim-btn:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
   #map { border-radius: 16px; box-shadow: 0 10px 34px rgba(0,40,90,.22); }
   /* телефонда карта экранның жартысынан сәл көп: бетті айналдыруға саусақ қоятын орын қалады */
   @media (max-width: 860px) { #map { height: 52vh; min-height: 300px; } }
@@ -531,15 +537,19 @@ function dropSvg(it, name) {
 }
 let dropLayer = null, dropList = [], dropTick = 0, dropTimer = null;
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Анимацияны тоқтату (WCAG 2.2.2): тербеліс, жарқыл және газдардың ауысып тұруы; таңдау жадта сақталады, әдепкі — жүйенің «қозғалысты азайту» баптауы
+const ANIM_KEY = 'atyrau-air-anim-paused';
+let animPaused = (() => { try { const v = localStorage.getItem(ANIM_KEY); return v === null ? reduceMotion() : v === '1'; } catch { return reduceMotion(); } })();
 function paintDrop(d, soft) {
   const it = d.items[dropTick % d.items.length], el = d.m.getElement();
   if (!el) return;
   const set = () => {
     const r = levelOf(it.v, it.p).r;
     el.innerHTML = dropSvg(it, d.s.name);
+    el.setAttribute('role', 'button'); el.setAttribute('aria-label', `${d.s.name}: ${it.p} ${it.v} µg/m³`); // Enter / бос орын — бекетті таңдау
     el.classList.toggle('warn', r > 1); el.classList.toggle('crit', r > 5); el.classList.remove('fade');
   };
-  if (!soft || reduceMotion()) { set(); return; }
+  if (!soft || reduceMotion() || animPaused) { set(); return; }
   el.classList.add('fade');
   setTimeout(set, 350);
 }
@@ -564,16 +574,28 @@ function renderHouse() {
       items.push({ p: pollutant, v, r: 0 });
     }
     const icon = L.divIcon({ className: 'drop-icon', html: '', iconSize: [curTier.w, curTier.h], iconAnchor: [curTier.w / 2, Math.round(curTier.h + 14 * curTier.w / 64)] });
-    const m = L.marker([s.lat, s.lng], { icon, keyboard: false, bubblingMouseEvents: false, zIndexOffset: 1000 + Math.round(items[0].r * 10) + (s === selected ? 5000 : 0) })
+    const m = L.marker([s.lat, s.lng], { icon, keyboard: true, bubblingMouseEvents: false, zIndexOffset: 1000 + Math.round(items[0].r * 10) + (s === selected ? 5000 : 0) })
       .on('click', () => { selected = s; renderChart(); }).addTo(dropLayer);
+    m.getElement()?.addEventListener('keydown', e => { if (e.key === ' ') { e.preventDefault(); m.fire('click'); } });
     const d = { s, items, m };
     dropList.push(d);
     paintDrop(d, false);
   }
-  if (dropList.some(d => d.items.length > 1)) dropTimer = setInterval(() => { dropTick++; dropList.forEach(d => d.items.length > 1 && paintDrop(d, true)); }, 3500);
+  if (!animPaused && dropList.some(d => d.items.length > 1)) dropTimer = setInterval(() => { dropTick++; dropList.forEach(d => d.items.length > 1 && paintDrop(d, true)); }, 3500);
 }
 
 map.on('zoomend', () => { if (dropTier() !== curTier && hours.length) renderHouse(); }); // деңгей ауысқанда ғана қайта сызылады
+new (L.Control.extend({ options: { position: 'topleft' }, onAdd() {
+  const b = L.DomUtil.create('button', 'anim-btn leaflet-bar'); b.type = 'button';
+  const sync = () => {
+    b.textContent = animPaused ? '▶' : '⏸'; b.setAttribute('aria-pressed', String(animPaused));
+    b.title = animPaused ? 'Turn animation on' : 'Pause animation'; b.setAttribute('aria-label', b.title);
+    document.documentElement.classList.toggle('anim-paused', animPaused);
+  };
+  L.DomEvent.disableClickPropagation(b);
+  b.onclick = () => { animPaused = !animPaused; try { localStorage.setItem(ANIM_KEY, animPaused ? '1' : '0'); } catch {} sync(); renderHouse(); };
+  sync(); return b;
+} }))().addTo(map);
 
 async function init() {
   const [rows, windRows, kgmRows] = await Promise.all([loadCsv('../data/petropavl/stations.csv'), loadCsv('../data/petropavl/wind.csv'), loadCsv('../data/petropavl/kgm.csv').catch(() => [])]);
